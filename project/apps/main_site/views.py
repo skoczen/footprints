@@ -5,6 +5,9 @@ from annoying.decorators import render_to
 def home(request):
     return locals()
 
+@render_to("main_site/ping.html")
+def ping(request):
+    return locals()
 
 @render_to("main_site/manifesto.html")
 def manifesto(request):

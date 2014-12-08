@@ -6,6 +6,7 @@ from envs.common import *
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+PING_URL = "http://skoczen-footprints.herokuapp.com/ping"
 
 EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
 MAILGUN_ACCESS_KEY = os.environ['MAILGUN_API_KEY']
