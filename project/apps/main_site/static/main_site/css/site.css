@@ -133,7 +133,7 @@ ul {
     max-width: 1024px;
 }
 
-.button, .button:hover, a.button, a.button:hover, button, button:hover, button.button, button.button:hover, .primaryAction, .primaryAction:hover {
+.button, .button:hover, a.button, a.button:hover, button, button:hover, button.button, button.button:hover, .primaryAction, .primaryAction:hover, .ph_form.home_buttons .form_input input.primaryAction {
     border-width: 1px;
     text-decoration: none;
     padding: 12px 18px;
@@ -159,19 +159,33 @@ ul {
     text-align: center;
     margin: 0 0 60px 0;
 }
-.home_buttons a, .primaryAction {
+.home_buttons a, .primaryAction, .ph_form .form_input input.primaryAction {
     margin: 0 20px;
     /*background-color: #ff580e;*/
     /*background-color: #4369ff;*/
     background-color: #4f66ff;
     color: #d1daff;
     border: 0;
+    width: auto;
 }
-.home_buttons a:hover, .home_buttons a.current, .primaryAction:hover {
+.home_buttons a:hover, .home_buttons a.current, .primaryAction:hover, .ph_form.home_buttons .form_input input.primaryAction:hover {
     background-color: #3a53ff;
     color: #FFF;
     border: 0;
+}
+.home_buttons input {
+    float: left;
+}
+.ph_form.home_buttons .form_input input {
+    width: auto;
+}
+.ph_form.home_buttons .form_input input.primaryAction {
+    /* I'm going to regret this in the morning.  Damn you, Sang-som! */
+    font-size: 16px;
+}
 
+.home_buttons a, .primaryAction {
+    font-size: 16px;
 }
 .btn-primary {
     background-color: #4f66ff;
@@ -194,9 +208,10 @@ ul {
 .hero_text {
     display: block;
     /*color: #AAA;*/
-    font-size: 160px;
-    line-height: 160px;
+    font-size: 80px;
+    line-height: 120px;
     font-weight: 100;
+    margin-top: 80px;
 }
 .screenshot {
     display: block;
@@ -261,9 +276,7 @@ h1 {
     color: #999;
 
 }
-.ph_form .form_input {
-    
-}
+
 .ph_form .form_input input,  .ph_form .form_input textarea {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     outline: 0;
@@ -333,6 +346,22 @@ h1 {
 
 .backups {
     margin: 20px 0;
+}
+#mc_embed_signup {
+    overflow: auto;
+    margin-bottom: 80px;
+}
+#mc_embed_signup div.mce_inline_error {
+    clear: both;
+    /*margin-top: 40px;*/
+    background: transparent !important;
+    color: #BBB !important;
+    text-align: left;
+    font-weight: normal !important;
+}
+#mc_embed_signup input.mce_inline_error {
+    border-color: #BBB !important;
+
 }
 @media (max-width: 1024px) {
     #nav a {
