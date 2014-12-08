@@ -209,7 +209,7 @@ LOGGING = {
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
-            'filters': ['require_debug_false'],
+            # 'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         }
     },
@@ -220,16 +220,16 @@ LOGGING = {
             'propagate': True,
         },
     },
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
+    # 'filters': {
+    #     'require_debug_false': {
+    #         '()': 'django.utils.log.RequireDebugFalse'
+    #     }
+    # },
 }
 import logging
-selenium_logger = logging.getLogger('selenium.webdriver.remote.remote_connection')
-selenium_logger.setLevel(logging.WARNING)
-logging.getLogger().setLevel(logging.WARNING)
+# selenium_logger = logging.getLogger('selenium.webdriver.remote.remote_connection')
+# selenium_logger.setLevel(logging.WARNING)
+# logging.getLogger().setLevel(logging.WARNING)
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 BROWSER = "chrome"
