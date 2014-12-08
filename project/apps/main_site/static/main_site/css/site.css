@@ -1,0 +1,362 @@
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -o-user-select: none;
+    user-select: none;
+}
+/*
+Titles:
+font-family: 'Libre Baskerville', serif;
+font-family: 'EB Garamond', serif;
+font-family: 'Playfair Display', serif;
+font-family: 'Sorts Mill Goudy', serif;
+font-family: 'Lora', serif;
+font-family: 'Crimson Text', serif;
+font-family: 'Cardo', serif;
+font-family: 'Radley', serif;
+font-family: 'Prata', serif;
+font-family: 'Bentham', serif;
+font-family: 'PT Serif', serif;
+font-family: 'Ovo', serif;
+
+Body:
+font-family: 'PT Sans', sans-serif;
+font-family: 'Cabin Condensed', sans-serif;
+font-family: 'Istok Web', sans-serif;
+font-family: 'Noto Sans', sans-serif;
+font-family: 'Lato', sans-serif;
+font-family: 'Raleway', sans-serif;
+font-family: 'Karla', sans-serif;
+font-family: 'Nobile', sans-serif;
+font-family: 'Actor', sans-serif;
+font-family: 'Muli', sans-serif;
+
+
+*/
+
+html {
+    /*background: url("../../main_site/img/wood-background-1.jpg") no-repeat center center fixed;*/
+    -webkit-background-size: cover; /* For WebKit*/
+    -moz-background-size: cover;    /* Mozilla*/
+    -o-background-size: cover;      /* Opera*/
+    background-size: cover;         /* Generic*/
+    /*height: 100%;*/
+    /*overflow: hidden;*/
+}
+
+body {
+    /*font-family: 'Muli', sans-serif;*/
+    font-family: 'Helvetica Neue', 'Lato', Helvetica, Arial, sans-serif;
+    background: none;
+    height:100%;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+h1, h2, h3, h4, h5, h6, h1 small, h2 small, h3 small, h4 small, h5 small, h6 small  {
+    font-weight: 300;
+}
+h1 .help {
+    font-weight: 300;
+    color: #999;
+    font-size: 0.5em;
+}
+p {
+    font-size: 16px;
+}
+ul {
+    margin-left: 2em;
+}
+
+#nav {
+    font-family: 'Muli', sans-serif;
+    height: 36px;
+    min-height: 36px;
+    width: 100%;
+    background-color: #454545;
+    vertical-align: top;
+    border-radius: 0;
+    border: 0;
+    z-index: 1000;
+}
+#nav a {
+    display: inline-block;
+    color: #AAA;
+    background-color: #454545;
+    /*width: 100px;*/
+    padding: 11px 25px 9px 25px;
+    height: 34px;
+    text-decoration: none;
+    /*border: 1px solid red;*/
+}
+#nav a:hover {
+    color: #EEE;
+}
+#nav ul {
+    margin: 0;
+    padding: 0;
+    background-color: #454545;
+}
+#nav ul.dropdown-menu {
+    background-color: #454545;
+    padding-bottom: 8px;
+}
+#nav a.logo {
+    background-color: transparent;
+    padding: 3px 25px;
+    height: 36px;
+    display: block;
+    float: left;
+    overflow: visible;
+}
+#nav a.logo img {
+    width: 131px;
+    height: 45px;
+}
+#nav .account_links {
+    float: right;
+}
+#main {
+    top: 0;
+    position: relative;
+    margin-bottom: 60px;
+}
+.page_content {
+    width: 80%;
+    margin: 0 auto;
+    max-width: 1024px;
+}
+
+.button, .button:hover, a.button, a.button:hover, button, button:hover, button.button, button.button:hover, .primaryAction, .primaryAction:hover {
+    border-width: 1px;
+    text-decoration: none;
+    padding: 12px 18px;
+    border-radius: 20px;
+    outline: none;
+    outline-style: none;
+    outline-width: 0;
+}
+#nav .mobile_toggle, #nav .mobile_toggle:hover {
+    border-radius: 0;
+    border: 0px;
+    background-color: transparent;
+    padding: 4px 0 0 0;
+}
+#nav .navbar-collapse {
+    padding: 0;
+    border: 0;
+    z-index: 100;
+}
+
+
+.home_buttons {
+    text-align: center;
+    margin: 0 0 60px 0;
+}
+.home_buttons a, .primaryAction {
+    margin: 0 20px;
+    /*background-color: #ff580e;*/
+    /*background-color: #4369ff;*/
+    background-color: #4f66ff;
+    color: #d1daff;
+    border: 0;
+}
+.home_buttons a:hover, .home_buttons a.current, .primaryAction:hover {
+    background-color: #3a53ff;
+    color: #FFF;
+    border: 0;
+
+}
+.btn-primary {
+    background-color: #4f66ff;
+    border: #4f66ff;
+}
+.btn-primary:hover {
+    background-color: #3a53ff;
+    border: #3a53ff;
+}
+.home h1 {
+    text-align: center;
+    margin: 120px 0 80px 0;
+}
+.hero_section {
+
+}
+.hero_section.write {
+    margin-top: 160px;
+}
+.hero_text {
+    display: block;
+    /*color: #AAA;*/
+    font-size: 160px;
+    line-height: 160px;
+    font-weight: 100;
+}
+.screenshot {
+    display: block;
+    border: 1px solid #CCC;
+}
+.screenshot img {
+    width: 200px;
+    height: 200px;
+}
+h1 {
+    margin: 40px 0 30px 0;
+}
+.home .detail_section {
+    width: 640px;
+    margin: 0 auto;
+    display: none;
+}
+.home .detail_section .home_buttons {
+    margin-top: 40px;
+}
+
+.footer {
+    font-weight: 300;
+    color: #888;
+    text-align: center;
+}
+.footer a {
+    color: #888;
+    display: inline-block;
+    margin: 0 10px;
+}
+.bubble {
+    background-color: #DDD;
+    display: inline-block;
+    border-radius: 4px;
+    color: #FFF;
+    font-size: 10px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    font-weight: 300;
+}
+.manifesto.page_content {
+    max-width: 880px;
+}
+
+
+.ph_form {
+    display: block;
+    padding-top: 20px;
+}
+
+.ph_form .question .text {
+    font-size: 30px;
+    font-weight: 300;
+    line-height: 1em;
+    margin-bottom: 4px;
+
+}
+.ph_form .question .help {
+    font-size: 16px;
+    font-weight: 300;
+    color: #999;
+
+}
+.ph_form .form_input {
+    
+}
+.ph_form .form_input input,  .ph_form .form_input textarea {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    outline: 0;
+    font-weight: 300;
+    font-size: 24px;
+    width: 80%;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #DDD;
+    color: #555;
+}
+.ph_form .form_input input[type=checkbox] {
+    width: auto;
+}
+.ph_form label {
+    font-weight: 300;
+}
+.ph_form .form_input.valid input,  .ph_form .form_input.valid textarea {
+    border-color: #5C7;
+}
+::-webkit-input-placeholder {
+   font-weight: 100;
+   padding-top: 4px;
+   font-size: 20px;
+   color: #999;
+}
+:-moz-placeholder { /* Firefox 18- */
+   font-weight: 100;
+   padding-top: 4px;
+   font-size: 20px;
+   color: #999;
+}
+::-moz-placeholder {  /* Firefox 19+ */
+   font-weight: 100;
+   padding-top: 4px;
+   font-size: 20px;
+   color: #999;
+}
+:-ms-input-placeholder {  
+   font-weight: 100;
+   padding-top: 4px;
+   font-size: 20px;
+   color: #999;
+}
+.ph_form .instead_text {
+    display: inline-block;
+    margin-left: 10px;
+}
+.ph_form .errors ul {
+    padding: 0;
+    margin: 0 0 0 2px;
+    list-style-type: none;
+    color: #900;
+    font-weight: 500;
+}
+.ph_form .helper {
+    color: #AAA;
+    margin: 2px 4px;
+}
+
+.explore {
+
+}
+.explore .author {
+    color: #CCC;
+}
+
+.backups {
+    margin: 20px 0;
+}
+@media (max-width: 1024px) {
+    #nav a {
+        padding: 11px 15px 9px 15px;
+    }
+    .page_content {
+        width: 95%;
+    }
+    .hero_text {
+        font-size: 80px;
+        font-weight: 100;
+        line-height: 80px;
+    }
+    .hero_section.write {
+        margin-top: 80px;
+    }
+}
+@media (max-width: 640px) {
+    .hero_text {
+        font-size: 64px;
+        font-weight: 100;
+        line-height: 64px;
+    }
+    .hero_section.write {
+        margin-top: 64px;
+    }
+}

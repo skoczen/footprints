@@ -1,0 +1,77 @@
+{% extends "account/base.html" %}
+{% load url from future %}
+{% load i18n compress %}
+
+{% block js %}{{block.super}}
+{% compress js %}
+<script src="{{STATIC_URL}}main_site/js/password.js"></script>
+{% endcompress %}
+{% endblock %}
+
+
+{% block head_title %}{% trans "Sign up at footprints" %}{% endblock %}
+
+{% block content %}
+<h1>{% if redirect_field_value %}{% trans "Welcome to footprints." %}{% else %}{% trans "Get started at footprints." %}{% endif %}<div class="help">Get started in one step.  footprints is free to signup and use.</div></h1>
+
+<form class="signup ph_form" role="form" id="signup_form" method="post" action="{% url 'account_signup' %}" autocomplete="off">
+  {% csrf_token %}
+  <div class="row question form-group">
+    <div class="col-md-5">
+        <div class="text">What's your name?</div>
+        <div class="help">If you publish work, this is the name your poetry will be published under.</div>
+    </div>
+    
+    <div class="col-md-7 answers">
+        <div class="form-group form_input {# valid #}">
+            {{ form.first_name }}
+            <div class="errors">{{form.first_name.errors}}</div>
+        </div>
+    </div>
+  </div>
+  <div class="row question form-group">
+    <div class="col-md-5">
+        <div class="text">What's your email address?</div>
+        <div class="help">You'll use this to sign in.</div>
+    </div>
+    
+    <div class="col-md-7 answers">
+        <div class="form-group form_input">
+            {{ form.email }}
+            <div class="errors">{{form.email.errors}}</div>
+        </div>
+        
+    </div>
+  </div>
+  <div class="row question form-group">
+    <div class="col-md-5">
+        <div class="text">What would you like your password to be?</div>
+        <div class="help">Enter it twice, to be sure. For best security, use a different one than you use elsewhere.</div>
+    </div>
+    
+    <div class="col-md-7 answers">
+        <div class="form-group form_input password">{{ form.password1 }}</div>
+        <div class="errors">{{form.password1.errors}}</div>
+        <div class="form-group form_input password">{{ form.password2 }}</div>
+        <div class="helper"><label for="show_password"><input type="checkbox" id="show_password"> Show Passwords</div>
+    </div>
+    
+  </div>
+  <div class="row">
+    <div class="col-md-5"></div>
+    <div class="col-md-7">
+        <button type="submit" class="button btn btn-primary sign_up_button">{% trans "Get Started" %} &raquo;</button>
+        <span class="instead_text">{% blocktrans %}Already have an account? <a href="{{ login_url }}">Sign in instead!{% endblocktrans %}</a></span>
+    </div>
+  </div>
+  
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+  
+</form>
+
+
+
+{% endblock %}
+

@@ -1,0 +1,27 @@
+dependencies:
+  override:
+    - pip install -r requirements.txt
+    
+test:
+  override:
+    - ./manage.py test --settings=envs.ci
+
+deployment:
+  staging:
+    branch: feature/*
+    commands:
+      - heroku maintenance:on --app footprints-staging
+      # - heroku scale celery=0 --app footprints-staging
+      - git push git@heroku.com:footprints-staging.git $CIRCLE_SHA1:master
+      - heroku run python manage.py syncdb --migrate --settings=envs.live --app footprints-staging
+      - heroku restart --app footprints-staging
+      - heroku maintenance:off --app footprints-staging
+  production:
+    branch: master
+    commands:
+      # - heroku maintenance:on --app footprints
+      # - heroku scale celery=0 --app footprints
+      - git push git@heroku.com:footprints.git $CIRCLE_SHA1:master
+      - heroku run python manage.py syncdb --migrate --settings=envs.live --app footprints
+      - heroku restart --app footprints
+      # - heroku maintenance:off --app footprints
