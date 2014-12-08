@@ -17,6 +17,7 @@ django-selector
 django-staticfiles
 django-storages
 django-ses
+dropbox
 fabric
 gunicorn
 psycopg2

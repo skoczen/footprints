@@ -11,11 +11,12 @@ class SignupForm(forms.Form):
     )
     
     def signup(self, request, user):
-        poet = Poet.objects.get_or_create(user=user)[0]
-        if "uuid" in request.session:
-            uuid = request.session["uuid"]
-            Fantastic.objects.filter(uuid=uuid).update(reader=poet)
-            Read.objects.filter(uuid=uuid).update(reader=poet)
+        pass
+        # poet = Poet.objects.get_or_create(user=user)[0]
+        # if "uuid" in request.session:
+        #     uuid = request.session["uuid"]
+        #     Fantastic.objects.filter(uuid=uuid).update(reader=poet)
+        #     Read.objects.filter(uuid=uuid).update(reader=poet)
 
     def save(self, user):
         user.first_name = self.cleaned_data['first_name']

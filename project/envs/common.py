@@ -1,3 +1,4 @@
+import os
 from os.path import abspath, join, dirname
 from sys import path
 from envs.keys_and_passwords import *
@@ -38,17 +39,11 @@ CACHES = {
 }
 
 ALLOWED_HOSTS = [
-    "footprints-staging.herokuapp.com",
-    "footprints.herokuapp.com",
-    "footprints.org",
-    "*.footprints.org",
-    "www.footprints.org",
-    "footprints.net",
-    "*.footprints.net",
-    "www.footprints.net",
-    "footprints.com",
-    "*.footprints.com",
-    "www.footprints.com",
+    "steven-footprints-staging.herokuapp.com",
+    "steven-footprints.herokuapp.com",
+    "footprintsapp.com",
+    "*.footprintsapp.com",
+    "www.footprintsapp.com",
 ]
 
 TIME_ZONE = 'America/Vancouver'
@@ -183,13 +178,13 @@ AUTHENTICATION_BACKENDS = (
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_SUBJECT_PREFIX = "footprints: "
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "Footprints: "
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = "optional"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_LOGOUT_REDIRECT_URL = "/logged-out/"
-ACCOUNT_SIGNUP_FORM_CLASS = "posts.forms.SignupForm"
+# ACCOUNT_SIGNUP_FORM_CLASS = "posts.forms.SignupForm"
 ACCOUNT_USER_DISPLAY = lambda user: user.get_profile().name
 
 SITE_ID = 1
