@@ -4,7 +4,7 @@ from postgresify import postgresify
 from envs.common import *
 
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 PING_URL = "http://skoczen-footprints.herokuapp.com/ping"
 
