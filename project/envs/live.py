@@ -10,7 +10,7 @@ PING_URL = "http://skoczen-footprints.herokuapp.com/ping"
 
 EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
 MAILGUN_ACCESS_KEY = os.environ['MAILGUN_API_KEY']
-MAILGUN_SERVER_NAME = 'footprints.org'
+MAILGUN_SERVER_NAME = 'mg.footprintsapp.com'
 BROKER_URL = os.environ["REDISTOGO_URL"]
 
 MEDIA_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
