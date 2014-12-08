@@ -39,8 +39,8 @@ CACHES = {
 }
 
 ALLOWED_HOSTS = [
-    "steven-footprints-staging.herokuapp.com",
-    "steven-footprints.herokuapp.com",
+    "skoczen-footprints-staging.herokuapp.com",
+    "skoczen-footprints.herokuapp.com",
     "footprintsapp.com",
     "*.footprintsapp.com",
     "www.footprintsapp.com",
