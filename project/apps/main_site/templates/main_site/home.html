@@ -15,49 +15,24 @@
 
 {% block content %}
 <div class="home page_content">
-    <h1>footprints is the place to read and write poetry.</h1>
+    <h1>Footprints is a simple, beautiful publication platform.</h1>
 
     <div class="home_sections hero_section">
-            <div class="hero_text">for readers</div>
-            <h2>Great writing, beautifully presented.</h2>
-            
-            {# <div class="screenshot"><img src="{{STATIC_URL}}main_site/img/home/beautifully.png"/></div> #}
-            <p>footprints presents new and classic writing in a simple, elegant format. The words matter, and there's nothing on footprints to separate you from them.</p>
+            <div class="hero_text"></div>
+            <h2>Simple.</h2>
+            <p>Footprints was designed to help you <i>just keep writing</i>, and lets you publish your work without spending time and stress on it.</p>
 
-            <h2>Know what you read.  Know what you loved.</h2>
-            {# <div class="screenshot"><img src="{{STATIC_URL}}main_site/img/home/recently-read.png"/></div> #}
-            <p>footprints automatically keeps track of the poems you spent time with, and the ones you marked as <i>fantastic</i>.  The result is you can always look back, and be reminded of poems you love.</p>
+            <h2>Promotes your content.</h2>
+            <p>Footprints can post your content to Facebook and Twitter in a way that benefits <i>your</i> traffic, not some giant corporation.</p>
 
-            <h2>Connect with authors.</h2>
-            <p>Have you ever wanted to say to an author <i>oh dear god this poem just exploded my everything</i>?  Now you can &ndash; and the author will actually hear it.</p>
+            <h2>Works with the things you already use.</h2>
+            <p>Footprints can pull posts from DayOne, handle Mailchimp signup forms, and produces newsletter-ready RSS feeds.</p>
 
-            <h2>Find something new.</h2>
-            <p>Explore footprints, and find work from fresh artists, and timeless classics you haven't seen yet. See what other users are reading, and always find something new.</p>
+            <h2>Free and Open source.</h2>
+            <p>Footprints is built on the shoulders of giants, so will remain free and open-source. You should always, always be able to get your content out, and this is the best way we know.</p>
 
-            <p><a href="{% url "account_signup" %}?next=" class="button btn btn-primary">Start Reading</a></p>
-
-    </div>
-    <div class="home_sections hero_section write">
-        <div class="hero_text">for writers</div>
-            <h2>Your words.  A global audience.</h2>
-            <p>If you're like us, you write poetry to connect with people.  To get the ideas and visions and emotions and world out of your head and interacting with another human, somewhere.  We built footprints to directly connect poems and readers. The poets who publish here agree &ndash; it works.
-
-            <h2>The best revision tool for poetry.</h2>
-            <p>footprints was built by poets.  We built it to be the best place to keep all our drafts &ndash; to let us work, and stay out of our way.  footprints saves all your revisions, and lets you look back. It has a simple, uncluttered interface that is <i>exactly</i> the way your poem will look published.  And, footprints lets you keep publishing revisions, even after you've published your poem.</p>
-
-            
-            <h2>Safe. You keep the rights. Download everything, anytime.</h2>
-            
-            <p>As poets, the last thing we wanted was a service that kept work hostage.  footprints doesn't keep your copyrights or have silly where-else-was-this-published limitations.  They're your words.  Take them wherever you'd like. We also provide a one-click backup to download everything you have on footprints - published poems, drafts, even the list of things you've read and liked.</p>
-
-            <h2>Connect with your readers.</h2>
-            
-            <p>We create direct, novel interactions between you and your readers, <i>on your terms</i>.  When you publish on footprints, you can finally know how many people have <i>actually read</i> each of your poems, and which are the most beloved.  We also give you the option to connect with your readers in ways traditional journals can't - by having discussions and comments right with your poems.</p>
-
-            <p>To top it off, footprints is free to use.</p>
-
+            <p>Welcome to Footprints.  Publication, with the author in mind.</p>
             <p><a href="{% url "account_signup" %}" class="button btn btn-primary">Get Started</a></p>
-        </div>
     </div>
 </div>
 {% endblock %}

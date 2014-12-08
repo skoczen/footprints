@@ -17,8 +17,8 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-EMAIL_SUBJECT_PREFIX = "[footprints.org] "
-SERVER_EMAIL = 'footprints <no-reply@footprints.org>'
+EMAIL_SUBJECT_PREFIX = "[footprintsapp.com] "
+SERVER_EMAIL = 'footprints <no-reply@footprintsapp.com>'
 DEFAULT_FROM_EMAIL = SERVER_EMAIL
 
 DATABASES = {
@@ -191,7 +191,7 @@ SITE_ID = 1
 
 import djcelery
 djcelery.setup_loader()
-BROKER_URL = 'redis://localhost:6379/6'
+BROKER_URL = 'redis://localhost:6379/7'
 
 AUTH_PROFILE_MODULE = "posts.Writer"
 LOGIN_REDIRECT_URL = "/my-writing/"
