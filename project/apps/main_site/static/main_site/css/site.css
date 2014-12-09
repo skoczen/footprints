@@ -167,6 +167,7 @@ ul {
     color: #d1daff;
     border: 0;
     width: auto;
+    margin: 0;
 }
 .home_buttons a:hover, .home_buttons a.current, .primaryAction:hover, .ph_form.home_buttons .form_input input.primaryAction:hover {
     background-color: #3a53ff;
@@ -178,6 +179,7 @@ ul {
 }
 .ph_form.home_buttons .form_input input {
     width: auto;
+    margin: 5px 20px 0 0;
 }
 .ph_form.home_buttons .form_input input.primaryAction {
     /* I'm going to regret this in the morning.  Damn you, Sang-som! */
@@ -361,7 +363,13 @@ h1 {
 }
 #mc_embed_signup input.mce_inline_error {
     border-color: #BBB !important;
-
+}
+#mc_embed_signup div.form_input {
+    overflow: auto;
+}
+#mc_embed_signup .form_errors {
+    display: block;
+    clear: both;
 }
 @media (max-width: 1024px) {
     #nav a {
@@ -371,9 +379,10 @@ h1 {
         width: 95%;
     }
     .hero_text {
-        font-size: 80px;
+        font-size: 64px;
         font-weight: 100;
-        line-height: 80px;
+        line-height: 64px;
+        margin-top: 60px;
     }
     .hero_section.write {
         margin-top: 80px;
@@ -381,9 +390,9 @@ h1 {
 }
 @media (max-width: 640px) {
     .hero_text {
-        font-size: 64px;
+        font-size: 48px;
         font-weight: 100;
-        line-height: 64px;
+        line-height: 48px;
     }
     .hero_section.write {
         margin-top: 64px;
