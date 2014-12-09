@@ -66,7 +66,7 @@ ul {
     height: 36px;
     min-height: 36px;
     width: 100%;
-    background-color: #454545;
+    background-color: #FFF;
     vertical-align: top;
     border-radius: 0;
     border: 0;
@@ -75,7 +75,7 @@ ul {
 #nav a {
     display: inline-block;
     color: #AAA;
-    background-color: #454545;
+    background-color: #FFF;
     /*width: 100px;*/
     padding: 11px 25px 9px 25px;
     height: 34px;
@@ -88,10 +88,10 @@ ul {
 #nav ul {
     margin: 0;
     padding: 0;
-    background-color: #454545;
+    background-color: #FFF;
 }
 #nav ul.dropdown-menu {
-    background-color: #454545;
+    background-color: #FFF;
     padding-bottom: 8px;
 }
 #nav a.logo {

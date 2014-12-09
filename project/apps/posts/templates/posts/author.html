@@ -1,0 +1,50 @@
+{% extends "base.html" %}{% load compress %}
+
+{% block title %}{{author.name}}'{% if not author.name_ends_in_s %}s{% endif %} Posts{% endblock %}
+
+{% block description %}Posts written by {{author.name}}. Published on Footprints.{% endblock %}
+{% block author %}{% url "posts:author" author.slug %}{% endblock %}
+{% block schema_name %}{{author.name}}'{% if not author.name_ends_in_s %}s{% endif %} Posts{% endblock %}
+{% block schema_description %}Posts written by {{author.name}}. Published on Footprints.{% endblock %}
+{% block schema_author %}{{author.name}}{% endblock %}
+{% block og_title %}{{author.name}}'{% if not author.name_ends_in_s %}s{% endif %} Posts{% endblock %}
+{% block og_url %}{% url "posts:author" author.slug %}{% endblock %}
+{% block og_description %}Posts written by {{author.name}}. Published on Footprints.{% endblock %}
+{% block og_publish_time %}{{author.created_at|date:"c"}}{% endblock %}
+{% block og_update_time %}{{author.most_recent_update|date:"c"}}{% endblock %}
+
+
+{% block css %}{{block.super}}
+{% compress css %}
+<link rel="stylesheet" href="{{STATIC_URL}}posts/css/author.css">
+{% endcompress %}
+{% endblock %}
+
+
+{% block js %}{{block.super}}
+{% compress js %}
+<script src="{{STATIC_URL}}main_site/js/site.js"></script>
+{% endcompress %}
+{% endblock %}
+
+
+{% block content %}
+<div class="page_content author">
+    {% if is_me %}<a href="{% url "posts:new" %}" class="new_draft_button button">Start a new draft</a>{% endif %}
+    <h1>{{author.name}}{% if is_me %} <span class="is_me bubble">me!</span>{% endif %}</h1>
+    
+    <h2>All Posts</h2>
+    <div class="work_group">
+        <ul>
+        {% for post in posts %}
+            {% ifchanged post.written_on.year %}
+            </ul>
+            <h3>{% if post.written_on %}{{post.written_on.year}}{% else %}Unknown year {% endif %}</h3>
+            <ul class="posts">    
+            {% endifchanged %}
+        <li class="post"><a href="{% url "posts:post" author.slug post.slug %}">{{post.title|safe}}</a> {% if post.is_draft %}<span class="draft bubble">DRAFT</span>{% else %}{% if post.num_fantastics > 0 %}<div class="fantastics">★ {{post.num_fantastics}}</div>{% endif %} {% if post.num_reads > 0 %}<div class="reads"><i class="fa fa-eye"></i> {{post.num_reads}}</div>{% endif %}{% endif %}</li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

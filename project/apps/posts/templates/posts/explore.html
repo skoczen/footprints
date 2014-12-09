@@ -1,0 +1,95 @@
+{% extends "base.html" %}{% load compress humanize %}
+
+{% block title %}Footprints: Explore{% endblock %}
+
+{% block css %}{{block.super}}
+{% compress css %}
+<link rel="stylesheet" href="{{STATIC_URL}}main_site/css/fonts.css">
+<link rel="stylesheet" href="{{STATIC_URL}}main_site/css/site.css">
+{% endcompress %}
+{% endblock %}
+
+{% block js %}{{block.super}}
+{% compress js %}
+<script src="{{STATIC_URL}}main_site/js/site.js"></script>
+{% endcompress %}
+{% endblock %}
+
+
+{% block content %}
+<div class="explore page_content">
+    {# <h1>There are {{num_posts|intcomma}} posts on footprints.  Dig in.</h1> #}
+
+    <div class="row">
+        <div class="col-sm-6 col_section">
+            <h1>Recently read</h1>
+            <ul>
+            {% for r in recent_reads %} 
+                <li><a href="{% url "posts:post" r.post.author.slug r.post.slug %}">{{r.post.title|safe}}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="col-sm-6 col_section">
+            <h1>Recently published</h1>
+            <ul>
+            {% for post in recent_published %}
+                <li><a href="{% url "posts:post" post.author.slug post.slug %}">{{post.title|safe}}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col_section">
+            <h1>Classics</h1>
+            <ul>
+            {% for post in top_classics %}
+                <li><a href="{% url "posts:post" post.author.slug post.slug %}">{{post.title|safe}}</a> {# <span class="author">by {{post.author.name}}</span> #}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="col-sm-6 col_section">
+            <h1>Great Authors</h1>
+            <ul>
+            {% for author in great_authors %}
+                <li><a href="{% url "posts:author" author.slug %}">{{author.name}}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col_section">
+            <h1>Active authors</h1>
+            <ul>
+            {% for author in active_authors %}
+                <li><a href="{% url "posts:author" author.slug %}">{{author.name}}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-sm-6 col_section">
+            <h1>Most popular posts</h1>
+            <ul>
+            {% for post in most_favorited %}
+                <li><a href="{% url "posts:post" post.author.slug post.slug %}">{{post.title|safe}}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <!-- 
+    Recently Read:
+    - top 10, update every 60s
+
+    Recently active authors:
+    - top 5
+
+    Recently published:
+    - top 10
+
+    
+
+    Classics:
+    - top 5 by favorited
+
+    -->
+</div>
+{% endblock %}

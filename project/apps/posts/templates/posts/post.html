@@ -1,0 +1,102 @@
+{% extends "base.html" %}{% load compress %}
+
+{% block title %}{{post.title}} by {{post.author.name}}{% endblock %}
+{% block description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
+{% block author %}{% url "posts:author" post.author.slug %}{% endblock %}
+{% block schema_name %}{{post.title}} by {{post.author.name}}{% endblock %}
+{% block schema_description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
+{% block schema_author %}{{post.author.name}}{% endblock %}
+{% block og_title %}{{post.title}} by {{post.author.name}}{% endblock %}
+{% block og_url %}{% url "posts:post" post.author.slug post.slug %}{% endblock %}
+{% block og_description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
+{% block og_publish_time %}{{post.published_at|date:"c"}}{% endblock %}
+{% block og_update_time %}{{post.sort_datetime|date:"c"}}{% endblock %}
+
+{% block css %}{{block.super}}
+{% compress css %}
+<link rel="stylesheet" href="{{STATIC_URL}}posts/css/posts.css">
+{% endcompress %}
+{% endblock %}
+
+{% block js %}{{block.super}}
+{% compress js %}
+<script src="{{STATIC_URL}}base/js/ajaxForm.js"></script>
+<script src="{{STATIC_URL}}posts/js/nicEdit.js"></script>
+<script type="text/javascript">
+    window.Footprints = window.Footprints || {};
+    Footprints.urls = Footprints.urls || {};
+    Footprints.state = Footprints.state || {};
+</script>
+<script src="{{STATIC_URL}}posts/js/post.js"></script>
+{% endcompress %}
+{% endblock %}
+
+{% block logo_url %}{{STATIC_URL}}main_site/img/logo-name-90-066.png{% endblock %}
+
+{% block main_content %}
+<form action="{% url "posts:save_revision" author=post.author.slug title=post.slug %}" class="post_form" method="POST">
+
+{% if is_mine %}
+<div class="edit_bar">
+    <a href="{% url "posts:revisions" post.author.slug post.slug %}" class="button revisions_button" target="_blank"><i class="icon-revisions" ></i> Revisions</a>
+    {% if post.is_draft %}
+    <button type="submit" href="#" class="button currently_editing_button save_revision_button"><i class="icon-edit" ></i> Save Draft</button>
+    <a href="#" class="button currently_editing_button publish_button"><i class="icon-edit" ></i> Publish</a>
+    {% else %}
+    <button type="submit" href="#" class="button currently_editing_button save_revision_button"><i class="icon-edit" ></i> Publish New Version</button>
+    {% endif %}
+    <button type="revert" href="#" class="button currently_editing_button cancel_editing_button"><i class="icon-edit" ></i> Cancel</button>
+    <a href="#" class="button start_editing_button edit_button"><i class="icon-edit" ></i> Edit</a>
+</div>
+{% endif %}
+
+
+<div class="post {% if post.is_draft %}draft{% endif %} {% if post.narrow %}narrow{% endif %}">
+    <div id="edit_pane_area"><div id="edit_pane"></div></div>
+    <div class="draft_badge"></div>
+    <h1 class="title"><div class="editable" id="post_title">{{post.title|safe}}</div></h1>
+
+    <div class="body"><div class="editable" id="post_body">{{post.body|safe}}</div></div>
+    <div class="display author">by <a href="{% url "posts:author" post.author.slug %}">{{post.author.name}}</a></div>
+    <div class="print author">by {{post.author.name}}</div>
+</div>
+
+{% if is_mine %}
+<div class="options_toggle">
+    <a href="#" class="options_button">⚙</a>
+</div>
+<div class="post_meta">
+    <table>
+    {{form.as_table}}
+    </table>
+    {% csrf_token %}
+</div>
+{% endif %}
+</form>
+{% if not post.is_draft and not is_mine %}
+<div class="kudos">
+<form class="fantastic_form" action="{% url "posts:this_was_fantastic" post.pk %}" method="POST">
+    {% csrf_token %}
+    {{fantastic_form.as_p}}
+    <button type="submit" href="#" class="fantastic_button button {% if fantastic.on %}clicked{% endif %}"><span class="num_agree"></span><span class="unclicked_star">☆</span><span class="clicked_star">★</span> This was fantastic.</button>
+</form>
+</div>
+<form class="read_form" action="{% url "posts:mark_read" post.pk %}" method="POST">
+    {% csrf_token %}
+    {{read_form.as_p}}
+</form>
+{% endif %}
+
+
+<div class="timeline">
+    <div class="published">
+        {% if post.is_draft %}Draft.{% else %}{% if not post.written_on %}Unknown publication date.{% else %}Written {% if post.approximate_publication_date %}around {{post.written_on|date:"Y" }}.{% else %}on {{post.written_on|date}}.{% endif%}{% endif %}{% endif %}
+        {% if post.revisions_visible or is_mine %}
+            <span class="revised_text">{% if post.has_been_revised and not post.imported %}<a href="{% url "posts:revisions" post.author.slug post.slug %}">Last revised</a> {{post.most_recent_revision.revised_at|date}}{% endif %}
+            </span>
+        {% endif %}
+        {% if not post.is_draft and post.num_reads > 1 %}<span class="num_reads"><span class="num">{{post.num_reads}}</span> reads.</span>{% endif %}
+    </div>
+    <div class="copyright">{% if post.public_domain %}Written by <a href="{% url "posts:author" post.author.slug %}">{{post.author.name}}</a>, in the public domain.</a> {% if post.author.wikipedia_url %}<br/>Learn about {{post.author.name}} on <a href="{{post.author.wikipedia_url}}" target="_blank">Wikipedia</a>{% endif %}{% else %}Copyright <a href="{% url "posts:author" post.author.slug %}">{{post.author.name}}</a>, all rights reserved.{% endif %}</div>
+</div>
+{% endblock %}

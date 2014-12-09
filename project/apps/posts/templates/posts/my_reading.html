@@ -1,0 +1,38 @@
+{% extends "base.html" %}{% load compress %}
+
+{% block title %}Footprints: Recently read{% endblock %}
+
+{% block css %}{{block.super}}
+{% compress css %}
+<link rel="stylesheet" href="{{STATIC_URL}}main_site/css/fonts.css">
+<link rel="stylesheet" href="{{STATIC_URL}}main_site/css/site.css">
+{% endcompress %}
+{% endblock %}
+
+{% block js %}{{block.super}}
+{% compress js %}
+<script src="{{STATIC_URL}}main_site/js/site.js"></script>
+{% endcompress %}
+{% endblock %}
+
+
+{% block content %}
+<div class="page_content">
+    <h1>Recently Read</h1>
+
+    </ul>
+    {% for read in my_reads %}
+    {% ifchanged read.read_at.month %}
+    </ul>
+    <h4>{{read.read_at|date:"F o"}}</h4>
+    <ul>
+    {% endifchanged %}
+    {% ifchanged read.post.pk or read.read_at.month %}
+    <li><a href="{% url "posts:post" read.post.author.slug read.post.slug %}">{{read.post.title|safe}}</a> by {{read.post.author.name}} {% if read.fantasticed_this_post %}★{% endif %}</li> 
+    {% endifchanged %}
+    {% empty %}
+    <li>Looks like you haven't read anything yet!
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,307 @@
+body {
+    background: #AAA;
+    /*background: #545454;*/
+    overflow-x: hidden;
+}
+#nav a {
+    color: #888;
+}
+#nav a:hover {
+    color: #CCC;
+}
+.button, .button:hover, a.button, a.button:hover, button, button:hover, button.button, button.button:hover, .primaryAction, .primaryAction:hover {
+    color: #DDD;
+    background-color: #B2B2B2;
+    border: 1px solid #999;
+}
+.button:hover, a.button:hover, button.button:hover, button:hover {
+    background-color: #999;
+}
+#main {
+    padding: 0;
+}
+.author {
+    display: block;
+    margin: 60px 0 0 0;
+    text-align: center;
+    color: #BBB;
+    font-weight: 300;
+}
+.author a {
+    color: #AAA;
+}
+.print.author {
+    display: none;
+}
+.post {
+    display: block;
+    position: relative;
+    width: 64em;
+    background: #FFF;
+    padding: 40px 80px 20px 80px;
+    margin: 80px auto 0 auto;
+    /*top: 80px;*/
+
+    border: 1px solid rgba(0,0,0,0);
+    border-bottom-color: rgba(255,255,255,0.97);
+    border-right-color: rgba(255,255,255,0.97);
+    box-shadow: 1px 2px 2px rgba(0,0,0,0.3);
+}
+.post p {
+    margin: 0;
+}
+@media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait) {
+    body {
+        /*background: #222;*/
+    }
+    .post {
+        padding: 40px 16px 20px 26px;
+        width: 762px;
+    }
+    .post.narrow {
+        padding: 40px 40px 20px 60px;
+        width: 720px;
+    }
+    .post .body {
+        /*font-size: 14px;*/
+    }
+}
+
+#edit_pane_area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border: 0;
+    margin: 0 auto;
+}
+.nicEdit-panelContain {
+    border: 0 !important;
+    padding-left: 80px;
+}
+.post .title, .post .body, .nicEdit-main, .editable {
+    white-space: pre; /* CSS2 */
+    white-space: pre-wrap; /* CSS 2.1 */
+    white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
+    word-wrap: break-word; /* IE */
+    outline: none;
+    outline-style: none;
+    outline-width: 0;
+}
+.post .title { 
+    /*reallly like*/
+    /*font-family: 'EB Garamond', serif;*/
+    
+    /* maybe, depends on below */
+    font-family: 'Cardo', serif;
+    letter-spacing: -1px;
+    
+
+    margin: 20px 0;
+    font-weight: 400;
+}
+.post .body {
+    /*all-rounder*/
+    /*font-family: 'Lato', sans-serif;*/
+    /*lighter, but good:;*/
+    font-family: 'Raleway', sans-serif;
+    
+    font-weight: 400;
+    font-size: 16px;
+}
+.post .draft_badge, .post.draft.editing .draft_badge {
+    display: none;
+}
+.post.draft .draft_badge {
+    z-index: 200;
+    display: block;
+    position: absolute;
+    top: -1px;
+    right: -2px;
+    width: 200px;
+    height: 200px;
+    background: url("../../posts/img/draft-badge.png");
+    background-repeat: no-repeat;
+    background-position: top right;
+}
+
+.timeline {
+    text-align: center;
+    margin: 80px 0;
+    color: #DDD;
+    font-weight: 200;
+}
+.timeline a {
+    color: #DDD;
+    text-decoration: underline;
+}
+.kudos {
+    margin-top: 60px;
+    text-align: center;
+}
+
+.kudos .fantastic_button.clicked {
+    background-color: #777;
+    color: #EEE;
+    border-color: #777;
+}
+.kudos .fantastic_button .clicked_star {
+    display: none;
+}
+.kudos .fantastic_button.clicked .clicked_star {
+    display: inline;
+}
+.kudos .fantastic_button.clicked .unclicked_star {
+    display: none;
+}
+
+.edit_bar {
+    /*position: absolute;*/
+    width: 64em;
+    margin: 0 auto;
+    text-align: right;
+    margin-top: 16px;
+    height: 40px;
+}
+.edit_bar .edit_button {
+    display: inline-block;
+}
+.edit_bar .currently_editing_button {
+    display: none;
+}
+.edit_bar.editing .currently_editing_button {
+    display: inline-block;
+}
+.edit_bar.editing .edit_button {
+    display: none;
+}
+.edit_bar .revisions_button {
+    float: left;
+}
+
+.author .posts .draft {
+    background-color: red;
+    display: inline-block;
+    border-radius: 2px;
+}
+.post.revision {
+    margin: 20px auto 0 auto;
+}
+.revision_badge {
+    text-align: center;
+    top: 0;
+    padding: 5px 0;
+    border: 2px solid #999;
+    border-radius: 4px;
+    width: 32%;
+    margin: 20px 0 20px 34%;
+    color: #CCC;
+    background-color: #9F9F9F;
+}
+.post_form {
+    position: relative;
+    top: 0;
+    left: 0;
+    -webkit-transition: left 0.25s linear;
+    -moz-transition: left 0.25s linear;
+    -ms-transition: left 0.25s linear;
+    -o-transition: left 0.25s linear;
+    transition: left 0.25s linear;
+}
+.post_meta {
+    position: absolute;
+    top: 120px;
+    right: -400px;
+    display: none;
+}
+.options_toggle {
+    display: none;
+    position: absolute;
+    top: 140px;
+    right: 50px;
+    height: 30px;
+    padding: 0 20px;
+}
+.options_toggle a {
+    display: block;
+    font-size: 50px;
+    line-height: 0;
+    color: #999;
+    text-decoration: none;   
+}
+.post_form.editing .options_toggle {
+    display: block;
+}
+.post_form.editing .post_meta {
+    display: block;
+}
+
+.post_form.show_options {
+    left: -600px;
+}
+.revised_text {
+    display: inline-block;
+    margin-left: 20px;
+}
+.copyright {
+    margin-top: 4px;
+}
+.num_reads {
+    margin-left: 20px;
+}
+.num_agree {
+    display: none;
+}
+.num_agree.visible {
+    display: inline-block;
+    margin-right: 10px;
+}
+@page  
+{ 
+    size: auto;   /* auto is the initial value */ 
+
+    /* this affects the margin in the printer settings */ 
+    margin: 25mm 25mm 25mm 25mm;  
+} 
+@media print {
+    .post {
+        margin: 0;
+        padding: 0 0 40px 0;
+        width: 100%;
+        page-break-inside: avoid;
+    }
+    .post .display.author {
+        display: none;
+    }
+    .post .print.author {
+        display: block;
+        color: #EEE !important;
+    }
+    .post div {
+        page-break-inside: avoid;
+    }
+    #nav {
+        display: none;    
+    }
+    .edit_bar {
+        display: none;
+    }
+    .options_toggle {
+        display: none;
+    }
+    .post_meta {
+        display: none;
+    }
+    .kudos {
+        display: none;   
+    }
+    .read_form {
+        display: none;
+    }
+    .timeline {
+        display: none;
+    }
+    #footer {
+        display: none;
+    }
+}

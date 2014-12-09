@@ -9,17 +9,17 @@
 {% endblock %}
 
 
-{% block head_title %}{% trans "Sign up at footprints" %}{% endblock %}
+{% block head_title %}{% trans "Sign up at Footprints" %}{% endblock %}
 
 {% block content %}
-<h1>{% if redirect_field_value %}{% trans "Welcome to footprints." %}{% else %}{% trans "Get started at footprints." %}{% endif %}<div class="help">Get started in one step.  footprints is free to signup and use.</div></h1>
+<h1>{% if redirect_field_value %}{% trans "Welcome to Footprints." %}{% else %}{% trans "Get started at Footprints." %}{% endif %}<div class="help">Get started in one step.  Footprints is free to signup and use.</div></h1>
 
 <form class="signup ph_form" role="form" id="signup_form" method="post" action="{% url 'account_signup' %}" autocomplete="off">
   {% csrf_token %}
   <div class="row question form-group">
     <div class="col-md-5">
         <div class="text">What's your name?</div>
-        <div class="help">If you publish work, this is the name your poetry will be published under.</div>
+        <div class="help">This is the name your posts will be published under.</div>
     </div>
     
     <div class="col-md-7 answers">

@@ -1,0 +1,24 @@
+{% extends "base.html" %}{% load compress %}
+
+{% block title %}Revision: {{post.title}} by {{post.author.name}} on {{post.revised_at|date}}{% endblock %}
+
+{% block css %}{{block.super}}
+{% compress css %}
+<link rel="stylesheet" href="{{STATIC_URL}}posts/css/posts.css">
+{% endcompress %}
+{% endblock %}
+
+
+{% block content %}
+<div class="revision_badge">Revision - {{post.revised_at|date}} {{post.revised_at|time}}</div>
+<div class="post revision {% if post.narrow %}narrow{% endif %}">
+    <h1 class="title"><div class="editable" id="post_title">{{post.title|safe}}</div></h1>
+
+    <div class="body"><div class="editable" id="post_body">{{post.body|safe}}</div></div>
+    <div class="author">by <a href="{% url "posts:author" post.author.slug %}">{{post.author.name}}</a></div>
+</div>
+
+<div class="timeline">
+    <div class="copyright">Copyright <a href="{% url "posts:author" post.author.slug %}">{{post.author.name}}</a>, all rights reserved.</div>
+</div>
+{% endblock %}

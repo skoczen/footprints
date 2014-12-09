@@ -1,0 +1,33 @@
+{% extends "base.html" %}{% load compress %}
+
+{% block title %}Revisions of {{post.title}} - by {{post.author.name}} on Footprints{% endblock %}
+
+{% block css %}{{block.super}}
+{% compress css %}
+<link rel="stylesheet" href="{{STATIC_URL}}main_site/css/fonts.css">
+<link rel="stylesheet" href="{{STATIC_URL}}main_site/css/site.css">
+{% endcompress %}
+{% endblock %}
+
+{% block js %}{{block.super}}
+{% compress js %}
+<script src="{{STATIC_URL}}main_site/js/site.js"></script>
+{% endcompress %}
+{% endblock %}
+
+
+{% block content %}
+<div class="page_content">
+    <h2>Revisions for <a href="{% url "posts:post" post.author.slug post.slug %}">{{post.title|safe}}</a></h2>
+    <ul>
+        {# <li> #}
+            {# <a href="{% url "posts:post" post.author.slug post.slug %}">Current Version</a> #}
+        {# </li> #}
+        {% for revision in revisions %}
+        <li>
+            <a href="{% url "posts:revision" revision.author.slug revision.pk %}">{{revision.revised_at }} - {{revision.title|safe}} </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

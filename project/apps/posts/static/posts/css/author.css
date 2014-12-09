@@ -1,0 +1,53 @@
+
+.author .posts .draft {
+    background-color: #c60210;
+}
+.author .posts .published {
+    background-color: green;
+}
+.author .fantastics, .author .reads {
+    float: right;
+    color: #EEE;
+    font-size: 12px;
+    padding: 2px 4px;
+    transition: color 0.3s ease;
+}
+.post:hover .fantastics, .post:hover .reads {
+    color: #BBB;
+
+}
+
+h2 {
+    margin-top: 20px;
+}
+h3 {
+    border: 1px solid #EEE;
+    border-width: 0 0 1px 0;
+}
+.work_group {
+    margin-left: 20px;
+}
+.none_yet {
+    color: #999;
+}
+ul {
+    list-style: none;
+    padding: 0;
+}
+li {
+    margin: 0;
+}
+.is_me {
+    background-color: green;
+}
+a.button.new_draft_button {
+    float: right;
+    background-color: #F2F2F2;
+    color: #999;
+    border-color: #DDD;
+}
+a.button.new_draft_button:hover {
+    background-color: #DDD;
+    color: #888;
+    border-color: #DDD;
+}

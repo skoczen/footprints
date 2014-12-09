@@ -1,0 +1,19 @@
+- Create account
+- Account page: 
+    - Auth Dropbox
+    - Auth Facebook
+    - Auth Twitter
+- Sync with DayOne via dropbox
+- Post to Facebook
+- Post to Twitter
+- Select an entry from DayOne and publish it.
+- Entry templates
+- RSS feed
+- This was fantastic
+- Share to facebook/twitter
+- Read
+
+
+Later:
+- Email entries
+- 
