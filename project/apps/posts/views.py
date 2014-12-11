@@ -1,5 +1,7 @@
 import uuid
 
+from dropbox.client import DropboxOAuth2Flow, DropboxClient
+
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -234,3 +236,34 @@ def mark_read(request, post_id):
         read.save()
 
     return {"success": True, "num_reads": post.num_reads}
+
+
+
+# Stopped here, just wire up dropbox, as noted in
+# https://www.dropbox.com/developers/core/docs/python#DropboxOAuth2Flow
+def get_dropbox_auth_flow(web_app_session):
+    redirect_uri = "https://my-web-server.org/dropbox-auth-finish"
+    return DropboxOAuth2Flow(APP_KEY, APP_SECRET, redirect_uri,
+                             web_app_session, "dropbox-auth-csrf-token")
+
+def dropbox_auth_start(web_app_session, request):
+    authorize_url = get_dropbox_auth_flow(web_app_session).start()
+    redirect_to(authorize_url)
+
+def dropbox_auth_finish(web_app_session, request):
+    try:
+        access_token, user_id, url_state = \
+                get_dropbox_auth_flow(web_app_session).finish(request.query_params)
+    except DropboxOAuth2Flow.BadRequestException, e:
+        http_status(400)
+    except DropboxOAuth2Flow.BadStateException, e:
+        # Start the auth flow again.
+        redirect_to("/dropbox-auth-start")
+    except DropboxOAuth2Flow.CsrfException, e:
+        http_status(403)
+    except DropboxOAuth2Flow.NotApprovedException, e:
+        flash('Not approved?  Why not?')
+        return redirect_to("/home")
+    except DropboxOAuth2Flow.ProviderException, e:
+        logger.log("Auth error: %s" % (e,))
+        http_status(403)

@@ -28,6 +28,7 @@ django-selector==0.4
 django-ses==0.7.0
 django-staticfiles==1.2.1
 django-storages==1.1.8
+dropbox==2.2.0
 ecdsa==0.11
 gunicorn==19.1.1
 html5lib==0.999
@@ -48,5 +49,6 @@ six==1.8.0
 splinter==0.7.0
 sqlparse==0.1.14
 titlecase==0.7.2
+urllib3==1.9.1
 versiontools==1.9.1
 wsgiref==0.1.2

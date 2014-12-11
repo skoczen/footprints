@@ -1,3 +1,30 @@
+Actual, me MVP:
+- Hit publish in DayOne
+- Have it show up on a beautiful blog, formatted fantastically.
+- Have a place I can push publish on, 
+    - Nice, simple wizard for twitter + fb. Easy.
+    - Have that content + nice links show up on FB + Twitter.
+
+
+Someday maybe:
+- Post directly from footprints?
+
+http://footprints.io/?
+
+
+Resources:
+Markdown editors:
+http://jrmoran.com/playground/markdown-live-editor/
+http://dillinger.io/
+http://softwaremaniacs.org/playground/showdown-highlight/
+https://stackedit.io/
+https://github.com/benweet/stackedit
+https://github.com/benweet/stackedit/blob/master/public/res/WELCOME.md#welcome-to-stackedit---welcome
+https://github.com/benweet/stackedit/blob/master/doc/developer-guide.md#developer-guide
+https://github.com/benweet/stackedit/blob/master/doc/theming.md#stackedit-theming-guide
+
+
+Product MVP:
 - Create account
 - Account page: 
     - Auth Dropbox
@@ -8,12 +35,31 @@
 - Post to Twitter
 - Select an entry from DayOne and publish it.
 - Entry templates
+
 - RSS feed
 - This was fantastic
 - Share to facebook/twitter
 - Read
 
 
+footprints app
+    - default picture
+    - delete dayone text
+    - post to fb
+    - post to twitter
+    - google analytics
+    - totally themeable, django, if-then awesomeness.
+    - convert links and italics and bold in fb posts
+    - twitter:
+        title, then link if < 240
+    - its RSS feed:
+        split title from first line of piece.
+        title is first line.  The end.
+
+
+
 Later:
+- Entry edit: https://github.com/benweet/stackedit
 - Email entries
 - 
+

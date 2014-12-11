@@ -63,6 +63,7 @@
   {% block full_body %}
 <div id="wrap">
     <div id="container">
+      {% if request.user.is_authenticated %}
         <nav id="nav" class="navbar navbar-default" role="navigation">
           <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -106,6 +107,7 @@
             </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
         </nav>
+        {% endif %}
         <div id="main" role="main">
             {% block main_content %}
             <div class="page_content">
@@ -117,12 +119,14 @@
         </div>
     </div>
 </div>
+{% if request.user.is_authenticated %}
 <div id="footer" class="footer">
     <a href="{% url "main_site:home" %}">Footprints </a> &ndash;
     {# <a href="{% url "main_site:about" %}">About</a> #}
     <a href="{% url "main_site:terms" %}">Terms</a>
     <a href="{% url "main_site:faq" %}">FAQ</a>
 </div>
+{% endif %}
   {% endblock %}
 
   {% block js %}

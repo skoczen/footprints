@@ -24,6 +24,14 @@ class Author(BaseModel):
     archive_name = models.CharField(max_length=255, blank=True, editable=False)
     birthdate = models.DateField(blank=True, null=True)
     deathdate = models.DateField(blank=True, null=True)
+    dropbox_api_key = models.TextField(blank=True, null=True)
+    dropbox_expire_date = models.DateTimeField(blank=True, null=True)
+    facebook_api_key = models.TextField(blank=True, null=True)
+    facebook_account_name = models.CharField(max_length=255, blank=True, null=True)
+    facebook_expire_date = models.DateTimeField(blank=True, null=True)
+    twitter_api_key = models.TextField(blank=True, null=True)
+    twitter_account_name = models.CharField(max_length=255, blank=True, null=True)
+    twitter_expire_date = models.DateTimeField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.archive and not self.user:
@@ -51,6 +59,15 @@ class Author(BaseModel):
     @property
     def start_date(self):
         return self.created_at
+
+    def dayone_valid(self):
+        return False
+    
+    def twitter_valid(self):
+        return False
+    
+    def facebook_valid(self):
+        return False
 
 
     def __unicode__(self):

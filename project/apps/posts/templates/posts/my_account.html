@@ -59,12 +59,55 @@
         </div>
         
       </div>
-      <div class="row">
-        <div class="col-md-5"></div>
-        <div class="col-md-7">
-            <button type="submit" class="button btn btn-primary sign_up_button">{% trans "Save Changes" %}</button>
+      <div class="row question form-group">
+        <div class="col-md-5">
+            <div class="text">Day One Connect</div>
+            <div class="help">Automatically import and sync DayOne entries.</div>
+        </div>
+        
+        <div class="col-md-7 answers">
+            <div class="form-group form_input password">
+                {% if user.dayone_valid %}
+                <div class="connected">Connected</div>
+                {% else %}
+                <a href="" class="button btn btn-primary"><i class="icon-dropbox"></i> Connect to Dropbox</a>
+                {% endif %}
+            </div>
         </div>
       </div>
+      <div class="row question form-group">
+        <div class="col-md-5">
+            <div class="text">Facebook Publication</div>
+            <div class="help">Provides the option to publish to facebook.</div>
+        </div>
+        
+        <div class="col-md-7 answers">
+            <div class="form-group form_input password">
+                {% if user.facebook_valid %}
+                <div class="connected">Connected to {{user.facebook_account_name}}</div>
+                {% else %}
+                <a href="" class="button btn btn-primary"><i class="icon-facebook"></i> Connect to Facebook</a>
+                {% endif %}
+            </div>
+        </div>
+      </div>
+      <div class="row question form-group">
+        <div class="col-md-5">
+            <div class="text">Twitter Publication</div>
+            <div class="help">Provides the option to publish to twitter.</div>
+        </div>
+        
+        <div class="col-md-7 answers">
+            <div class="form-group form_input password">
+                {% if user.twitter_valid %}
+                <div class="connected">Connected to {{user.twitter_account_name}}</div>
+                {% else %}
+                <a href="" class="button btn btn-primary"><i class="icon-twitter"></i> Connect to Twitter</a>
+                {% endif %}
+            </div>
+        </div>
+      </div>
+      
       
       {% if redirect_field_value %}
       <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
