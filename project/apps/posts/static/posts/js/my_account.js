@@ -26,10 +26,14 @@ $(function() {
             success: function(resp){
                 if (resp.success) {
                     if (resp.in_sync) {
+                        extra_text = "";
+                        if (!Footprints.status.ever_synced) {
+                            extra_text = "<br/>This first sync can take a little while. Don't worry, you can leave, and come back later - it'll keep going!";
+                        }
                         if (resp.current === 0) {
-                            $(".sync_response_text").html("Getting list of posts...");
+                            $(".sync_response_text").html("Getting list of posts..." + extra_text);
                         } else {
-                            $(".sync_response_text").html(resp.current + "/" + resp.total + " posts synced.");
+                            $(".sync_response_text").html(resp.current + "/" + resp.total + " posts synced." + extra_text);
                         }
                         setTimeout(check_sync_status, 500);
                     } else {
@@ -65,6 +69,7 @@ $(function() {
         $(".sync_now_link .action_text").html("Syncing...");
         $(".sync_icon i").addClass("fa-spin");
         $(".sync_response_text").html("");
+
     }
     $(".sync_now_link").click(function(){
         show_sync_clicked();

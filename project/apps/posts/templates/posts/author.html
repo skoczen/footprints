@@ -41,7 +41,7 @@
             </ul>
             <h3>{% if post.written_on %}{{post.written_on.year}}{% else %}Unknown year {% endif %}</h3>
             <ul class="posts">    
-            {% else %}
+            {% endifchanged %}
             {% ifchanged post.written_on.month %}
             </ul>
             <h4>{% if post.written_on %}{{post.written_on|date:"F"}}{% else %}Unknown month {% endif %}</h4>
@@ -52,9 +52,9 @@
             <h5>{% if post.written_on %}{{post.written_on.day}}{% else %}Unknown day {% endif %}</h5>
             <ul class="posts">    
             {% endifchanged %}
-            {% endifchanged %}
+            
 
-        <li class="post">{{post.written_on|date}}<a href="{% url "posts:post" author.slug post.slug %}">{{post.title|safe}}</a> {% if post.is_draft %}<span class="draft bubble">DRAFT</span>{% else %}{% if post.num_fantastics > 0 %}<div class="fantastics">★ {{post.num_fantastics}}</div>{% endif %} {% if post.num_reads > 0 %}<div class="reads"><i class="fa fa-eye"></i> {{post.num_reads}}</div>{% endif %}{% endif %}</li>
+        <li class="post"><span class="time">{{post.written_on|time}}</span> <a href="{% url "posts:post" author.slug post.slug %}">{{post.title|safe}}</a> {% if post.is_draft %}<span class="draft bubble">DRAFT</span>{% else %}{% if post.num_fantastics > 0 %}<div class="fantastics">★ {{post.num_fantastics}}</div>{% endif %} {% if post.num_reads > 0 %}<div class="reads"><i class="fa fa-eye"></i> {{post.num_reads}}</div>{% endif %}{% endif %}</li>
         {% endfor %}
         </ul>
     </div>

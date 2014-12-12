@@ -46,7 +46,8 @@ ALLOWED_HOSTS = [
     "www.footprintsapp.com",
 ]
 
-TIME_ZONE = 'America/Vancouver'
+# TIME_ZONE = 'America/Vancouver'
+TIME_ZONE = 'Asia/Bangkok'
 
 LANGUAGE_CODE = 'en-us'
 

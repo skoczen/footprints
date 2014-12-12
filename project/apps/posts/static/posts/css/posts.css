@@ -139,11 +139,22 @@ body {
     margin-top: 60px;
     text-align: center;
 }
+.kudos .fantastic_button {
+    background-color: #FCFCFC;
+    border-color: #FDFDFD;
+    color: #CCC;
+}
+.kudos .fantastic_button:hover {
+    background-color: #EEE;
+    border-color: #DEDEDE;
+    color: #999;
+
+}
 
 .kudos .fantastic_button.clicked {
-    background-color: #777;
-    color: #EEE;
-    border-color: #777;
+    background-color: #DDD;
+    color: #777;
+    border-color: #AAA;
 }
 .kudos .fantastic_button .clicked_star {
     display: none;

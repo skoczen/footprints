@@ -145,7 +145,7 @@ def get_from_plist_if_exists(key, plist):
 def datetime_from_utc_to_local(utc_datetime):
     now_timestamp = time.time()
     offset = datetime.datetime.fromtimestamp(now_timestamp) - datetime.datetime.utcfromtimestamp(now_timestamp)
-    return utc_datetime + offset
+    return utc_datetime + datetime.timedelta(hours=7)
 
 @task
 def sync_posts(author_id):
@@ -163,12 +163,11 @@ def sync_posts(author_id):
         file_list = client.metadata(full_dayone_path)
 
         cache.set(author.dayone_sync_total_key, len(file_list["contents"]))
-        print len(file_list["contents"])
         count = 0
         for f in file_list["contents"]:
             do_update = False
             dayone_id = f["path"].split("/")[-1]
-            print count
+            
             cache.set(author.dayone_sync_current_key, count)
             exists = False
             if Post.objects.filter(dayone_id=dayone_id).count() > 0:
@@ -176,8 +175,6 @@ def sync_posts(author_id):
                 p = Post.objects.get(dayone_id=dayone_id)
                 if p.dayone_last_rev != f["revision"]:
                     dayone_update_time = datetime_from_utc_to_local(datetime.datetime(*time.strptime(f["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6]))
-                    print dayone_update_time
-                    print p.updated_at
                     if dayone_update_time > p.updated_at:
                         do_update = True
             else:
@@ -204,10 +201,10 @@ def sync_posts(author_id):
                     "dayone_post": True,
                     "dayone_id": dayone_id,
                     
-                    "dayone_last_modified": datetime.datetime(*time.strptime(f["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6]),
+                    "dayone_last_modified": datetime_from_utc_to_local(datetime.datetime(*time.strptime(f["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6])),
                     "dayone_last_rev": f["revision"],
                     "is_draft": draft,
-                    "dayone_posted": get_from_plist_if_exists("Creation Date", plist),
+                    "dayone_posted": datetime_from_utc_to_local(get_from_plist_if_exists("Creation Date", plist)),
                     "written_on": get_from_plist_if_exists("Creation Date", plist),
                     
                     "location_area": get_from_plist_if_exists("Location.Administrative Area", plist),

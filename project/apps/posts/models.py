@@ -50,6 +50,10 @@ class Author(BaseModel):
         super(Author, self).save(*args, **kwargs)
 
     @property
+    def published_posts(self):
+        return self.post_set.filter(is_draft=False).order_by("-written_on").all()
+
+    @property
     def dayone_sync_cache_key(self):
         return "DayOne-In-Sync-%s" % self.pk
 

@@ -2,15 +2,16 @@ Writer. Maker. Life-liver.
 - The failure list.
 
 Next:
-    parse out pub date, location, etc from dayone
+        parse out pub date, location, etc from dayone
     get image from dayone
     assemble into posts.
 
-
 - Display 10 most recent posts (properly formatted)
 - Infinite scroll to next ones
-- 
 
+
+Little things:
+ - timezone wonkiness
 
 Actual, me MVP:
 - Hit publish in DayOne

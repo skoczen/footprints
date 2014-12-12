@@ -229,6 +229,19 @@ def mark_read(request, post_id):
 
     return {"success": True, "num_reads": post.num_reads}
 
+@login_required
+@render_to("posts/blog.html")
+def my_blog(request, author=None):
+    author = request.user.get_profile()
+    posts = author.published_posts[:10]
+    return locals()
+
+@render_to("posts/blog.html")
+def blog(request, author=None):
+    author = Author.objects.get(slug__iexact=author)
+    posts = author.published_posts[:10]
+    return locals()
+
 
 @ajax_request
 @login_required
