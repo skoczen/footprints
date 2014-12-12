@@ -1,10 +1,16 @@
-from celery import task
 import codecs
 import datetime
 import os
+import plistlib
 import shutil
 import tempfile
+import time
 import zipfile
+
+from celery.task import task, periodic_task
+from dropbox.client import DropboxClient
+
+from django.core.cache import cache
 
 # Sometimes, it's just faster not to reinvent the wheel.
 # Via http://stackoverflow.com/questions/1855095/how-to-create-a-zip-archive-of-a-directory-in-python
@@ -114,3 +120,127 @@ def generate_backup_zip(author_id):
         b.save()
 
     shutil.rmtree(temp_folder_path)
+
+
+@periodic_task(run_every=datetime.timedelta(seconds=120))
+def periodic_sync():
+    from posts.models import Author
+    for a in Author.objects.all():
+        print "%s: %s" % (a, a.dayone_valid)
+        if a.dayone_valid and not cache.get(a.dayone_sync_cache_key):
+            sync_posts(a.pk)
+        else:
+            print "Sync for %s already running." % a
+
+
+def get_from_plist_if_exists(key, plist):
+    try:
+        node = plist
+        for segment in key.split("."):
+            node = node[segment]
+        return node
+    except:
+        return None
+
+def datetime_from_utc_to_local(utc_datetime):
+    now_timestamp = time.time()
+    offset = datetime.datetime.fromtimestamp(now_timestamp) - datetime.datetime.utcfromtimestamp(now_timestamp)
+    return utc_datetime + offset
+
+@task
+def sync_posts(author_id):
+    from posts.models import Author, Post
+    author = Author.objects.get(pk=author_id)
+
+    cache.set(author.dayone_sync_cache_key, True)
+    try:
+        cache.set(author.dayone_sync_start_time_cache_key, datetime.datetime.now())
+        cache.set(author.dayone_sync_total_key, "~%s" % cache.get(author.dayone_sync_total_key, "0"))
+        cache.set(author.dayone_sync_current_key, 0)
+
+        client = DropboxClient(author.dropbox_access_token)
+        full_dayone_path = "%s/entries" % author.dropbox_dayone_folder_path
+        file_list = client.metadata(full_dayone_path)
+
+        cache.set(author.dayone_sync_total_key, len(file_list["contents"]))
+        print len(file_list["contents"])
+        count = 0
+        for f in file_list["contents"]:
+            do_update = False
+            dayone_id = f["path"].split("/")[-1]
+            print count
+            cache.set(author.dayone_sync_current_key, count)
+            exists = False
+            if Post.objects.filter(dayone_id=dayone_id).count() > 0:
+                exists = True
+                p = Post.objects.get(dayone_id=dayone_id)
+                if p.dayone_last_rev != f["revision"]:
+                    dayone_update_time = datetime_from_utc_to_local(datetime.datetime(*time.strptime(f["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6]))
+                    print dayone_update_time
+                    print p.updated_at
+                    if dayone_update_time > p.updated_at:
+                        do_update = True
+            else:
+                do_update = True
+
+            if do_update:
+                if not cache.get(author.dayone_sync_cache_key):
+                    print "Interrupted."
+                    break;
+
+                with client.get_file(f["path"]) as fh:
+                    plist = plistlib.readPlist(fh)
+                content = u"%s" % plist["Entry Text"]
+
+                split = content.split("\n")
+                title = split[0]
+
+                body = "\n".join(split[1:])
+                draft = "Publish URL" not in plist
+                kwargs = {
+                    "author": author,
+                    "title": title,
+                    "body": body,
+                    "dayone_post": True,
+                    "dayone_id": dayone_id,
+                    
+                    "dayone_last_modified": datetime.datetime(*time.strptime(f["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6]),
+                    "dayone_last_rev": f["revision"],
+                    "is_draft": draft,
+                    "dayone_posted": get_from_plist_if_exists("Creation Date", plist),
+                    "written_on": get_from_plist_if_exists("Creation Date", plist),
+                    
+                    "location_area": get_from_plist_if_exists("Location.Administrative Area", plist),
+                    "location_country": get_from_plist_if_exists("Location.Country", plist),
+                    "latitude": get_from_plist_if_exists("Location.Latitude", plist),
+                    "longitude": get_from_plist_if_exists("Location.Longitude", plist),
+                    "location_name": get_from_plist_if_exists("Location.Place Name", plist),
+                    "time_zone_string": get_from_plist_if_exists("Location.Time Zone", plist),
+                    
+                    "weather_temp_f": get_from_plist_if_exists("Weather.Fahrenheit", plist),
+                    "weather_temp_c": get_from_plist_if_exists("Weather.Celsius", plist),
+                    "weather_description": get_from_plist_if_exists("Weather.Description", plist),
+                    "weather_icon": get_from_plist_if_exists("Weather.IconName", plist),
+                    "weather_pressure": get_from_plist_if_exists("Weather.Pressure MB", plist),
+                    "weather_relative_humidity": get_from_plist_if_exists("Weather.Relative Humidity", plist),
+                    "weather_wind_bearing": get_from_plist_if_exists("Weather.Wind Bearing", plist),
+                    "weather_wind_chill_c": get_from_plist_if_exists("Weather.Wind Chill Celsius", plist),
+                    "weather_wind_speed_kph": get_from_plist_if_exists("Weather.Wind Speed KPH", plist),
+                }
+                if exists:
+                    for (key, value) in kwargs.items():
+                        setattr(p, key, value)
+                    p.save()
+                else:
+                    p = Post.objects.create(**kwargs)
+                
+                print p.slug
+            count += 1
+
+        author.last_dropbox_sync = datetime.datetime.now()
+        author.save()
+    except:
+        import traceback; traceback.print_exc();
+        pass
+    cache.delete(author.dayone_sync_cache_key)
+    print "Done"

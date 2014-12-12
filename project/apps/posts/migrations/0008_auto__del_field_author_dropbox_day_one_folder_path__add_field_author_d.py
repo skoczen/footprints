@@ -8,15 +8,39 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Deleting field 'Author.dropbox_dayone_folder_path'
+        db.delete_column(u'posts_author', 'dropbox_dayone_folder_path')
+
         # Adding field 'Author.dropbox_dayone_folder_path'
         db.add_column(u'posts_author', 'dropbox_dayone_folder_path',
                       self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True),
                       keep_default=False)
 
+        # Adding field 'Author.dropbox_dayone_entry_hash'
+        db.add_column(u'posts_author', 'dropbox_dayone_entry_hash',
+                      self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'Author.dropbox_dayone_image_hash'
+        db.add_column(u'posts_author', 'dropbox_dayone_image_hash',
+                      self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True),
+                      keep_default=False)
+
 
     def backwards(self, orm):
+        # Adding field 'Author.dropbox_dayone_folder_path'
+        db.add_column(u'posts_author', 'dropbox_dayone_folder_path',
+                      self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True),
+                      keep_default=False)
+
         # Deleting field 'Author.dropbox_dayone_folder_path'
         db.delete_column(u'posts_author', 'dropbox_dayone_folder_path')
+
+        # Deleting field 'Author.dropbox_dayone_entry_hash'
+        db.delete_column(u'posts_author', 'dropbox_dayone_entry_hash')
+
+        # Deleting field 'Author.dropbox_dayone_image_hash'
+        db.delete_column(u'posts_author', 'dropbox_dayone_image_hash')
 
 
     models = {
@@ -64,7 +88,9 @@ class Migration(SchemaMigration):
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'deathdate': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'dropbox_access_token': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'dropbox_dayone_entry_hash': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'dropbox_dayone_folder_path': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'dropbox_dayone_image_hash': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'dropbox_expire_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'dropbox_url_state': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'dropbox_user_id': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
@@ -123,6 +149,10 @@ class Migration(SchemaMigration):
             'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['posts.Author']"}),
             'body': ('django.db.models.fields.TextField', [], {'default': "'Body'", 'null': 'True', 'blank': 'True'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'dayone_id': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'dayone_last_modified': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'dayone_last_rev': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'dayone_post': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'display_type': ('django.db.models.fields.CharField', [], {'default': "'poetry'", 'max_length': '50'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'imported': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),

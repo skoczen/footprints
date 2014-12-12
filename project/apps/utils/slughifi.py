@@ -82,6 +82,8 @@ def unique_slug(item, slug_source, slug_field, generate_new=False):
     else:
         from django.template.defaultfilters import slugify
         slug = slughifi(getattr(item, slug_source))
+        if not slug:
+            return "%s" % item.dayone_id.split(".")[0]
         itemModel = item.__class__
         # the following gets all existing slug values
         allSlugs = [sl.values()[0].lower() for sl in itemModel.objects.filter(**{"%s__icontains" % slug_field: slug}).values(slug_field)]

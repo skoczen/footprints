@@ -8,15 +8,31 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Author.dropbox_dayone_folder_path'
-        db.add_column(u'posts_author', 'dropbox_dayone_folder_path',
+        # Adding field 'Post.dayone_post'
+        db.add_column(u'posts_post', 'dayone_post',
+                      self.gf('django.db.models.fields.BooleanField')(default=False),
+                      keep_default=False)
+
+        # Adding field 'Post.dayone_id'
+        db.add_column(u'posts_post', 'dayone_id',
                       self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'Post.dayone_last_modified'
+        db.add_column(u'posts_post', 'dayone_last_modified',
+                      self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'Author.dropbox_dayone_folder_path'
-        db.delete_column(u'posts_author', 'dropbox_dayone_folder_path')
+        # Deleting field 'Post.dayone_post'
+        db.delete_column(u'posts_post', 'dayone_post')
+
+        # Deleting field 'Post.dayone_id'
+        db.delete_column(u'posts_post', 'dayone_id')
+
+        # Deleting field 'Post.dayone_last_modified'
+        db.delete_column(u'posts_post', 'dayone_last_modified')
 
 
     models = {
@@ -123,6 +139,9 @@ class Migration(SchemaMigration):
             'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['posts.Author']"}),
             'body': ('django.db.models.fields.TextField', [], {'default': "'Body'", 'null': 'True', 'blank': 'True'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'dayone_id': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'dayone_last_modified': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'dayone_post': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'display_type': ('django.db.models.fields.CharField', [], {'default': "'poetry'", 'max_length': '50'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'imported': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),

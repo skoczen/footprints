@@ -1,18 +1,22 @@
 import datetime
 import re
+import mistune
+
 from django.db import models
+from django.core.cache import cache
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from utils.slughifi import unique_slug, slughifi
 from main_site.models import BaseModel
 
-POEM_DISPLAY_TYPES = [
-    ("poetry", "poetry"),
-    ("prose", "Prose"),
-    ("spoken_word", "Spoken Word"),
-]
 ENTITY_REGEX = re.compile("&[^\s]*;")
-
+POST_TYPES = [
+    (1, "Big Quote"),
+    (2, "Photo with caption"),
+    (3, "Article and a Single Image"),
+    (4, "Article and a multiple images"),
+    (5, "Body with no real title"),
+]
 
 class Author(BaseModel):
     user = models.ForeignKey("auth.User", blank=True, null=True)
@@ -28,7 +32,10 @@ class Author(BaseModel):
     dropbox_user_id = models.CharField(max_length=255, blank=True, null=True)
     dropbox_url_state = models.CharField(max_length=255, blank=True, null=True)
     dropbox_expire_date = models.DateTimeField(blank=True, null=True)
-    dropbox_day_one_folder_path = models.CharField(max_length=255, blank=True, null=True)
+    dropbox_dayone_folder_path = models.CharField(max_length=255, blank=True, null=True)
+    dropbox_dayone_entry_hash = models.CharField(max_length=255, blank=True, null=True)
+    dropbox_dayone_image_hash = models.CharField(max_length=255, blank=True, null=True)
+    last_dropbox_sync =  models.DateTimeField(blank=True, null=True)
     facebook_api_key = models.TextField(blank=True, null=True)
     facebook_account_name = models.CharField(max_length=255, blank=True, null=True)
     facebook_expire_date = models.DateTimeField(blank=True, null=True)
@@ -41,6 +48,32 @@ class Author(BaseModel):
             raise Exception("user is missing, and author is not an archive")
         self.slug = unique_slug(self, 'name', 'slug')
         super(Author, self).save(*args, **kwargs)
+
+    @property
+    def dayone_sync_cache_key(self):
+        return "DayOne-In-Sync-%s" % self.pk
+
+    @property
+    def dayone_in_sync(self):
+        return cache.get(self.dayone_sync_cache_key) == True
+
+    @property
+    def dayone_sync_start_time_cache_key(self):
+        return "DayOne-In-Sync-Started-%s" % self.pk
+
+    @property
+    def dayone_sync_total_key(self):
+        return "DayOne-In-Sync-Total-%s" % self.pk
+
+    @property
+    def dayone_sync_current_key(self):
+        return "DayOne-In-Sync-Current-%s" % self.pk
+
+    def start_dayone_sync(self):
+        cache.set(self.dayone_sync_cache_key, True)
+
+    def finish_dayone_sync(self):
+        cache.delete(self.dayone_sync_cache_key, True)
 
     @property
     def name(self):
@@ -63,15 +96,23 @@ class Author(BaseModel):
     def start_date(self):
         return self.created_at
 
+    @property
     def dropbox_valid(self):
-        return self.dropbox_access_token is not None and self.dropbox_user_id is not None
+        return self.dropbox_access_token and self.dropbox_user_id
     
+    @property
     def dayone_valid(self):
-        return self.dropbox_day_one_folder_path is not None
+        return self.dropbox_valid and self.dropbox_dayone_folder_path
 
+    @property
+    def num_dayone_posts(self):
+        return self.post_set.filter(dayone_post=True).count()
+
+    @property
     def twitter_valid(self):
         return False
     
+    @property
     def facebook_valid(self):
         return False
 
@@ -97,23 +138,45 @@ class AbstractPost(BaseModel):
     author = models.ForeignKey(Author)
     title = models.TextField(blank=True, null=True, default="Title")
     body = models.TextField(blank=True, null=True, default="Body")
+    title_html = models.TextField(blank=True, null=True, editable=False)
+    body_html = models.TextField(blank=True, null=True, editable=False)
+    post_type = models.IntegerField(choices=POST_TYPES)
+    num_images = models.IntegerField(default=0)
 
     is_draft = models.BooleanField(default=True)
-    display_type = models.CharField(max_length=50, choices=POEM_DISPLAY_TYPES, default=POEM_DISPLAY_TYPES[0][0])
     allow_comments = models.BooleanField(default=True)
-    show_draft_revisions = models.BooleanField(default=True)
-    show_published_revisions = models.BooleanField(default=True)
-    longest_line = models.IntegerField(default=0)
-    public_domain = models.BooleanField(default=False)
-    imported = models.BooleanField(default=False)
-    approximate_publication_date = models.BooleanField(default=False)
-    source_url = models.TextField(blank=True, null=True)
 
-    audio_url = models.TextField(blank=True, null=True)
-    video_url = models.TextField(blank=True, null=True)
+    dayone_post = models.BooleanField(default=False, editable=False)
+    dayone_id = models.CharField(max_length=255, blank=True, null=True, editable=False)
+    dayone_posted = models.DateTimeField(blank=True, null=True, editable=False)
+    dayone_last_modified = models.DateTimeField(blank=True, null=True, editable=False)
+    dayone_last_rev = models.CharField(max_length=255, blank=True, null=True, editable=False)
+
+    location_area = models.CharField(max_length=255, blank=True, null=True,)
+    location_country = models.CharField(max_length=255, blank=True, null=True,)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    location_name = models.CharField(max_length=255, blank=True, null=True, editable=False)
+    time_zone_string = models.CharField(max_length=255, blank=True, null=True, editable=False)
+    
+    weather_temp_f = models.IntegerField(blank=True, null=True)
+    weather_temp_c = models.IntegerField(blank=True, null=True)
+    weather_description = models.CharField(max_length=255, blank=True, null=True, editable=False)
+    weather_icon = models.CharField(max_length=255, blank=True, null=True, editable=False)
+    weather_pressure = models.IntegerField(blank=True, null=True)
+    weather_relative_humidity = models.IntegerField(blank=True, null=True)
+    weather_wind_bearing = models.IntegerField(blank=True, null=True)
+    weather_wind_chill_c = models.IntegerField(blank=True, null=True)
+    weather_wind_speed_kph = models.IntegerField(blank=True, null=True)
+
 
     def __unicode__(self, *args, **kwargs):
         return self.title
+
+    def save(self, *args, **kwargs):
+        self.title_html = mistune.markdown(self.title)
+        self.body_html = mistune.markdown(self.body)
+        super(AbstractPost, self).save(*args, **kwargs)
 
     class Meta:
         abstract = True
@@ -123,33 +186,47 @@ class Post(AbstractPost):
     started_at = models.DateTimeField(blank=True, null=True, editable=False, auto_now_add=True)
     sort_datetime = models.DateTimeField(blank=True, null=True, editable=False)
     published_at = models.DateTimeField(blank=True, null=True, editable=False)
-    written_on = models.DateField(blank=True, null=True, default=datetime.date.today())
+    written_on = models.DateTimeField(blank=True, null=True, default=datetime.datetime.now())
     slug = models.CharField(max_length=800, blank=True, verbose_name="url")
 
-    def save(self, force_longest_line_recalc=False, *args, **kwargs):
+    def save(self, *args, **kwargs):
         if not self.published_at and not self.is_draft:
             self.published_at = datetime.datetime.now()
+
+        # Post type.
+        if self.num_images == 0 and not self.body:
+            self.post_type = POST_TYPES[0][0]
+        elif self.num_images == 1 and not self.body:
+            self.post_type = POST_TYPES[1][0]
+        elif self.num_images == 1:
+            self.post_type = POST_TYPES[2][0]
+        elif self.body and len(self.title) > 250:
+            self.post_type = POST_TYPES[4][0]
+        else:
+            self.post_type = POST_TYPES[3][0]
 
         make_revision = False
         if not self.pk:
             make_revision = True
-            self.slug = unique_slug(self, 'title', 'slug', generate_new=True)
+            if not self.title:
+                self.slug = "%s" % self.dayone_id.split(".")[0]
+            else:
+                self.slug = unique_slug(self, 'title', 'slug', generate_new=True)
         else:
             old_me = Post.objects.get(pk=self.pk)
             if slughifi(old_me.title) != slughifi(self.title):
-                self.slug = unique_slug(self, 'title', 'slug', generate_new=True)
+                if not self.title:
+                    self.slug = "%s" % self.dayone_id.split(".")[0]
+                else:
+                    self.slug = unique_slug(self, 'title', 'slug', generate_new=True)
 
             if old_me.title != self.title or old_me.body != self.body:
                 make_revision = True
 
-        if make_revision or self.longest_line == 0 or force_longest_line_recalc:
-            longest = len(self.title)
-            cleaned_body = self.body.replace("<br/>", "\n").replace("<br>", "\n").replace("</div>", "\n")
-            cleaned_body = ENTITY_REGEX.sub(" ", cleaned_body)
-            for l in cleaned_body.split("\n"):
-                if len(l) > longest:
-                    longest = len(l)
-            self.longest_line = longest
+        # if make_revision:
+        #     cleaned_body = self.body.replace("<br/>", "\n").replace("<br>", "\n").replace("</div>", "\n")
+        #     cleaned_body = ENTITY_REGEX.sub(" ", cleaned_body)
+            
         self.sort_datetime = self.date
         super(Post, self).save(*args, **kwargs)
 
@@ -201,10 +278,6 @@ class Post(AbstractPost):
 
     def __unicode__(self):
         return "%s" % self.title
-
-    @property
-    def narrow(self):
-        return self.longest_line <= 64
 
     class Meta:
         ordering = ("-started_at",)

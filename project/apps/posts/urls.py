@@ -7,10 +7,12 @@ from posts import views
 
 urlpatterns = patterns('',
     # Connections
-    url(r'^connect/get-dropbox-auth-flow', views.get_dropbox_auth_flow, name='get_dropbox_auth_flow'),
-    url(r'^connect/dropbox-auth-start', views.dropbox_auth_start, name='dropbox_auth_start'),
-    url(r'^connect/dropbox-auth-finish', views.dropbox_auth_finish, name='dropbox_auth_finish'),
-    url(r'^connect/find-dayone-folder', views.find_dayone_folder, name='find_dayone_folder'),
+    url(r'^connect/get-dropbox-auth-flow$', views.get_dropbox_auth_flow, name='get_dropbox_auth_flow'),
+    url(r'^connect/dropbox-auth-start$', views.dropbox_auth_start, name='dropbox_auth_start'),
+    url(r'^connect/dropbox-auth-finish$', views.dropbox_auth_finish, name='dropbox_auth_finish'),
+    url(r'^connect/find-dayone-folder$', views.find_dayone_folder, name='find_dayone_folder'),
+    url(r'^connect/sync-dayone$', views.sync_dayone, name='sync_dayone'),
+    url(r'^connect/sync-dayone-status$', views.sync_dayone_status, name='sync_dayone_status'),
     
 
 

@@ -8,15 +8,39 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Author.dropbox_dayone_folder_path'
-        db.add_column(u'posts_author', 'dropbox_dayone_folder_path',
-                      self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True),
+        # Adding field 'Post.post_type'
+        db.add_column(u'posts_post', 'post_type',
+                      self.gf('django.db.models.fields.IntegerField')(default=0),
+                      keep_default=False)
+
+        # Adding field 'Post.num_images'
+        db.add_column(u'posts_post', 'num_images',
+                      self.gf('django.db.models.fields.IntegerField')(default=0),
+                      keep_default=False)
+
+        # Adding field 'PostRevision.post_type'
+        db.add_column(u'posts_postrevision', 'post_type',
+                      self.gf('django.db.models.fields.IntegerField')(default=0),
+                      keep_default=False)
+
+        # Adding field 'PostRevision.num_images'
+        db.add_column(u'posts_postrevision', 'num_images',
+                      self.gf('django.db.models.fields.IntegerField')(default=0),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'Author.dropbox_dayone_folder_path'
-        db.delete_column(u'posts_author', 'dropbox_dayone_folder_path')
+        # Deleting field 'Post.post_type'
+        db.delete_column(u'posts_post', 'post_type')
+
+        # Deleting field 'Post.num_images'
+        db.delete_column(u'posts_post', 'num_images')
+
+        # Deleting field 'PostRevision.post_type'
+        db.delete_column(u'posts_postrevision', 'post_type')
+
+        # Deleting field 'PostRevision.num_images'
+        db.delete_column(u'posts_postrevision', 'num_images')
 
 
     models = {
@@ -64,7 +88,9 @@ class Migration(SchemaMigration):
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'deathdate': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'dropbox_access_token': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'dropbox_dayone_entry_hash': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'dropbox_dayone_folder_path': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'dropbox_dayone_image_hash': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'dropbox_expire_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'dropbox_url_state': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'dropbox_user_id': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
@@ -72,6 +98,7 @@ class Migration(SchemaMigration):
             'facebook_api_key': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'facebook_expire_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'last_dropbox_sync': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'premium_user': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'public_domain': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'slug': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
@@ -118,51 +145,79 @@ class Migration(SchemaMigration):
         u'posts.post': {
             'Meta': {'ordering': "('-started_at',)", 'object_name': 'Post'},
             'allow_comments': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'approximate_publication_date': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'audio_url': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['posts.Author']"}),
             'body': ('django.db.models.fields.TextField', [], {'default': "'Body'", 'null': 'True', 'blank': 'True'}),
+            'body_html': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'display_type': ('django.db.models.fields.CharField', [], {'default': "'poetry'", 'max_length': '50'}),
+            'dayone_id': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'dayone_last_modified': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'dayone_last_rev': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'dayone_post': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'dayone_posted': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'imported': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_draft': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'longest_line': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'public_domain': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'latitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
+            'location_area': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'location_country': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'location_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
+            'num_images': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'post_type': ('django.db.models.fields.IntegerField', [], {}),
             'published_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'show_draft_revisions': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'show_published_revisions': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'slug': ('django.db.models.fields.CharField', [], {'max_length': '800', 'blank': 'True'}),
             'sort_datetime': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'source_url': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'started_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'null': 'True', 'blank': 'True'}),
+            'time_zone_string': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.TextField', [], {'default': "'Title'", 'null': 'True', 'blank': 'True'}),
+            'title_html': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'video_url': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'written_on': ('django.db.models.fields.DateField', [], {'default': 'datetime.datetime(2014, 12, 11, 0, 0)', 'null': 'True', 'blank': 'True'})
+            'weather_description': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'weather_icon': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'weather_pressure': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'weather_relative_humidity': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'weather_temp_c': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'weather_temp_f': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'weather_wind_bearing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'weather_wind_chill_c': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'weather_wind_speed_kph': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'written_on': ('django.db.models.fields.DateField', [], {'default': 'datetime.datetime(2014, 12, 12, 0, 0)', 'null': 'True', 'blank': 'True'})
         },
         u'posts.postrevision': {
             'Meta': {'ordering': "('-revised_at',)", 'object_name': 'PostRevision'},
             'allow_comments': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'approximate_publication_date': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'audio_url': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['posts.Author']"}),
             'body': ('django.db.models.fields.TextField', [], {'default': "'Body'", 'null': 'True', 'blank': 'True'}),
+            'body_html': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'display_type': ('django.db.models.fields.CharField', [], {'default': "'poetry'", 'max_length': '50'}),
+            'dayone_id': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'dayone_last_modified': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'dayone_last_rev': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'dayone_post': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'dayone_posted': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'imported': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_draft': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'longest_line': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'latitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
+            'location_area': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'location_country': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'location_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
+            'num_images': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'post': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['posts.Post']"}),
-            'public_domain': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'post_type': ('django.db.models.fields.IntegerField', [], {}),
             'revised_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'show_draft_revisions': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'show_published_revisions': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'source_url': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'time_zone_string': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.TextField', [], {'default': "'Title'", 'null': 'True', 'blank': 'True'}),
+            'title_html': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'video_url': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
+            'weather_description': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'weather_icon': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'weather_pressure': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'weather_relative_humidity': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'weather_temp_c': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'weather_temp_f': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'weather_wind_bearing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'weather_wind_chill_c': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'weather_wind_speed_kph': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'})
         },
         u'posts.read': {
             'Meta': {'object_name': 'Read'},

@@ -12,6 +12,11 @@
 window.Footprints = window.Footprints || {};
 Footprints.urls = Footprints.urls || {};
 Footprints.urls.find_dayone_folder = "{% url 'posts:find_dayone_folder' %}";
+Footprints.urls.sync_dayone = "{% url 'posts:sync_dayone' %}";
+Footprints.urls.sync_dayone_status = "{% url 'posts:sync_dayone_status' %}";
+Footprints.status = {};
+Footprints.status.in_sync = {{request.user.get_profile.dayone_in_sync|lower}};
+
 </script>
 {% endblock %}
 
@@ -67,7 +72,7 @@ Footprints.urls.find_dayone_folder = "{% url 'posts:find_dayone_folder' %}";
       </div>
       <div class="row question form-group">
         <div class="col-md-5">
-            <div class="text">Day One Connect</div>
+            <div class="text">DayOne Connect</div>
             <div class="help">Automatically import and sync DayOne entries.</div>
         </div>
         
@@ -76,13 +81,27 @@ Footprints.urls.find_dayone_folder = "{% url 'posts:find_dayone_folder' %}";
                 {% if request.user.get_profile.dropbox_valid %}
                 <div class="connected"><i class="fa fa-dropbox"></i> Dropbox: Connected</div>
                   {% if request.user.get_profile.dayone_valid %}
-                  <div class="connected"><i class="fa fa-book"></i> DayOne: Journal found at {{request.user.get_profile.dropbox_day_one_folder_path}}</div>
+                  <div class="connected"><i class="fa fa-book"></i> DayOne: Journal found at {{request.user.get_profile.dropbox_dayone_folder_path}}</div>
+                  <div class="sync_status">
+                    <span class="sync_icon">
+                      <i class="fa fa-refresh"></i>
+                    </span>
+                    <span class="current_status">
+                      Last Sync: <span class="timesince">{% if request.user.get_profile.last_dropbox_sync %}{{request.user.get_profile.last_dropbox_sync|timesince}} ago{% else %} Never Synced.{% endif %}</span> 
+                    </span>
+                    <span class="sync_actions">
+                      <a href="#" class="sync_now_link">
+                          <span class="action_text">Sync now</span>
+                        </a>
+                        <div class="sync_response_text">{{request.user.get_profile.num_dayone_posts}} posts synced from DayOne.</div>
+                    </span>
+                  </div>
                   {% else %}
                   <a href="#" class="button btn btn-primary find_dayone_folder">
                     <span class="icons hidden">
                       <i class="fa fa-circle-o-notch fa fa-spin"></i>
                     </span>
-                     Find DayOne Folder</a>
+                     <span class="action_text">Find DayOne Folder</span></a>
                   <div class="dayone_response_text"></div>
                   {% endif %}
                 {% else %}

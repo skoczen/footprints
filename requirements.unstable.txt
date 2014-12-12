@@ -20,6 +20,7 @@ django-ses
 dropbox
 fabric
 gunicorn
+mistune
 psycopg2
 requests
 titlecase

@@ -4,11 +4,8 @@ from posts.models import Backup, Fantastic, Post, PostRevision, Author, Read
 BASE_POEM_LIST_DISPLAY = [
     "title",
     "author",
-    "longest_line",
     "is_draft",
     "allow_comments",
-    "show_draft_revisions",
-    "show_published_revisions"
 ]
 
 

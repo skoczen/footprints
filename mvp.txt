@@ -1,6 +1,16 @@
 Writer. Maker. Life-liver.
 - The failure list.
 
+Next:
+    parse out pub date, location, etc from dayone
+    get image from dayone
+    assemble into posts.
+
+
+- Display 10 most recent posts (properly formatted)
+- Infinite scroll to next ones
+- 
+
 
 Actual, me MVP:
 - Hit publish in DayOne
@@ -8,6 +18,7 @@ Actual, me MVP:
 - Have a place I can push publish on, 
     - Nice, simple wizard for twitter + fb. Easy.
     - Have that content + nice links show up on FB + Twitter.
+
 
 
 Someday maybe:

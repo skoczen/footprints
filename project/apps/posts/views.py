@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.core.cache import cache
 from django.http import Http404
 from django.db.models import Count
 from django.db.models import Max, Min
@@ -13,7 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 from annoying.decorators import render_to, ajax_request
 from posts.models import Backup, Fantastic, Post, Author, PostRevision, Read
 from posts.forms import AccountForm, FantasticForm, PostForm, ReadForm
-from posts.tasks import generate_backup_zip
+from posts.tasks import generate_backup_zip, sync_posts
 
 @render_to("posts/home.html")
 def home(request):
@@ -165,16 +166,6 @@ def revisions(request, author=None, title=None):
     is_mine = post.author.user == request.user
     if is_mine:
         revisions = post.revisions
-    elif post.show_draft_revisions:
-        if (post.show_published_revisions):
-            revisions = post.revisions
-        else:
-            revisions = post.revisions.filter(is_draft=True)
-    else:
-        if post.show_published_revisions:
-            revisions = post.revisions.filter(is_draft=False)
-        else:
-            revisions = post.revisions.none()
 
     return locals()
 
@@ -239,8 +230,6 @@ def mark_read(request, post_id):
     return {"success": True, "num_reads": post.num_reads}
 
 
-
-
 @ajax_request
 @login_required
 def find_dayone_folder(request):
@@ -250,11 +239,45 @@ def find_dayone_folder(request):
     client = DropboxClient(author.dropbox_access_token)
     matches = client.search("/", "Journal.dayone", file_limit=5)
     if len(matches) == 1:
-        author.dropbox_day_one_folder_path = matches[0]["path"]
+        author.dropbox_dayone_folder_path = matches[0]["path"]
         author.save()
         return {"success": True}
     
     return {"success": False}
+
+@ajax_request
+@login_required
+def sync_dayone(request):
+    try:
+        me = request.user
+        author = me.get_profile()
+        sync_posts.delay(author.id)
+        return {"success": True}
+    except:
+        import traceback; traceback.print_exc();
+        return {"success": False}
+
+@ajax_request
+@login_required
+def sync_dayone_status(request):
+    try:
+        me = request.user
+        author = me.get_profile()
+
+        resp = {
+            "in_sync": author.dayone_in_sync,
+            "start_time": cache.get(author.dayone_sync_start_time_cache_key),
+            "total": cache.get(author.dayone_sync_total_key),
+            "current": cache.get(author.dayone_sync_current_key),
+            "success": True
+        }
+        print resp
+        return resp
+    except:
+        import traceback; traceback.print_exc();
+        return {"success": False}
+
+
 
 def get_dropbox_auth_flow(web_app_session):
     redirect_uri = "%s%s" % (settings.BASE_URL, reverse("posts:dropbox_auth_finish"))
