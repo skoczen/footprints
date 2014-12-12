@@ -62,7 +62,7 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = join(PROJECT_ROOT, "collected_static")
 STATIC_URL = '/static/'
 
-PING_URL = "http://localhost:8001/ping"
+BASE_URL = "http://localhost:8001"
 
 STATICFILES_DIRS = ()
 STATICFILES_FINDERS = (

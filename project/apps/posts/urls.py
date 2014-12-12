@@ -6,6 +6,14 @@ url = parser.url
 from posts import views
 
 urlpatterns = patterns('',
+    # Connections
+    url(r'^connect/get-dropbox-auth-flow', views.get_dropbox_auth_flow, name='get_dropbox_auth_flow'),
+    url(r'^connect/dropbox-auth-start', views.dropbox_auth_start, name='dropbox_auth_start'),
+    url(r'^connect/dropbox-auth-finish', views.dropbox_auth_finish, name='dropbox_auth_finish'),
+    url(r'^connect/find-dayone-folder', views.find_dayone_folder, name='find_dayone_folder'),
+    
+
+
     url(r'^$', views.home, name='home'),
     url(r'^explore/?$', views.explore, name='explore'),
     url(r'^my-writing/?$', views.my_writing, name='my_writing'),
@@ -25,5 +33,6 @@ urlpatterns = patterns('',
     # url(r'^{author:slug}/{title:slug}/revision/{revision_umb?$', views.revisions, name='revisions'),
 
     url(r'^{author:slug}/{title:slug}/?$', views.post, name='post'),
-    
+ 
+
 )

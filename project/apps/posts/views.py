@@ -3,6 +3,7 @@ import uuid
 from dropbox.client import DropboxOAuth2Flow, DropboxClient
 
 from django.http import HttpResponseRedirect
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import Http404
@@ -239,31 +240,53 @@ def mark_read(request, post_id):
 
 
 
-# Stopped here, just wire up dropbox, as noted in
-# https://www.dropbox.com/developers/core/docs/python#DropboxOAuth2Flow
+
+@ajax_request
+@login_required
+def find_dayone_folder(request):
+    me = request.user
+    author = me.get_profile()
+
+    client = DropboxClient(author.dropbox_access_token)
+    matches = client.search("/", "Journal.dayone", file_limit=5)
+    if len(matches) == 1:
+        author.dropbox_day_one_folder_path = matches[0]["path"]
+        author.save()
+        return {"success": True}
+    
+    return {"success": False}
+
 def get_dropbox_auth_flow(web_app_session):
-    redirect_uri = "https://my-web-server.org/dropbox-auth-finish"
-    return DropboxOAuth2Flow(APP_KEY, APP_SECRET, redirect_uri,
+    redirect_uri = "%s%s" % (settings.BASE_URL, reverse("posts:dropbox_auth_finish"))
+    return DropboxOAuth2Flow(settings.DROPBOX_APP_KEY, settings.DROPBOX_APP_SECRET, redirect_uri,
                              web_app_session, "dropbox-auth-csrf-token")
 
-def dropbox_auth_start(web_app_session, request):
-    authorize_url = get_dropbox_auth_flow(web_app_session).start()
-    redirect_to(authorize_url)
+def dropbox_auth_start(request):
+    authorize_url = get_dropbox_auth_flow(request.session).start()
+    return HttpResponseRedirect(authorize_url)
 
-def dropbox_auth_finish(web_app_session, request):
+def dropbox_auth_finish(request):
     try:
         access_token, user_id, url_state = \
-                get_dropbox_auth_flow(web_app_session).finish(request.query_params)
+                get_dropbox_auth_flow(request.session).finish(request.GET)
+        profile = request.user.get_profile()
+        profile.dropbox_access_token = access_token
+        profile.dropbox_user_id = user_id
+        profile.dropbox_url_state = url_state
+        profile.save()
+
+        return HttpResponseRedirect(reverse("posts:my_account"))
+
     except DropboxOAuth2Flow.BadRequestException, e:
         http_status(400)
     except DropboxOAuth2Flow.BadStateException, e:
         # Start the auth flow again.
-        redirect_to("/dropbox-auth-start")
+        return HttpResponseRedirect(reverse("posts:dropbox_auth_start"))
     except DropboxOAuth2Flow.CsrfException, e:
         http_status(403)
     except DropboxOAuth2Flow.NotApprovedException, e:
         flash('Not approved?  Why not?')
-        return redirect_to("/home")
+        return HttpResponseRedirect(reverse("posts:my_account"))
     except DropboxOAuth2Flow.ProviderException, e:
         logger.log("Auth error: %s" % (e,))
         http_status(403)

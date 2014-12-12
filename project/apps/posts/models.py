@@ -24,8 +24,11 @@ class Author(BaseModel):
     archive_name = models.CharField(max_length=255, blank=True, editable=False)
     birthdate = models.DateField(blank=True, null=True)
     deathdate = models.DateField(blank=True, null=True)
-    dropbox_api_key = models.TextField(blank=True, null=True)
+    dropbox_access_token = models.CharField(max_length=255, blank=True, null=True)
+    dropbox_user_id = models.CharField(max_length=255, blank=True, null=True)
+    dropbox_url_state = models.CharField(max_length=255, blank=True, null=True)
     dropbox_expire_date = models.DateTimeField(blank=True, null=True)
+    dropbox_day_one_folder_path = models.CharField(max_length=255, blank=True, null=True)
     facebook_api_key = models.TextField(blank=True, null=True)
     facebook_account_name = models.CharField(max_length=255, blank=True, null=True)
     facebook_expire_date = models.DateTimeField(blank=True, null=True)
@@ -60,9 +63,12 @@ class Author(BaseModel):
     def start_date(self):
         return self.created_at
 
-    def dayone_valid(self):
-        return False
+    def dropbox_valid(self):
+        return self.dropbox_access_token is not None and self.dropbox_user_id is not None
     
+    def dayone_valid(self):
+        return self.dropbox_day_one_folder_path is not None
+
     def twitter_valid(self):
         return False
     
