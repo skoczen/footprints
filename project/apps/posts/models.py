@@ -10,12 +10,17 @@ from utils.slughifi import unique_slug, slughifi
 from main_site.models import BaseModel
 
 ENTITY_REGEX = re.compile("&[^\s]*;")
+BIG_QUOTE = 1
+PHOTO_WITH_CAPTION = 2
+ARTICLE_SINGLE_IMAGE = 3
+ARTICLE_MULTIPLE_IMAGES = 4
+BODY_WITH_NO_TITLE = 5
 POST_TYPES = [
-    (1, "Big Quote"),
-    (2, "Photo with caption"),
-    (3, "Article and a Single Image"),
-    (4, "Article and a multiple images"),
-    (5, "Body with no real title"),
+    (BIG_QUOTE, "Big Quote"),
+    (PHOTO_WITH_CAPTION, "Photo with caption"),
+    (ARTICLE_SINGLE_IMAGE, "Article and a Single Image"),
+    (ARTICLE_MULTIPLE_IMAGES, "Article and a multiple images"),
+    (BODY_WITH_NO_TITLE, "Body with no real title"),
 ]
 
 class Author(BaseModel):
@@ -120,7 +125,6 @@ class Author(BaseModel):
     def facebook_valid(self):
         return False
 
-
     def __unicode__(self):
         return "%s" % self.name
 
@@ -155,6 +159,7 @@ class AbstractPost(BaseModel):
     dayone_posted = models.DateTimeField(blank=True, null=True, editable=False)
     dayone_last_modified = models.DateTimeField(blank=True, null=True, editable=False)
     dayone_last_rev = models.CharField(max_length=255, blank=True, null=True, editable=False)
+    dayone_image = models.ImageField(upload_to="dayone_images", blank=True, null=True)
 
     location_area = models.CharField(max_length=255, blank=True, null=True,)
     location_country = models.CharField(max_length=255, blank=True, null=True,)
@@ -180,11 +185,35 @@ class AbstractPost(BaseModel):
     def save(self, *args, **kwargs):
         self.title_html = mistune.markdown(self.title)
         self.body_html = mistune.markdown(self.body)
+
+        self.num_images = self.body_html.count("<img")
+        if self.dayone_image:
+            self.num_images += 1
+
         super(AbstractPost, self).save(*args, **kwargs)
 
     class Meta:
         abstract = True
 
+    @property
+    def is_big_quote(self):
+        return self.post_type == BIG_QUOTE
+
+    @property
+    def is_photo_with_caption(self):
+        return self.post_type == PHOTO_WITH_CAPTION
+
+    @property
+    def is_article_single_image(self):
+        return self.post_type == ARTICLE_SINGLE_IMAGE
+
+    @property
+    def is_article_multiple_images(self):
+        return self.post_type == ARTICLE_MULTIPLE_IMAGES
+
+    @property
+    def is_body_with_no_title(self):
+        return self.post_type == BODY_WITH_NO_TITLE
 
 class Post(AbstractPost):
     started_at = models.DateTimeField(blank=True, null=True, editable=False, auto_now_add=True)
@@ -199,15 +228,15 @@ class Post(AbstractPost):
 
         # Post type.
         if self.num_images == 0 and not self.body:
-            self.post_type = POST_TYPES[0][0]
+            self.post_type = BIG_QUOTE
         elif self.num_images == 1 and not self.body:
-            self.post_type = POST_TYPES[1][0]
+            self.post_type = PHOTO_WITH_CAPTION
         elif self.num_images == 1:
-            self.post_type = POST_TYPES[2][0]
-        elif self.body and len(self.title) > 250:
-            self.post_type = POST_TYPES[4][0]
+            self.post_type = ARTICLE_SINGLE_IMAGE
+        elif self.body and len(self.title) > 120:
+            self.post_type = BODY_WITH_NO_TITLE
         else:
-            self.post_type = POST_TYPES[3][0]
+            self.post_type = ARTICLE_MULTIPLE_IMAGES
 
         make_revision = False
         if not self.pk:

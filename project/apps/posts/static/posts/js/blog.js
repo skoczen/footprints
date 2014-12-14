@@ -6,6 +6,7 @@ $(function(){
     Footprints.post = {};
     Footprints.post.editor = {};
     Footprints.post.actions = {};
+    Footprints.post.handlers = {};
     Footprints.post.state = {};
     Footprints.post.editor.editing_nodes = [];
     Footprints.post.editor.is_editing = false;
@@ -67,10 +68,13 @@ $(function(){
         $(".read_form").submit();
     };
     Footprints.post.read_tracker.check_scroll = function() {
-        if($(window).scrollTop() + $(window).height() > $(document).height() - 280) {
+        if($(window).scrollTop() + $(window).height() > $(document).height() - 1280) {
             Footprints.post.read_tracker.saw_bottom = true;
             $(window).unbind("scroll");
-            Footprints.post.read_tracker.mark_read_if_read();
+            // Footprints.post.read_tracker.mark_read_if_read();
+
+            // Load next posts.
+            Footprints.post.actions.load_next_posts();
         }
     };
     Footprints.post.read_tracker.enough_time_callback = function() {
@@ -97,67 +101,63 @@ $(function(){
         
         return Footprints.post.read_tracker.calculate_from_lines_and_chars(lines, chars);
     };
-
-    Footprints.post.actions.init = function() {
-        $(".post_form").ajaxForm({
-            beforeSerialize: function() {
-                $("#id_title").val(nicEditors.findEditor("post_title").getContent());
-                $("#id_body").val(nicEditors.findEditor("post_body").getContent());
+    Footprints.post.actions.load_next_posts = function() {
+        console.log("Footprints.post.actions.load_next_posts")
+        console.log(Footprints.urls.load_next_posts)
+        $.ajax(Footprints.urls.load_next_posts, {
+            "method": "GET",
+            "data": {
+                'last_timestamp': window.Footprints.state.last_timestamp
             },
-            success: function(json) {
-                Footprints.post.editor.cancel_editing();
-                if (json.new_url) {
-                    document.location = json.new_url;
-                }
+            "success": Footprints.post.handlers.more_posts_loaded
+        })
+    }
+    Footprints.post.handlers.more_posts_loaded = function(resp) {
+        console.log(resp)
+        if (resp.success) {
+            $(".posts").append(resp.html);
+            if (resp.last_timestamp !== false) {
+                Footprints.state.last_timestamp = resp.last_timestamp;
+                $(window).scroll(Footprints.post.read_tracker.check_scroll);
+                Footprints.post.read_tracker.check_scroll();
+                $(".fantastic_form").ajaxForm({
+                    success: Footprints.post.handlers.fantastic_form_callback
+                });
+            } else {
+                $(".the_start").addClass("visible");
             }
-        });
-        if ($(".read_form").length > 0) {
-            $(".read_form").ajaxForm({
-                success: function(json) {
-                    $(".num_reads .num").html(json.num_reads);
-                }
-            });
-            $(window).scroll(Footprints.post.read_tracker.check_scroll);
-            Footprints.post.read_tracker.check_scroll();
-            setTimeout(Footprints.post.read_tracker.enough_time_callback, Footprints.post.read_tracker.time_estimate());
         }
-
+    }
+    Footprints.post.handlers.fantastic_form_callback = function(json) {
+        console.log(json)
+        if (json.num_people > 1) {
+            $(".post_" + json.post_id + " .fantastic_button .num_agree .number").html(json.num_people);
+            $(".post_" + json.post_id + " .fantastic_button .num_agree").addClass("visible");
+            setTimeout(function(){
+                $(".post_" + json.post_id + " .fantastic_button .num_agree").removeClass("visible");
+            }, 4000);
+        }
+    }
+    Footprints.post.actions.init = function() {
+        $(".fantastic_form").on('click', '.fantastic_button', function(){
+            var ele = $(this);
+            ele.toggleClass("clicked");
+            form = ele.parents("form");
+            console.log(form)
+            if (ele.hasClass("clicked")) {
+                $("input[name=on]", form).val("True");
+            } else {
+                $("input[name=on]", form).val("False");
+            }
+            form.submit();
+        });
         if ($(".fantastic_form").length > 0) {
             $(".fantastic_form").ajaxForm({
-                beforeSerialize: function() {
-                    $(".fantastic_button").toggleClass("clicked");
-                    if ($(".fantastic_button").hasClass("clicked")) {
-                        $("#id_on").val("True");
-                    } else {
-                        $("#id_on").val("False");
-                    }
-                },
-                success: function(json) {
-                    // if (json.num_people > 0) {
-                        $(".fantastic_button .num_agree .number").html(12);
-                        $(".fantastic_button .num_agree").addClass("visible");
-                    }
-                // }
+                success: Footprints.post.handlers.fantastic_form_callback
             });
         }
-
-        // Handlers
-        // $(".save_revision_button").click(Footprints.post.actions.save_revision);
-        $(".publish_button").click(function(){
-            if (confirm("This will make your piece available to the general public.  There's no undo, but it is pretty awesome.  Ready to go?")) {
-                $("#id_is_draft").val("False");
-                $(".post_form").submit();
-            }
-            return false;
-        });
-        $(".start_editing_button").click(Footprints.post.editor.start_editing);
-        $(".cancel_editing_button").click(Footprints.post.editor.cancel_editing);
-        $(".options_button").click(Footprints.post.editor.toggle_options);
-
-        if (window.location.href.indexOf("?editing=true") != -1) {
-            Footprints.post.editor.start_editing();
-        }
-        bkLib.onDomLoaded(nicEditors.allTextAreas);
+        $(window).scroll(Footprints.post.read_tracker.check_scroll);
+        Footprints.post.read_tracker.check_scroll();
     };
     Footprints.post.actions.init();
 

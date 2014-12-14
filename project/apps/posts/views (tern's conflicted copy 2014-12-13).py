@@ -11,7 +11,6 @@ from django.db.models import Count
 from django.db.models import Max, Min
 from django.http import HttpResponseRedirect, Http404
 from django.template.loader import render_to_string
-from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from annoying.decorators import render_to, ajax_request
 from posts.models import Backup, Fantastic, Post, Author, PostRevision, Read
@@ -211,7 +210,7 @@ def this_was_fantastic(request, post_id):
             fantastic.reader = None
         fantastic.save()
 
-        return {"success": True, "num_people": post.num_fantastics, "post_id": post.pk}
+        return {"success": True, "num_people": post.num_fantastics}
 
     return {"success": False}
 
@@ -234,86 +233,32 @@ def mark_read(request, post_id):
 
     return {"success": True, "num_reads": post.num_reads}
 
-def next_10_annotated_posts_and_forms(author, request, last_timestamp=None):
-    if last_timestamp:
-        posts = author.published_posts.filter(written_on__lt=last_timestamp)[:POSTS_PER_PAGINATION]
-    else:
-        posts = author.published_posts[:POSTS_PER_PAGINATION]
-
-    if not request.user.is_authenticated():
-        if "uuid" not in request.session:
-            request.session["uuid"] = uuid.uuid1()
-    
-    is_mine = author == request.user.get_profile()
-
-    for p in posts:
-        # TODO: pull this form for me, actually.
-        fantastic_form = FantasticForm()
-        read_form = ReadForm()
-
-        read = None
-        fantastic = None
-        # if not is_mine:
-        if request.user.is_authenticated():
-            try:
-                read = Read.objects.filter(post=post, reader=request.user.get_profile()).order_by("-read_at")[0]
-            except IndexError:
-                pass
-            try:
-                post.fantastic = Fantastic.objects.filter(post=post, reader=request.user.get_profile()).order_by("-marked_at")[0]
-            except IndexError:
-                pass
-        else:
-            if "uuid" in request.session:
-                try:
-                    read = Read.objects.filter(post=post, uuid=request.session["uuid"]).order_by("-read_at")[0]
-                except IndexError:
-                    pass
-                try:
-                    post.fantastic = Fantastic.objects.filter(post=post, uuid=request.session["uuid"]).order_by("-marked_at")[0]
-                except IndexError:
-                    pass
-
 @login_required
 @render_to("posts/blog.html")
 def my_blog(request, author=None):
-    
-    
-    fantastic_form = FantasticForm()
     author = request.user.get_profile()
     posts = author.published_posts[:POSTS_PER_PAGINATION]
-    last_timestamp = posts[len(posts)-1].written_on.strftime("%s")
+    last_timestamp = posts[POSTS_PER_PAGINATION-1].written_on.strftime("%s")
     return locals()
 
 @render_to("posts/blog.html")
 def blog(request, author=None):
-    if not request.user.is_authenticated():
-        if "uuid" not in request.session:
-            request.session["uuid"] = uuid.uuid1()
-    fantastic_form = FantasticForm()
     author = Author.objects.get(slug__iexact=author)
     posts = author.published_posts[:POSTS_PER_PAGINATION]
-    last_timestamp = posts[len(posts)-1].written_on.strftime("%s")
+    last_timestamp = posts[POSTS_PER_PAGINATION-1].written_on.strftime("%s")
     return locals()
 
 @ajax_request
 def next_posts(request, author=None):
-    if not request.user.is_authenticated():
-        if "uuid" not in request.session:
-            request.session["uuid"] = uuid.uuid1()
     try:
-        fantastic_form = FantasticForm()
         author = Author.objects.get(slug__iexact=author)
         last_timestamp = datetime.datetime.fromtimestamp(int(request.GET["last_timestamp"]))
         posts = author.published_posts.filter(written_on__lt=last_timestamp)[:POSTS_PER_PAGINATION]
-        last_timestamp = False
-        if len(posts) > 0:
-            last_timestamp = posts[len(posts)-1].written_on.strftime("%s")
-        template = render_to_string("posts/_posts.html", RequestContext(request, locals()))
+        last_timestamp = posts[POSTS_PER_PAGINATION-1].written_on.strftime("%s")
+        template = render_to_string("posts/_posts.html", locals())
         return {
             "success": True,
             "html": template,
-            "last_timestamp": last_timestamp
         }
     except:
         import traceback; traceback.print_exc();

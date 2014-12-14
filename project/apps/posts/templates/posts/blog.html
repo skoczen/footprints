@@ -26,41 +26,20 @@
     window.Footprints = window.Footprints || {};
     Footprints.urls = Footprints.urls || {};
     Footprints.state = Footprints.state || {};
+    Footprints.urls.load_next_posts = "{% url 'posts:next_posts' author.slug %}";
+    Footprints.state.last_timestamp = {{last_timestamp}};
 </script>
-<script src="{{STATIC_URL}}posts/js/post.js"></script>
+<script src="{{STATIC_URL}}posts/js/blog.js"></script>
 {% endcompress %}
 {% endblock %}
 
 {% block logo_url %}{{STATIC_URL}}main_site/img/logo-name-90-066.png{% endblock %}
 
 {% block main_content %}
-{% for post in posts %}
-
-<div class="post {% if post.is_draft %}draft{% endif %} {% if post.narrow %}narrow{% endif %}">
-    <div id="edit_pane_area"><div id="edit_pane"></div></div>
-    <div class="draft_badge"></div>
-    <h1 class="title"><div class="editable" id="post_title">{{post.title|safe}}</div></h1>
-
-    <div class="body"><div class="editable" id="post_body">{{post.body_html|safe}}</div></div>
-    {# <div class="display author">by <a href="{% url "posts:blog" post.author.slug %}">{{post.author.name}}</a></div> #}
-    {# <div class="print author">by {{post.author.name}}</div> #}
-    {% if not post.is_draft and not is_mine %}
-    <div class="kudos">
-    <form class="fantastic_form" action="{% url "posts:this_was_fantastic" post.pk %}" method="POST">
-        {% csrf_token %}
-        {{fantastic_form.as_p}}
-        <button type="submit" href="#" class="fantastic_button button {% if fantastic.on %}clicked{% endif %}"><span class="num_agree"></span><span class="unclicked_star">☆</span><span class="clicked_star">★</span> This was fantastic.</button>
-    </form>
-    </div>
-    <form class="read_form" action="{% url "posts:mark_read" post.pk %}" method="POST">
-        {% csrf_token %}
-        {{read_form.as_p}}
-    </form>
+<div class="posts">
+    {% include "posts/_posts.html" %}
 </div>
-
-{% endif %}
-
-
-{% endfor %}
-
+<div class="the_start">
+    &mdash; the start &mdash;
+</div>
 {% endblock %}

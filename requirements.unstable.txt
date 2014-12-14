@@ -21,9 +21,11 @@ dropbox
 fabric
 gunicorn
 mistune
+pillow
 psycopg2
 requests
 titlecase
+sorl-thumbnail
 south
 splinter
 versiontools

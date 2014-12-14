@@ -54,11 +54,13 @@
 <div class="post {% if post.is_draft %}draft{% endif %} {% if post.narrow %}narrow{% endif %}">
     <div id="edit_pane_area"><div id="edit_pane"></div></div>
     <div class="draft_badge"></div>
-    <h1 class="title"><div class="editable" id="post_title">{{post.title|safe}}</div></h1>
+    <div class="text_and_title">
+        <h1 class="title"><div class="editable" id="post_title">{{post.title|safe}}</div></h1>
 
-    <div class="body"><div class="editable" id="post_body">{{post.body_html|safe}}</div></div>
-    <div class="display author">by <a href="{% url "posts:author" post.author.slug %}">{{post.author.name}}</a></div>
-    <div class="print author">by {{post.author.name}}</div>
+        <div class="body"><div class="editable" id="post_body">{{post.body_html|safe}}</div></div>
+        <div class="display author">by <a href="{% url "posts:author" post.author.slug %}">{{post.author.name}}</a></div>
+        <div class="print author">by {{post.author.name}}</div>
+    </div>
 </div>
 
 {% if is_mine %}

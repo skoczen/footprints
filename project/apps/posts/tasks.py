@@ -1,16 +1,18 @@
 import codecs
 import datetime
+import hashlib
 import os
 import plistlib
 import shutil
+from StringIO import StringIO
 import tempfile
 import time
 import zipfile
 
 from celery.task import task, periodic_task
 from dropbox.client import DropboxClient
-
 from django.core.cache import cache
+from django.core.files.base import ContentFile
 
 # Sometimes, it's just faster not to reinvent the wheel.
 # Via http://stackoverflow.com/questions/1855095/how-to-create-a-zip-archive-of-a-directory-in-python
@@ -142,6 +144,12 @@ def get_from_plist_if_exists(key, plist):
     except:
         return None
 
+def get_matching_image_meta_if_exists(dayone_id, image_list):
+    for i in image_list["contents"]:
+        if i["path"].split("/")[-1].split(".")[0] == dayone_id.split(".")[0]:
+            return i
+    return None
+
 def datetime_from_utc_to_local(utc_datetime):
     now_timestamp = time.time()
     offset = datetime.datetime.fromtimestamp(now_timestamp) - datetime.datetime.utcfromtimestamp(now_timestamp)
@@ -159,15 +167,17 @@ def sync_posts(author_id):
         cache.set(author.dayone_sync_current_key, 0)
 
         client = DropboxClient(author.dropbox_access_token)
-        full_dayone_path = "%s/entries" % author.dropbox_dayone_folder_path
-        file_list = client.metadata(full_dayone_path)
+        full_dayone_entry_path = "%s/entries" % author.dropbox_dayone_folder_path
+        full_dayone_image_path = "%s/photos" % author.dropbox_dayone_folder_path
+        file_list = client.metadata(full_dayone_entry_path)
+        image_list = client.metadata(full_dayone_image_path)
 
         cache.set(author.dayone_sync_total_key, len(file_list["contents"]))
         count = 0
         for f in file_list["contents"]:
             do_update = False
             dayone_id = f["path"].split("/")[-1]
-            
+
             cache.set(author.dayone_sync_current_key, count)
             exists = False
             if Post.objects.filter(dayone_id=dayone_id).count() > 0:
@@ -177,6 +187,12 @@ def sync_posts(author_id):
                     dayone_update_time = datetime_from_utc_to_local(datetime.datetime(*time.strptime(f["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6]))
                     if dayone_update_time > p.updated_at:
                         do_update = True
+                    if not do_update:
+                        image = get_matching_image_meta_if_exists(dayone_id, image_list)
+                        if image:
+                            image_update_time = datetime_from_utc_to_local(datetime.datetime(*time.strptime(image["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6]))
+                            if image_update_time > p.updated_at:
+                                do_update = True
             else:
                 do_update = True
 
@@ -194,6 +210,14 @@ def sync_posts(author_id):
 
                 body = "\n".join(split[1:])
                 draft = "Publish URL" not in plist
+                
+                image = get_matching_image_meta_if_exists(dayone_id, image_list)
+                if image:
+                    print "getting image"
+                    m = hashlib.sha1()
+                    m.update("%s %s" % (dayone_id, datetime.datetime.now()))
+                    image_name = "%s%s" % (dayone_id.split(".")[0], m.hexdigest())
+
                 kwargs = {
                     "author": author,
                     "title": title,
@@ -227,10 +251,28 @@ def sync_posts(author_id):
                 if exists:
                     for (key, value) in kwargs.items():
                         setattr(p, key, value)
+                    if image:
+                        image_file = client.get_file(image["path"])
+                        p.dayone_image.save(
+                            "%s.jpg" % image_name,
+                            ContentFile(StringIO(image_file.read()).getvalue())
+                        )
+                        image_file.close()
                     p.save()
                 else:
                     p = Post.objects.create(**kwargs)
+                    if image:
+                        image_file = client.get_file(image["path"])
+
+                        p.dayone_image.save(
+                            "%s.jpg" % image_name,
+                            ContentFile(StringIO(image_file.read()).getvalue())
+                        )
+
+                        p.save()
+                        image_file.close()
                 
+
                 print p.slug
             count += 1
 

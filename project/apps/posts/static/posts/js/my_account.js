@@ -50,7 +50,7 @@ $(function() {
     }
 
     var sync_success_response = function(resp) {
-        $(".sync_icon i").removeClass("fa-spin");
+        $(".sync_icon i").addClass("fa-spin");
         if (resp.success == true) {
             check_sync_status();
         } else {

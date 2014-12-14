@@ -3,11 +3,25 @@ Writer. Maker. Life-liver.
 
 Next:
         parse out pub date, location, etc from dayone
-    get image from dayone
-    assemble into posts.
+        - Display 10 most recent posts (properly formatted)
+        get image from dayone
+        assemble into posts.
+        - Infinite scroll to next ones
+        - fix love this
+        - Post types.
 
-- Display 10 most recent posts (properly formatted)
-- Infinite scroll to next ones
+- some bugs in post type selection based on image #s.
+- image width: 896
+- some bugs in image height for short/narrow images (see want sexy parallax effect)
+- posts link to detail pages.
+- rss feed
+- fix love this multi-clicks
+- // TODO:  // THe end
+- fix 
+- "x people agree" -> fade out
+
+- Want: sexy parallax effect
+    - also, save image height in the db, so we can be clever.
 
 
 Little things:
@@ -19,7 +33,10 @@ Actual, me MVP:
 - Have a place I can push publish on, 
     - Nice, simple wizard for twitter + fb. Easy.
     - Have that content + nice links show up on FB + Twitter.
-
+- Import tumblr direct post:
+     (screenshot epic)
+     - peanut
+- Handle old links
 
 
 Someday maybe:
@@ -35,7 +52,7 @@ http://dillinger.io/
 http://softwaremaniacs.org/playground/showdown-highlight/
 https://stackedit.io/
 https://github.com/benweet/stackedit
-https://github.com/benweet/stackedit/blob/master/public/res/WELCOME.md#welcome-to-stackedit---welcome
+https://github.com/benweet/stackedit/blob/master/public/res/WELCOME.md#welcome-to-stackedit
 https://github.com/benweet/stackedit/blob/master/doc/developer-guide.md#developer-guide
 https://github.com/benweet/stackedit/blob/master/doc/theming.md#stackedit-theming-guide
 

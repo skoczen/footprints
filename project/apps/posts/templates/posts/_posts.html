@@ -1,0 +1,10 @@
+{% for post in posts %}
+    {% ifchanged post.written_on.month %}
+        {% if not forloop.first %}
+        <div class="month_break">
+            &mdash; {{post.written_on|date:"F Y"}} &mdash;
+        </div>
+        {% endif %}
+    {% endifchanged %}
+    {% include "posts/_blog_post.html" %}
+{% endfor %}

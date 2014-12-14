@@ -1,0 +1,62 @@
+
+<div class="post post_{{post.pk}} {% if post.is_draft %}draft{% endif %} {% if post.narrow %}narrow{% endif %}">
+{% if post.is_photo_with_caption %}
+    <div class="text_and_title">
+        
+    <h1 class="title"><a href="{% url 'posts:post' post.author.slug post.slug %}"><div class="editable" id="post_title">{{post.title|safe}}</div></a></h1>
+    <div class="body"><div class="editable" id="post_body">{{post.body_html|safe}}</div></div>
+
+    {% if post.dayone_image %}<a href="{{MEDIA_URL}}{{post.dayone_image}}" target="_blank"><div class="post_image full_bleed"><img src="{{MEDIA_URL}}{{post.dayone_image}}"/></a></div>{% endif %}
+    <div class="draft_badge"></div>
+{% else %}
+{% if post.is_big_quote %}
+{% if post.dayone_image %}<a href="{{MEDIA_URL}}{{post.dayone_image}}" target="_blank"><div class="post_image full_bleed"><img src="{{MEDIA_URL}}{{post.dayone_image}}"/></a></div>{% endif %}
+<div class="text_and_title">
+    <h1 class="title"><a href="{% url 'posts:post' post.author.slug post.slug %}">{{post.title|safe}} {{post.body_html|safe}}</a></h1>
+{% else %}
+{% if post.is_article_single_image %}
+    {% if post.dayone_image %}<a href="{{MEDIA_URL}}{{post.dayone_image}}" target="_blank"><div class="post_image full_bleed"><img src="{{MEDIA_URL}}{{post.dayone_image}}"/></a></div>{% endif %}
+    <div class="draft_badge"></div>
+    <div class="text_and_title">
+        
+        <h1 class="title"><a href="{% url 'posts:post' post.author.slug post.slug %}"><div class="editable" id="post_title">{{post.title|safe}}</div></a></h1>
+        <div class="body"><div class="editable" id="post_body">{{post.body_html|safe}}</div></div>
+
+{% else %}
+{% if post.is_article_multiple_images %}
+    {% if post.dayone_image %}<a href="{{MEDIA_URL}}{{post.dayone_image}}" target="_blank"><div class="post_image full_bleed"><img src="{{MEDIA_URL}}{{post.dayone_image}}"/></a></div>{% endif %}
+    <div class="draft_badge"></div>
+    <div class="text_and_title">
+        <h1 class="title"><a href="{% url 'posts:post' post.author.slug post.slug %}"><div class="editable" id="post_title">{{post.title|safe}}</div></a></h1>
+        <div class="body"><div class="editable" id="post_body">{{post.body_html|safe}}</div></div>
+
+{% else %}
+{% if post.is_body_with_no_title %}
+    {% if post.dayone_image %}<a href="{{MEDIA_URL}}{{post.dayone_image}}" target="_blank"><div class="post_image full_bleed"><img src="{{MEDIA_URL}}{{post.dayone_image}}"/></a></div>{% endif %}
+    <div class="draft_badge"></div>
+    <div class="text_and_title">
+        <div class="body"><div class="editable" id="post_body">{{post.title|safe}}{{post.body_html|safe}}</div></div>
+{% else %}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endif %}
+        {# <div class="display author">by <a href="{% url "posts:blog" post.author.slug %}">{{post.author.name}}</a></div> #}
+        {# <div class="print author">by {{post.author.name}}</div> #}
+        {% if not post.is_draft and not is_mine %}
+        <div class="kudos">
+        <form class="fantastic_form " action="{% url "posts:this_was_fantastic" post.pk %}" method="POST">
+            {% csrf_token %}
+            {{fantastic_form.as_p}}
+            <button type="button" href="#" class="fantastic_button button {% if post.fantastic.on %}clicked{% endif %}"><span class="unclicked_star"><icon class="fa fa-heart-o"></icon></span><span class="clicked_star"><icon class="fa fa-heart"></icon></span><span class="fantastic_text">I love this.</span> <span class="num_agree"><span class="number">{{post.num_fantastics}}</span> people agree!</span> </button>
+        </form>
+        </div>
+        <form class="read_form" action="{% url "posts:mark_read" post.pk %}" method="POST">
+            {% csrf_token %}
+            {{read_form.as_p}}
+        </form>
+    </div>
+</div>
+
+{% endif %}
