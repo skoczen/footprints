@@ -25,6 +25,7 @@ pillow
 psycopg2
 requests
 titlecase
+tweepy
 sorl-thumbnail
 south
 splinter

@@ -7,6 +7,8 @@ GOOGLE_ANALYTICS_PROPERTY_ID = None
 INTERCOM_APP_ID = None
 DROPBOX_APP_KEY = None
 DROPBOX_APP_SECRET = None
+TWITTER_APP_KEY = None
+TWITTER_APP_SECRET = None
 
 try:
     from keys_and_passwords_private import *
@@ -29,3 +31,5 @@ set_env_fallback("GOOGLE_ANALYTICS_PROPERTY_ID")
 set_env_fallback("INTERCOM_APP_ID")
 set_env_fallback("DROPBOX_APP_KEY")
 set_env_fallback("DROPBOX_APP_SECRET")
+set_env_fallback("TWITTER_APP_KEY")
+set_env_fallback("TWITTER_APP_SECRET")

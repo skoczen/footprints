@@ -19,6 +19,8 @@ Next:
 - // TODO:  // THe end
 - fix 
 - "x people agree" -> fade out
+- dates?
+
 
 - Want: sexy parallax effect
     - also, save image height in the db, so we can be clever.
@@ -36,6 +38,9 @@ Actual, me MVP:
 - Import tumblr direct post:
      (screenshot epic)
      - peanut
+- Logo for FB, Twitter, Dropbox
+    - https://apps.twitter.com/app/7640201/settings
+    
 - Handle old links
 
 

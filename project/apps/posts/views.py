@@ -2,6 +2,7 @@ import datetime
 import uuid
 
 from dropbox.client import DropboxOAuth2Flow, DropboxClient
+import tweepy
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -374,11 +375,12 @@ def get_dropbox_auth_flow(web_app_session):
     redirect_uri = "%s%s" % (settings.BASE_URL, reverse("posts:dropbox_auth_finish"))
     return DropboxOAuth2Flow(settings.DROPBOX_APP_KEY, settings.DROPBOX_APP_SECRET, redirect_uri,
                              web_app_session, "dropbox-auth-csrf-token")
-
+@login_required
 def dropbox_auth_start(request):
     authorize_url = get_dropbox_auth_flow(request.session).start()
     return HttpResponseRedirect(authorize_url)
 
+@login_required
 def dropbox_auth_finish(request):
     try:
         access_token, user_id, url_state = \
@@ -404,3 +406,52 @@ def dropbox_auth_finish(request):
     except DropboxOAuth2Flow.ProviderException, e:
         logger.log("Auth error: %s" % (e,))
         http_status(403)
+
+
+def twitter_auth():
+    twitter_callback_url = "%s%s" % (settings.BASE_URL, reverse("posts:twitter_auth_finish"))
+    print twitter_callback_url
+    return tweepy.OAuthHandler(settings.TWITTER_APP_KEY, settings.TWITTER_APP_SECRET, twitter_callback_url)
+
+def authorized_tweepy_api(author):
+    auth = twitter_auth()
+    auth.set_access_token(author.twitter_api_key, author.twitter_api_secret)
+
+    return tweepy.API(auth)
+
+@login_required
+def twitter_auth_start(request):
+    auth = twitter_auth()
+    try:
+        redirect_url = auth.get_authorization_url()
+        request.session['request_token'] = (auth.request_token)
+    except tweepy.TweepError:
+        import traceback; traceback.print_exc();
+        print 'Error! Failed to get request token.'
+        return HttpResponseRedirect(reverse("posts:my_account"))
+
+    return HttpResponseRedirect(redirect_url)
+
+@login_required
+def twitter_auth_finish(request):
+    try:
+        verifier = request.GET['oauth_verifier']
+
+        auth = twitter_auth()
+        token = request.session['request_token']
+        del request.session['request_token']
+        auth.request_token = token
+
+        auth.get_access_token(verifier)
+
+        author = request.user.get_profile()
+        author.twitter_api_key = auth.access_token
+        author.twitter_api_secret = auth.access_token_secret
+        api = authorized_tweepy_api(author)
+        author.twitter_account_name = api.me().screen_name
+        author.save()
+    except:
+        import traceback; traceback.print_exc();
+        pass
+
+    return HttpResponseRedirect(reverse("posts:my_account"))

@@ -45,6 +45,7 @@ class Author(BaseModel):
     facebook_account_name = models.CharField(max_length=255, blank=True, null=True)
     facebook_expire_date = models.DateTimeField(blank=True, null=True)
     twitter_api_key = models.TextField(blank=True, null=True)
+    twitter_api_secret = models.TextField(blank=True, null=True)
     twitter_account_name = models.CharField(max_length=255, blank=True, null=True)
     twitter_expire_date = models.DateTimeField(blank=True, null=True)
 
@@ -119,7 +120,7 @@ class Author(BaseModel):
 
     @property
     def twitter_valid(self):
-        return False
+        return self.twitter_api_secret and self.twitter_api_key and self.twitter_account_name
     
     @property
     def facebook_valid(self):
@@ -177,6 +178,10 @@ class AbstractPost(BaseModel):
     weather_wind_bearing = models.IntegerField(blank=True, null=True)
     weather_wind_chill_c = models.IntegerField(blank=True, null=True)
     weather_wind_speed_kph = models.IntegerField(blank=True, null=True)
+
+    twitter_published = models.BooleanField(default=False, editable=False)
+    twitter_status_text = models.TextField(blank=True, null=True)
+    twitter_status_id = models.CharField(max_length=255, blank=True, null=True, editable=False)
 
 
     def __unicode__(self, *args, **kwargs):
