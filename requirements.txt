@@ -31,6 +31,7 @@ django-staticfiles==1.2.1
 django-storages==1.1.8
 dropbox==2.2.0
 ecdsa==0.11
+facepy==1.0.4
 gunicorn==19.1.1
 html5lib==0.999
 kombu==3.0.24
@@ -45,6 +46,7 @@ python-openid==2.2.5
 pytz==2014.10
 redis==2.10.3
 requests==2.5.0
+requests-oauth2==0.2.0
 requests-oauthlib==0.4.2
 selenium==2.44.0
 six==1.8.0

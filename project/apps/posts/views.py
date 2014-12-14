@@ -2,7 +2,9 @@ import datetime
 import uuid
 
 from dropbox.client import DropboxOAuth2Flow, DropboxClient
+from facepy import GraphAPI
 import tweepy
+from requests_oauth2 import OAuth2
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -419,6 +421,8 @@ def authorized_tweepy_api(author):
 
     return tweepy.API(auth)
 
+# api.update_status / update_status_with_media
+
 @login_required
 def twitter_auth_start(request):
     auth = twitter_auth()
@@ -455,3 +459,54 @@ def twitter_auth_finish(request):
         pass
 
     return HttpResponseRedirect(reverse("posts:my_account"))
+
+
+def facebook_auth():
+    facebook_callback_url = "%s%s" % (settings.BASE_URL, reverse("posts:facebook_auth_finish"))
+    return  OAuth2(settings.FACEBOOK_APP_KEY, settings.FACEBOOK_APP_SECRET, 
+                "https://www.facebook.com/",
+                facebook_callback_url,
+                "dialog/oauth", "oauth/access_token"
+            )
+
+def authorized_facebook_api(author):
+    return GraphAPI(author.facebook_api_key)
+
+# # Get my latest posts
+# graph.get('me/posts')
+
+# # Post a photo of a parrot
+# graph.post(
+#     path = 'me/photos',
+#     source = open('parrot.jpg', 'rb')
+# )
+
+@login_required
+def facebook_auth_start(request):
+    auth = facebook_auth()
+    authorization_url = auth.authorize_url('publish_actions,email')
+    print authorization_url
+    return HttpResponseRedirect(authorization_url)
+
+@login_required
+def facebook_auth_finish(request):
+    try:
+        code = request.GET["code"]
+        auth = facebook_auth()
+        auth.site = "https://graph.facebook.com/"
+        response = auth.get_token(code)
+
+        author = request.user.get_profile()
+        author.facebook_api_key = response["access_token"][0]
+        author.facebook_expire_date = datetime.datetime.now() + datetime.timedelta(seconds=int(response["expires"][0]))
+        api = authorized_facebook_api(author)
+        me = api.get("me")
+        author.facebook_account_name = me["name"]
+        author.facebook_account_link = me["link"]
+        author.save()
+    except:
+        import traceback; traceback.print_exc();
+        pass
+
+    return HttpResponseRedirect(reverse("posts:my_account"))
+

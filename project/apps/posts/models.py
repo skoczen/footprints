@@ -42,6 +42,7 @@ class Author(BaseModel):
     dropbox_dayone_image_hash = models.CharField(max_length=255, blank=True, null=True)
     last_dropbox_sync =  models.DateTimeField(blank=True, null=True)
     facebook_api_key = models.TextField(blank=True, null=True)
+    facebook_account_link = models.TextField(blank=True, null=True)
     facebook_account_name = models.CharField(max_length=255, blank=True, null=True)
     facebook_expire_date = models.DateTimeField(blank=True, null=True)
     twitter_api_key = models.TextField(blank=True, null=True)
@@ -124,7 +125,7 @@ class Author(BaseModel):
     
     @property
     def facebook_valid(self):
-        return False
+        return self.facebook_api_key and self.facebook_account_name
 
     def __unicode__(self):
         return "%s" % self.name

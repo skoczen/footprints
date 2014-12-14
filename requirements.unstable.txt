@@ -19,11 +19,13 @@ django-storages
 django-ses
 dropbox
 fabric
+facepy
 gunicorn
 mistune
 pillow
 psycopg2
 requests
+requests-oauth2
 titlecase
 tweepy
 sorl-thumbnail

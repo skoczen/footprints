@@ -17,7 +17,7 @@ Footprints.urls.sync_dayone_status = "{% url 'posts:sync_dayone_status' %}";
 Footprints.status = {};
 Footprints.status.in_sync = {{request.user.get_profile.dayone_in_sync|lower}};
 Footprints.status.ever_synced = {% if not request.user.get_profile.last_dropbox_sync %}false{% else %}true{% endif %};
-
+Footprints.actions = {};
 </script>
 {% endblock %}
 
@@ -120,9 +120,12 @@ Footprints.status.ever_synced = {% if not request.user.get_profile.last_dropbox_
         <div class="col-md-7 answers">
             <div class="form-group form_input password">
                 {% if request.user.get_profile.facebook_valid %}
-                <div class="connected">Connected to {{request.user.get_profile.facebook_account_name}}</div>
+                <div class="connected"><i class="fa fa-facebook"></i> Facebook: Connected</div>
+                <div class="account">
+                  <i class="fa fa-user"></i> Account: <a href="{{request.user.get_profile.facebook_account_link}}" target="_blank">{{request.user.get_profile.facebook_account_name}}</a>
+                </div>
                 {% else %}
-                <a href="" class="button btn btn-primary"><i class="fa fa-facebook"></i> Connect to Facebook</a>
+                <a href="{% url 'posts:facebook_auth_start' %}" class="button btn btn-primary facebook_connect_btn"><i class="fa fa-facebook"></i> Connect to Facebook</a>
                 {% endif %}
             </div>
         </div>
