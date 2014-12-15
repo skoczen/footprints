@@ -9,16 +9,15 @@ Next:
         - Infinite scroll to next ones
         - fix love this
         - Post types.
+        - "x people agree" -> fade out
 
 - some bugs in post type selection based on image #s.
-- image width: 896
+- thumbnails image width: 896
 - some bugs in image height for short/narrow images (see want sexy parallax effect)
 - posts link to detail pages.
 - rss feed
 - fix love this multi-clicks
 - // TODO:  // THe end
-- fix 
-- "x people agree" -> fade out
 - dates?
 
 
@@ -30,17 +29,19 @@ Little things:
  - timezone wonkiness
 
 Actual, me MVP:
-- Hit publish in DayOne
-- Have it show up on a beautiful blog, formatted fantastically.
+    - Hit publish in DayOne
+    - Have it show up on a beautiful blog, formatted fantastically.
 - Have a place I can push publish on, 
     - Nice, simple wizard for twitter + fb. Easy.
     - Have that content + nice links show up on FB + Twitter.
+- Handle domain, with pretty urls.
+
 - Import tumblr direct post:
      (screenshot epic)
      - peanut
 - Logo for FB, Twitter, Dropbox
     - https://apps.twitter.com/app/7640201/settings
-    
+
 - Handle old links
 
 

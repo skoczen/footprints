@@ -31,8 +31,35 @@ Footprints.actions = {};
       {% csrf_token %}
       <div class="row question form-group">
         <div class="col-md-5">
-            <div class="text">Publication name</div>
-            <div class="help">This will not change web addresses of your posts from footprints.com/{{author.slug}}/. If you want those to change, use the help link to contact us!</div>
+            <div class="text">Blog Domain</div>
+            <div class="help">Your domain, i.e. blog.inkandfeet.com.  You don't need the 'http://' part.</div>
+        </div>
+        
+        <div class="col-md-7 answers">
+            <div class="form-group form_input">
+                {{ author_form.blog_domain }}
+                <div class="errors">{{author_form.blog_domain.errors}}</div>
+            </div>
+            
+        </div>
+      </div>
+      <div class="row question form-group">
+        <div class="col-md-5">
+            <div class="text">Blog Name</div>
+            <div class="help">The name of your blog. This will show up in page titles and google results.</div>
+        </div>
+        
+        <div class="col-md-7 answers">
+            <div class="form-group form_input {# valid #}">
+                {{ author_form.blog_name }}
+                <div class="errors">{{author_form.blog_name.errors}}</div>
+            </div>
+        </div>
+      </div>
+       <div class="row question form-group">
+        <div class="col-md-5">
+            <div class="text">Pen Name</div>
+            <div class="help">The name your posts will be published under.</div>
         </div>
         
         <div class="col-md-7 answers">
@@ -56,6 +83,7 @@ Footprints.actions = {};
             
         </div>
       </div>
+      
       <div class="row question form-group">
         <div class="col-md-5">
             <div class="text">Change password</div>
@@ -123,6 +151,7 @@ Footprints.actions = {};
                 <div class="connected"><i class="fa fa-facebook"></i> Facebook: Connected</div>
                 <div class="account">
                   <i class="fa fa-user"></i> Account: <a href="{{request.user.get_profile.facebook_account_link}}" target="_blank">{{request.user.get_profile.facebook_account_name}}</a>
+                  <a href="{% url 'posts:facebook_auth_start' %}" class=""><i class="fa fa-facebook"></i> Reconnect</a>
                 </div>
                 {% else %}
                 <a href="{% url 'posts:facebook_auth_start' %}" class="button btn btn-primary facebook_connect_btn"><i class="fa fa-facebook"></i> Connect to Facebook</a>
@@ -143,6 +172,7 @@ Footprints.actions = {};
                 <div class="connected"><i class="fa fa-twitter"></i> Twitter: Connected</div>
                 <div class="account">
                   <i class="fa fa-user"></i> Account: <a href="https://twitter.com/{{request.user.get_profile.twitter_account_name}}" target="_blank">@{{request.user.get_profile.twitter_account_name}}</a>
+                  <a href="{% url 'posts:twitter_auth_start' %}" class=""><i class="fa fa-facebook"></i> Reconnect</a>
                 </div>
                 {% else %}
                 <a href="{% url 'posts:twitter_auth_start' %}" class="button btn btn-primary"><i class="fa fa-twitter"></i> Connect to Twitter</a>
@@ -150,7 +180,13 @@ Footprints.actions = {};
             </div>
         </div>
       </div>
-      
+      <div class="row">
+        <div class="col-md-5"></div>
+        <div class="col-md-7">
+            <button type="submit" class="button btn btn-primary sign_up_button">{% trans "Save Changes" %}</button>
+        </div>
+      </div>
+
       
       {% if redirect_field_value %}
       <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />

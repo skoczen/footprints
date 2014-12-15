@@ -1,12 +1,16 @@
 {% extends "base.html" %}{% load compress %}
 
-{% block title %}{{post.title}} by {{post.author.name}}{% endblock %}
+{% block title %}{{post.title}}{% endblock %}
 {% block description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
 {% block author %}{% url "posts:author" post.author.slug %}{% endblock %}
-{% block schema_name %}{{post.title}} by {{post.author.name}}{% endblock %}
+{% block schema_name %}{{post.title}}{% endblock %}
 {% block schema_description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
 {% block schema_author %}{{post.author.name}}{% endblock %}
-{% block og_title %}{{post.title}} by {{post.author.name}}{% endblock %}
+{% block og_title %}{{post.title}}{% endblock %}
+{% if post.dayone_image %}
+{% block og_image %}{{MEDIA_URL}}{{post.dayone_image}}{% endblock %}
+{% endif %}
+
 {% block og_url %}{% url "posts:post" post.author.slug post.slug %}{% endblock %}
 {% block og_description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
 {% block og_publish_time %}{{post.published_at|date:"c"}}{% endblock %}
@@ -43,6 +47,7 @@
     <button type="submit" href="#" class="button currently_editing_button save_revision_button"><i class="icon-edit" ></i> Save Draft</button>
     <a href="#" class="button currently_editing_button publish_button"><i class="icon-edit" ></i> Publish</a>
     {% else %}
+    <a href="{% url 'posts:social_share' post.pk %}" class="button social_share_button"><i class="icon-twitter" ></i> Social Share</a>
     <button type="submit" href="#" class="button currently_editing_button save_revision_button"><i class="icon-edit" ></i> Publish New Version</button>
     {% endif %}
     <button type="revert" href="#" class="button currently_editing_button cancel_editing_button"><i class="icon-edit" ></i> Cancel</button>

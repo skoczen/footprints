@@ -18,6 +18,8 @@ class PostForm(forms.ModelForm):
             "is_draft",
             # "display_type",
             "allow_comments",
+            "twitter_status_text",
+            "facebook_status_text",
         )
 
 
@@ -41,6 +43,17 @@ class ReadForm(forms.ModelForm):
             # "reader",
         )
 
+class SocialShareForm(forms.ModelForm):
+
+    class Meta:
+        model = Post
+        fields = (
+            "twitter_status_text",
+            "facebook_status_text",
+            "twitter_publish_intent",
+            "facebook_publish_intent",
+        )
+
 
 class SignupForm(forms.Form):
     first_name = forms.CharField(
@@ -60,6 +73,24 @@ class SignupForm(forms.Form):
     def save(self, user):
         user.first_name = self.cleaned_data['first_name']
         user.save()
+            
+class AuthorForm(forms.ModelForm):
+    # blog_name = forms.CharField(
+    #     max_length=255,
+    #     label='Blog Name',
+    #     help_text="The name of your blog. This will show up in page titles and google results.",
+    #     widget=forms.TextInput(attrs={'placeholder': 'Adventures in Awesome'}),
+    # )
+    # blog_domain = forms.CharField(
+    #     max_length=255,
+    #     label='Blog Domain',
+    #     help_text="Your domain, i.e. blog.inkandfeet.com.  You don't need the 'http://' part.",
+    #     widget=forms.TextInput(attrs={'placeholder': 'blog.myawesomesite.com'}),
+    # )
+
+    class Meta:
+        model = Author
+        fields = ("blog_name", "blog_domain", )
 
 
 class AccountForm(forms.ModelForm):
@@ -78,9 +109,10 @@ class AccountForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ("first_name", "email",)
+        fields = ("first_name", "email", )
 
     def save(self):
         if self.cleaned_data['password'] and self.cleaned_data['password'] != "":
             self.instance.set_password(self.cleaned_data['password'])
             self.instance.save()
+

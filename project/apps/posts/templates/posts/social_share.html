@@ -1,0 +1,75 @@
+{% extends "base.html" %}{% load compress i18n %}
+
+{% block title %}{{post.title}} by {{post.author.name}}{% endblock %}
+{% block description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
+{% block author %}{% url "posts:author" post.author.slug %}{% endblock %}
+{% block schema_name %}{{post.title}} by {{post.author.name}}{% endblock %}
+{% block schema_description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
+{% block schema_author %}{{post.author.name}}{% endblock %}
+{% block og_title %}{{post.title}} by {{post.author.name}}{% endblock %}
+{% block og_url %}{% url "posts:post" post.author.slug post.slug %}{% endblock %}
+{% block og_description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
+{% block og_publish_time %}{{post.published_at|date:"c"}}{% endblock %}
+{% block og_update_time %}{{post.sort_datetime|date:"c"}}{% endblock %}
+
+{% block css %}{{block.super}}
+{% compress css %}
+{# <link rel="stylesheet" href="{{STATIC_URL}}posts/css/posts.css"> #}
+{% endcompress %}
+{% endblock %}
+
+{% block js %}{{block.super}}
+{% compress js %}
+{% endcompress %}
+{% endblock %}
+
+{% block main_content %}
+<div class="page_content">
+    <h1>Social publishing</h1>
+    <h2>for {{post.title_html|safe}}</h2>
+
+    <form action="" method="POST" class="ph_form">
+        <div class="row question form-group">
+            <div class="col-md-2">
+                <div class="text">Twitter Post</div>
+                <div class="help"></div>
+            </div>
+            
+            <div class="col-md-10 answers">
+                <div class="form-group form_input">
+                    {{ form.twitter_publish_intent }}
+                    {{ form.twitter_status_text }}
+                    <div class="errors">{{form.twitter_status_text.errors}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="row question form-group">
+            <div class="col-md-2">
+                <div class="text">Facebook Status</div>
+                <div class="help"></div>
+            </div>
+            
+            <div class="col-md-10 answers">
+                <div class="form-group form_input">
+                    {{ form.twitter_publish_intent }}
+                    {{ form.facebook_status_text }}
+                    <div class="errors">{{form.facebook_status_text.errors}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="row question form-group">
+            <div class="col-md-2">
+                
+            </div>
+            
+            <div class="col-md-10 answers">
+                <div class="form-group form_input">
+                    <button type="submit" class="button btn btn-primary sign_up_button">{% trans "Publish" %}</button>
+                </div>
+            </div>
+        </div>
+        
+        
+    </form>
+</div>
+{% endblock %}

@@ -18,7 +18,7 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from annoying.decorators import render_to, ajax_request
 from posts.models import Backup, Fantastic, Post, Author, PostRevision, Read
-from posts.forms import AccountForm, FantasticForm, PostForm, ReadForm
+from posts.forms import AccountForm, FantasticForm, PostForm, ReadForm, SocialShareForm
 from posts.tasks import generate_backup_zip, sync_posts
 
 POSTS_PER_PAGINATION = 10
@@ -77,17 +77,21 @@ def generate_backup(request):
 @render_to("posts/my_account.html")
 @login_required
 def my_account(request):
+    from posts.forms import AuthorForm
     me = request.user
     author = me.get_profile()
     changes_saved = False
     if request.method == "POST":
         form = AccountForm(request.POST, instance=me)
-        if form.is_valid():
+        author_form = AuthorForm(request.POST, instance=author, prefix="AUTHOR")
+        if form.is_valid() and author_form.is_valid():
             me = form.save()
+            author_form.save()
             changes_saved = True
+
     else:
         form = AccountForm(instance=me)
-
+        author_form = AuthorForm(instance=author, prefix="AUTHOR")
     return locals()
 
 
@@ -298,6 +302,24 @@ def blog(request, author=None):
     posts = author.published_posts[:POSTS_PER_PAGINATION]
     last_timestamp = posts[len(posts)-1].written_on.strftime("%s")
     return locals()
+
+
+@login_required
+@render_to("posts/social_share.html")
+def social_share(request, post_id):
+    try:
+        post = Post.objects.get(pk=post_id)
+        assert post.author == request.user.get_profile()
+        if request.method == "POST":
+            form = SocialShareForm(request.POST, instance=post)
+        else:
+            form = SocialShareForm(instance=post)
+        
+        return locals()
+
+    except:
+        import traceback; traceback.print_exc();
+        return HttpResponseRedirect(reverse('main_site:home'))
 
 @ajax_request
 def next_posts(request, author=None):

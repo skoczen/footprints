@@ -31,8 +31,8 @@ $(function(){
     };
     Footprints.post.editor.add_nicedit_editors = function() {
         Footprints.post.editor.editing_node = new nicEditor({
-                fullPanel : false,
-                buttonList : ['bold','italic','underline', 'link',]
+                fullPanel : true,
+                // buttonList : ['bold','italic','underline', 'blockquote', 'link']
                 // Currently broke as fuck.  ,'left','center','right'
         }).panelInstance("edit_pane", {hasPanel: true});
         $(".post .editable").each(function(){
@@ -133,11 +133,8 @@ $(function(){
                     }
                 },
                 success: function(json) {
-                    // if (json.num_people > 0) {
-                        $(".fantastic_button .num_agree .number").html(12);
-                        $(".fantastic_button .num_agree").addClass("visible");
-                    }
-                // }
+                    $(".fantastic_button .num_agree").html(json.num_people).addClass("visible");
+                }
             });
         }
 

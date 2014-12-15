@@ -5,6 +5,7 @@ import mistune
 from django.db import models
 from django.core.cache import cache
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
 from utils.slughifi import unique_slug, slughifi
 from main_site.models import BaseModel
@@ -27,6 +28,9 @@ class Author(BaseModel):
     user = models.ForeignKey("auth.User", blank=True, null=True)
     premium_user = models.BooleanField(default=False)
     slug = models.CharField(max_length=255, blank=True, editable=False)
+    blog_name = models.CharField(max_length=255, blank=True)
+    blog_domain = models.CharField(max_length=255, blank=True)
+
     public_domain = models.BooleanField(default=False)
     wikipedia_url = models.TextField(blank=True, null=True)
     archive = models.BooleanField(default=False)
@@ -180,10 +184,15 @@ class AbstractPost(BaseModel):
     weather_wind_chill_c = models.IntegerField(blank=True, null=True)
     weather_wind_speed_kph = models.IntegerField(blank=True, null=True)
 
+    twitter_publish_intent = models.BooleanField(default=True)
     twitter_published = models.BooleanField(default=False, editable=False)
     twitter_status_text = models.TextField(blank=True, null=True)
     twitter_status_id = models.CharField(max_length=255, blank=True, null=True, editable=False)
 
+    facebook_publish_intent = models.BooleanField(default=True)
+    facebook_published = models.BooleanField(default=False, editable=False)
+    facebook_status_text = models.TextField(blank=True, null=True)
+    facebook_status_id = models.CharField(max_length=255, blank=True, null=True, editable=False)
 
     def __unicode__(self, *args, **kwargs):
         return self.title
@@ -191,6 +200,11 @@ class AbstractPost(BaseModel):
     def save(self, *args, **kwargs):
         self.title_html = mistune.markdown(self.title)
         self.body_html = mistune.markdown(self.body)
+        if not self.twitter_status_text:
+            self.twitter_status_text = "%s %s%s" % (self.body[:240], self.settings.BASE_URL, reverse('posts:post', self.author.slug, self.slug))
+
+        if not self.facebook_status_text:
+            self.facebook_status_text = "%s %s%s" % (self.body, self.settings.BASE_URL, reverse('posts:post', self.author.slug, self.slug))
 
         self.num_images = self.body_html.count("<img")
         if self.dayone_image:
