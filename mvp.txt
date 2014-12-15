@@ -10,8 +10,13 @@ Next:
         - fix love this
         - Post types.
         - "x people agree" -> fade out
+        - Logo for FB, Twitter, Dropbox
+            - https://apps.twitter.com/app/7640201/settings
 
-- on blur of fb editing field, shorten it.
+
+- update twitter look to look like twitter.
+- actual wired up posting!
+
 - some bugs in post type selection based on image #s.
 - thumbnails image width: 896
 - some bugs in image height for short/narrow images (see want sexy parallax effect)
@@ -21,13 +26,12 @@ Next:
 - // TODO:  // THe end
 - dates?
 
-
 - Want: sexy parallax effect
     - also, save image height in the db, so we can be clever.
 
-
 Little things:
  - timezone wonkiness
+ - on blur of fb editing field, shorten it.?
 
 Actual, me MVP:
     - Hit publish in DayOne
@@ -40,10 +44,9 @@ Actual, me MVP:
 - Import tumblr direct post:
      (screenshot epic)
      - peanut
-- Logo for FB, Twitter, Dropbox
-    - https://apps.twitter.com/app/7640201/settings
-
 - Handle old links
+
+
 
 
 Someday maybe:

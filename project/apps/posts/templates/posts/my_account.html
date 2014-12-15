@@ -37,12 +37,12 @@ Footprints.actions = {};
       <div class="row question form-group">
         <div class="col-md-5">
             <div class="text">Blog Domain</div>
-            <div class="help">Your domain, i.e. blog.inkandfeet.com.  You don't need the 'http://' part.</div>
+            <div class="help">The domain we should put your blog at.</div>
         </div>
         
         <div class="col-md-7 answers">
             <div class="form-group form_input">
-                {{ author_form.blog_domain }}
+                <span class="http">http://</span>{{ author_form.blog_domain }}
                 <div class="errors">{{author_form.blog_domain.errors}}</div>
             </div>
             
@@ -184,7 +184,7 @@ Footprints.actions = {};
                 </div>
                 <div class="connected"><i class="fa fa-twitter"></i> Twitter: Connected</div>
                 <div class="account">
-                  <i class="fa fa-user"></i> Account: <a href="https://twitter.com/{{request.user.get_profile.twitter_account_name}}" target="_blank">@{{request.user.get_profile.twitter_account_name}}</a>
+                  <i class="fa fa-user"></i> Account: {{request.user.get_profile.twitter_full_name}} <a href="https://twitter.com/{{request.user.get_profile.twitter_account_name}}" target="_blank">@{{request.user.get_profile.twitter_account_name}}</a>
                 </div>
                 <div>
                   <i class="fa fa-refresh"></i> <a href="{% url 'posts:twitter_auth_start' %}" class="">Reconnect</a>

@@ -52,6 +52,7 @@ class Author(BaseModel):
     facebook_profile_picture_url = models.TextField(blank=True, null=True)
     twitter_api_key = models.TextField(blank=True, null=True)
     twitter_api_secret = models.TextField(blank=True, null=True)
+    twitter_full_name = models.CharField(max_length=255, blank=True, null=True)
     twitter_account_name = models.CharField(max_length=255, blank=True, null=True)
     twitter_expire_date = models.DateTimeField(blank=True, null=True)
     twitter_profile_picture_url = models.TextField(blank=True, null=True)
@@ -204,6 +205,9 @@ class AbstractPost(BaseModel):
     def save(self, *args, **kwargs):
         self.title_html = mistune.markdown(self.title)
         self.body_html = mistune.markdown(self.body)
+
+        print "self.social_shares_customized"
+        print self.social_shares_customized
         if not self.social_shares_customized:
             self.twitter_status_text = "%s" % (self.title.strip()[:118],)
 

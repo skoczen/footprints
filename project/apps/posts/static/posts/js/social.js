@@ -12,6 +12,7 @@ $(function(){
     Footprints.share.actions.show_hide_forms = function() {
         var hide_twitter = $("#id_twitter_publish_intent:checked").length == 0;
         $(".twitter_fields").toggleClass("disabled", hide_twitter);
+        $(".twitter .include_image").toggleClass("disabled", hide_twitter);
         // $(".twitter .section_toggle").toggleClass("disabled", hide_twitter)
         if (hide_twitter) {
             $(".twitter_fields input, .twitter_fields textarea").attr("disabled", "disabled");
@@ -29,8 +30,14 @@ $(function(){
     }
     Footprints.share.handlers.input_changed = function() {
         var num_remaining = 140-22-$(".twitter_fields textarea").val().length;
-        $(".num_characters_remaining .number").html(num_remaining);
-        $(".num_characters_remaining").toggleClass("over", num_remaining < 0)
+        $(".twitter .num_characters_remaining .number").html(num_remaining);
+        $(".twitter .num_characters_remaining").toggleClass("over", num_remaining < 0)
+
+        var num_remaining = 450-$(".facebook_fields textarea").val().length;
+        $(".facebook .num_characters_remaining .number").html(Math.abs(num_remaining));
+        $(".facebook .num_characters_remaining").toggleClass("over", num_remaining < 0)
+        $(".facebook .num_characters_remaining .short").toggleClass("hidden", num_remaining<0)
+        $(".facebook .num_characters_remaining .long").toggleClass("hidden", num_remaining>=0)
     }
     Footprints.share.actions.post_photo_twitter_changed = function() {
         var is_checked = $("#id_twitter_include_image:checked").length == 0;
@@ -51,7 +58,10 @@ $(function(){
         $(".twitter .include_image input").on('switchChange.bootstrapSwitch', Footprints.share.actions.post_photo_twitter_changed);
         $("#id_publish_now").on('switchChange.bootstrapSwitch', Footprints.share.actions.publish_now_changed);
         $(".twitter_fields textarea").keyup(Footprints.share.handlers.input_changed);
+        $(".facebook_fields textarea").keyup(Footprints.share.handlers.input_changed);
+        $(".facebook_fields textarea").autosize();
         
+
         $("input[type=checkbox]").bootstrapSwitch({
             "onText": "Yes",
             "offText": "No",

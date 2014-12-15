@@ -307,20 +307,30 @@ def blog(request, author=None):
 @login_required
 @render_to("posts/social_share.html")
 def social_share(request, post_id):
+    changes_saved = False
+    published = False
     try:
         post = Post.objects.get(pk=post_id)
         assert post.author == request.user.get_profile()
         if request.method == "POST":
             form = SocialShareForm(request.POST, instance=post)
             social_shares_customized = False
+            
             if form.is_valid():
-                if form.cleaned_data["facebook_status_text"] != post.facebook_status_text or\
-                    form.cleaned_data["twitter_status_text"] != post.twitter_status_text:
+                old_post = Post.objects.get(pk=post_id)
+                if form.cleaned_data["facebook_status_text"] != old_post.facebook_status_text or\
+                    form.cleaned_data["twitter_status_text"] != old_post.twitter_status_text:
                         social_shares_customized = True
                 post = form.save()
                 if social_shares_customized:
                     post.social_shares_customized = True
+                    post.facebook_status_text = form.cleaned_data["facebook_status_text"]
+                    post.twitter_status_text = form.cleaned_data["twitter_status_text"]
                     post.save()
+                changes_saved = True
+
+                if form.cleaned_data["publish_now"]:
+                    print "Publish now! :)"
         else:
             form = SocialShareForm(instance=post)
         
@@ -410,6 +420,9 @@ def get_dropbox_auth_flow(web_app_session):
                              web_app_session, "dropbox-auth-csrf-token")
 @login_required
 def dropbox_auth_start(request):
+    if "redirect_to" in request.GET:
+        request.session["dropbox_auth_redirect_to"] = request.GET["redirect_to"]
+
     authorize_url = get_dropbox_auth_flow(request.session).start()
     return HttpResponseRedirect(authorize_url)
 
@@ -434,7 +447,12 @@ def dropbox_auth_finish(request):
     except DropboxOAuth2Flow.CsrfException, e:
         http_status(403)
     except DropboxOAuth2Flow.NotApprovedException, e:
-        flash('Not approved?  Why not?')
+        if "dropbox_auth_redirect_to" in request.session:
+            redirect_url = request.session["dropbox_auth_redirect_to"]
+            del request.session["dropbox_auth_redirect_to"]
+            assert not "http:"  in redirect_url
+            return HttpResponseRedirect(redirect_url)
+
         return HttpResponseRedirect(reverse("posts:my_account"))
     except DropboxOAuth2Flow.ProviderException, e:
         logger.log("Auth error: %s" % (e,))
@@ -456,6 +474,9 @@ def authorized_tweepy_api(author):
 
 @login_required
 def twitter_auth_start(request):
+    if "redirect_to" in request.GET:
+        request.session["twitter_auth_redirect_to"] = request.GET["redirect_to"]
+
     auth = twitter_auth()
     try:
         redirect_url = auth.get_authorization_url()
@@ -483,6 +504,8 @@ def twitter_auth_finish(request):
         author.twitter_api_key = auth.access_token
         author.twitter_api_secret = auth.access_token_secret
         api = authorized_tweepy_api(author)
+        
+        author.twitter_full_name = api.me().name
         author.twitter_account_name = api.me().screen_name
         author.twitter_profile_picture_url = api.me().profile_image_url_https
         author.save()
@@ -490,6 +513,12 @@ def twitter_auth_finish(request):
         import traceback; traceback.print_exc();
         pass
 
+    if "twitter_auth_redirect_to" in request.session:
+        redirect_url = request.session["twitter_auth_redirect_to"]
+        del request.session["twitter_auth_redirect_to"]
+        assert not "http:"  in redirect_url
+        return HttpResponseRedirect(redirect_url)
+        
     return HttpResponseRedirect(reverse("posts:my_account"))
 
 
@@ -515,6 +544,9 @@ def authorized_facebook_api(author):
 
 @login_required
 def facebook_auth_start(request):
+    if "redirect_to" in request.GET:
+        request.session["facebook_auth_redirect_to"] = request.GET["redirect_to"]
+
     auth = facebook_auth()
     authorization_url = auth.authorize_url('publish_actions,email')
     return HttpResponseRedirect(authorization_url)
@@ -540,6 +572,11 @@ def facebook_auth_finish(request):
     except:
         import traceback; traceback.print_exc();
         pass
-
+    
+    if "facebook_auth_redirect_to" in request.session:
+        redirect_url = request.session["facebook_auth_redirect_to"]
+        del request.session["facebook_auth_redirect_to"]
+        assert not "http:"  in redirect_url
+        return HttpResponseRedirect(redirect_url)
     return HttpResponseRedirect(reverse("posts:my_account"))
 

@@ -23,23 +23,24 @@
 {% block js %}{{block.super}}
 {% compress js %}
 <script src="{{STATIC_URL}}main_site/js/bootstrap-switch.js"></script>
+<script src="{{STATIC_URL}}main_site/js/jquery.autosize.js"></script>
 <script src="{{STATIC_URL}}posts/js/social.js"></script>
 {% endcompress %}
 {% endblock %}
 
 {% block main_content %}
 <div class="page_content">
-    <h1>Social publishing</h1>
-    <h2>{% if post.dayone_image %}
-        {% thumbnail post.dayone_image "100x100" as thumb %}
-        <img src="{{thumb.url}}" class="list_thumb" />
-        {% endthumbnail %}
-        {% endif %}
-        {{post.title|safe}}
-    </h2>
+    <h1>Social Publishing</h1>
+    <h2>{{post.title|safe}}</h2>
 
+    {% if published %}
+        <div class="alert alert-success">Changes saved.</div>
+    {% else %}
+        {% if changes_saved %}<div class="alert alert-success">Changes saved.</div>{% endif %}
+    {% endif %}
     <form action="" method="POST" class="ph_form social_form">
         {% csrf_token %}
+
         <div class="row question form-group">
             <div class="col-md-2">
                 <div class="text">Twitter</div>
@@ -47,6 +48,10 @@
             </div>
             
             <div class="col-md-10 answers twitter">
+                {% if not post.author.twitter_valid %}
+                    <p>Your twitter account isn't connected to Footprints yet.</p>
+                    <a href="{% url 'posts:twitter_auth_start' %}?redirect_to={{request.path}}" class="button btn btn-primary"><i class="fa fa-twitter"></i> Connect to Twitter</a>
+                {% else %}
                 <div class="form-group form_input section_toggle">
                     <div class="toggle">
                         <label for="id_twitter_publish_intent">Publish to Twitter: </label> 
@@ -66,31 +71,33 @@
                 <div class="form-group form_input twitter_fields">
                     
                     <div class="mock_twitter_ui row">
-                        <div class="col-md-2 info_fields">
+                        <div class="profile_pic">
+                            <img src="{{request.user.get_profile.twitter_profile_picture_url}}" />
+                        </div>
+                        <div class="author_and_handle">
                             <div class="author">
-                                <img src="{{request.user.get_profile.twitter_profile_picture_url}}" />
-                                @{{post.author.twitter_account_name}}:
+                                {{post.author.twitter_full_name}}
                             </div>
-                            <div class="twitter_logo hidden-xs">
-                                <i class="fa fa-twitter"></i> 
+                            <div class="handle">
+                                @{{post.author.twitter_account_name}} &bull; Just now
                             </div>
                         </div>
-                        <div class="col-md-10">
-                            <div class="tweet_content_area">
-                                {{ form.twitter_status_text }}
-                                <div class="article_url">https://t.co/linkToPost</div>
-                                {% if post.dayone_image %}
-                                {% thumbnail post.dayone_image "50x50" as thumb %}
-                                <img src="{{thumb.url}}" class="list_thumb post_thumb" />
-                                {% endthumbnail %}
-                                {% endif %}
-                            </div>
+                        <div class="num_characters_remaining"><span class="number"></span> characters remaining</div>
+                        <div class="tweet_content_area">
+                            {{ form.twitter_status_text }}
+                            <div class="article_url">https://t.co/linkToPost</div>
+                            {% if post.dayone_image %}
+                            {% thumbnail post.dayone_image "510x250" crop="center" as thumb %}
+                            <img src="{{thumb.url}}" class="list_thumb post_thumb" />
+                            {% endthumbnail %}
+                            {% endif %}
 
                             <div class="errors">{{form.twitter_status_text.errors}}</div>
-                            <div class="num_characters_remaining"><span class="number"></span> remaining</div>
                         </div>
                     </div>
                 </div>
+
+                {% endif %}
             </div>
         </div>
         <div class="row question form-group">
@@ -99,8 +106,11 @@
                 <div class="help"></div>
             </div>
             
-            <div class="col-md-10 answers">
-                <div class="col-md-10 answers facebook">
+            <div class="col-md-10 answers facebook">
+                {% if not post.author.facebook_valid %}
+                    <p>Your Facebook account isn't connected to Footprints yet.</p>
+                    <a href="{% url 'posts:twitter_auth_start' %}?redirect_to={{request.path}}" class="button btn btn-primary"><i class="fa fa-facebook"></i> Connect to Facebook</a>
+                {% else %}
                 <div class="form-group form_input section_toggle">
                     <div class="toggle">
                         <label for="id_facebook_publish_intent">Publish to Facebook: </label> 
@@ -114,7 +124,16 @@
                         <div class="status_content_area">
                             <div class="fb_photo"><img src="{{request.user.get_profile.facebook_profile_picture_url}}" /></div>
                             <div class="fb_name">{{post.author.facebook_account_name}}</div>
-                            <div class="fb_when">Just Now</div>
+                            <div class="fb_when">Just Now &bull; <i class="fa fa-users"></i> </div>
+
+                            <div class="num_characters_remaining">
+                                <span class="short">
+                                You have about <span class="number"></span> more characters until Facebook switches to the <span class="read_more_link">See More</span> link.
+                                </span>
+                                <span class="long">
+                                Facebook is probably going to truncate this text in the news feed, and show a <span class="read_more_link">See More</span> link.<br/>That might be fine, but it will generally reduce the number of click-throughs to your blog.<br/><br/>You're over the limit by about <span class="number"></span> characters.
+                                </span>
+                            </div>
                             <div class="status_text">
                                 {{ form.facebook_status_text }}
                                 <div class="article_url">http://{{post.author.blog_domain}}{% url 'posts:post' post.author.slug post.pk %}</div>
@@ -125,14 +144,16 @@
                                 <img src="{{thumb.url}}" class="list_thumb" />
                                 {% endthumbnail %}
                                 {% endif %}
-                                <div class="thumb_title">
-                                    {{post.title|truncatechars:64}}
-                                </div>
-                                <div class="thumb_body">
-                                    {{post.body|truncatechars:135}}
-                                </div>
-                                <div class="domain">
-                                    {{post.body.author.blog_domain}}
+                                <div class="thumb_caption">
+                                    <div class="thumb_title">
+                                        {{post.title|truncatechars:64}}
+                                    </div>
+                                    <div class="thumb_body">
+                                        {{post.body|truncatechars:165}}
+                                    </div>
+                                    <div class="domain">
+                                        {{post.author.blog_domain}}
+                                    </div>
                                 </div>
                             </div>
                             <div class="share_stuff">
@@ -142,6 +163,7 @@
                         <div class="errors">{{form.facebook_status_text.errors}}</div>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
         <div class="row question form-group">

@@ -1,7 +1,27 @@
+h2 {
+    font-family: 'Cardo', serif;
+    font-style: italic;
+    color: #999;
+    border: 1px solid #EEE;
+    border-width: 0 0 1px 0;
+    padding: 0 0 15px 0;
+    margin: 0 0 20px 0;
+    clear: none;
+}
+.post_title {
+    display: block;
+    overflow: auto;
+    float: left;
+    margin: 0 0 20px 0;
+}
 .disabled  {
     color: #CCC;
     background: transparent;
     opacity: 0.2;
+    display: none;
+}
+.question {
+    margin: 20px inherit 40px inherit;
 }
 .disabled input, .disabled textarea {
     background: #EEE;
@@ -10,54 +30,75 @@
 .twitter_fields textarea {
     height: 103px;
 }
-.twitter_fields .author {
-    font-size: 18px;
-    font-weight: 100;
-    opacity: 0.8;
+.twitter_fields .profile_pic {
+    float: left;
+    margin: 0 10px 10px 0;
 }
+.twitter_fields .author_and_handle {
+    width: 100%;
+    clear: right;
+}
+.twitter_fields .author {
+    display: inline-block;
+    font-weight: bold;
+}
+.twitter_fields .handle {
+    display: inline-block;
+    color: #8F99A6;
+    font-size: 12px;
+}
+
 .twitter_fields .info_fields {
     text-align: center;
 }
 
 .mock_twitter_ui {
-    background-color: #55ACEE;
-    padding: 20px;
-    color: #FFF;
-    border-radius: 10px;
-    margin: 0;
+    position: relative;
+    border: 1px solid #EEE;
+    /*border-width: 1px 0;*/
+    margin: 0 0px;
+    padding: 10px;
+    max-width: 600px;
 }
+
 .ph_form .form_input .mock_twitter_ui textarea {
     width: 100%;
-    background: #F3F3FF;
-    color: #222;
+    color: #454545;
     border: 0;
     padding: 0;
     resize: none;
+    font-size: 14px;
+    font-weight: normal;
+    font-family: Arial;
+    height: 40px;
+}
+.ph_form .form_input .mock_twitter_ui textarea:hover, .mock_facebook_ui .status_text textarea:hover {
+    background: #FBFF95;
+}
+.ph_form .form_input .mock_twitter_ui textarea:focus, .mock_facebook_ui .status_text textarea:focus {
+    background: #FFF
+}
+.mock_twitter_ui .article_url {
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #0087C6;
 }
 .mock_twitter_ui .tweet_content_area {
-    position: relative;
-    background: #F3F3FF;
-    color: #222;
-    font-size: 24px;
-    font-weight: 300;
-    padding: 6px 10px;
-    border-radius: 4px
-}
-.mock_twitter_ui .twitter_logo {
-    font-size: 80px;
-    opacity: 0.6;
+    width: 520px;
+    color: #454545;
+    float: left;
 }
 .mock_twitter_ui .tweet_content_area .post_thumb {
-    position: absolute;
-    right: 6px;
-    bottom: 6px;
-    border: 4px solid #FFF;
+    border-radius: 6px;
+
 }
 .mock_facebook_ui {
     background: #E9EAED;
     padding: 10px;
+    max-width: 600px;
 }
 .mock_facebook_ui .status_content_area {
+    position: relative;
     width: 500px;
     margin: 0px auto;
     background: #FFF;
@@ -68,19 +109,65 @@
     border: 1px solid #CCC;
     box-shadow: 1px 1px 2px rgba(40,40,40,0.1)
 }
+.mock_facebook_ui .fb_name {
+    color: #3B5998;
+    font-size: 16px;
+    font-weight: bold;
+}
 .mock_facebook_ui .fb_photo {
     float: left;
+    margin: 0 10px 10px 0;
+}
+.mock_facebook_ui .fb_when {
+    color: #AAA;
+    font-size: 12px;
+    font-weight: normal;
 }
 .mock_facebook_ui .status_text {
     clear: both;
+    padding: 4px;
 }
 .mock_facebook_ui .status_text textarea {
     width: 100%;
     margin: 0;
-    padding: 4px;
-    font-size: 18px;
     border: 0;
+    padding: 0;
     resize: none;
+    height: 150px;
+}
+.mock_facebook_ui .article_url {
+    margin-bottom: 20px;
+    color: #3B5998;
+}
+.mock_facebook_ui .status_text, .mock_facebook_ui .status_text textarea {
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-size: 14px;
+    line-height: 18px;
+    -webkit-font-smoothing: antialiased;
+    color: #141823;
+    font-weight: normal;
+}
+.mock_facebook_ui .thumb_caption {
+    padding: 8px;
+}
+.mock_facebook_ui .thumb_title {
+    font-family: Georgia, "Times New Roman", Serif;
+    font-size: 18px;
+}
+.mock_facebook_ui .thumb_body {
+    padding-top: 4px;
+    font-size: 12px;
+}
+.mock_facebook_ui .domain {
+    text-transform: uppercase;
+    color: #AAA;
+    padding-top: 6px;
+    font-size: 10px;
+}
+.mock_facebook_ui .share_stuff {
+    font-size: 12px;
+    color: #6D84B4;
+    padding: 10px 0 0 0;
 }
 .toggle {
     display: inline-block;
@@ -91,20 +178,63 @@
     padding: 3px 0 0 0;
     vertical-align: middle;
 }
-.num_characters_remaining {
-    font-size: 20px;
-    opacity: 0.4;
-    font-weight: 100;
-    transition: opacity 1s;
+.twitter .num_characters_remaining {
+    right: -212px;
+    color: #999;
+    opacity: 1;
+
 }
-.num_characters_remaining.over .number {
+.twitter .num_characters_remaining.over .number {
     /*transition: color 1s;*/
 }
-.num_characters_remaining.over {
-    opacity: 1;
+.twitter .num_characters_remaining.over {
+    color: #222;
 }
-.num_characters_remaining.over .number {
+.twitter .num_characters_remaining.over .number {
     color: red;
     font-weight: 700;
+}
+.num_characters_remaining {
+    display: block;
+    position: absolute;
+    right: -260px;
+    margin-top: 20px;
+    width: 200px;
+    color: #999;
+}
+.facebook .num_characters_remaining {
+    color: #999;
+}
+.facebook .num_characters_remaining .read_more_link {
+    color: #3B5998;
+}
+.facebook .num_characters_remaining .long {
+    color: #454545;
+}
+@media all and (max-width: 600px) {
+    .facebook .num_characters_remaining {
+        display: block;
+        position: relative;
+        background: #EEE;
+        /*margin: 20px 0;*/
+        clear: both;
+        float: left;
+        width: auto;
+        right: inherit;
+        color: #888;
+        padding: 8px;
+    }
+    .mock_facebook_ui {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+    .mock_facebook_ui .status_content_area {
+        width: auto;
+    }
+    .mock_facebook_ui .thumb_body img {
+        width: 100%;
+
+    }
 
 }
