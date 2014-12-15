@@ -1,6 +1,6 @@
-{% extends "base.html" %}{% load compress i18n %}
+{% extends "base.html" %}{% load compress i18n thumbnail %}
 
-{% block title %}{{post.title}} by {{post.author.name}}{% endblock %}
+{% block title %}Social share for {{post.title}} by {{post.author.name}}{% endblock %}
 {% block description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
 {% block author %}{% url "posts:author" post.author.slug %}{% endblock %}
 {% block schema_name %}{{post.title}} by {{post.author.name}}{% endblock %}
@@ -14,55 +14,147 @@
 
 {% block css %}{{block.super}}
 {% compress css %}
-{# <link rel="stylesheet" href="{{STATIC_URL}}posts/css/posts.css"> #}
+<link rel="stylesheet" href="{{STATIC_URL}}posts/css/social.css">
+<link href="{{STATIC_URL}}main_site/css/bootstrap.css" rel="stylesheet">
+<link href="{{STATIC_URL}}main_site/css/bootstrap-switch.css" rel="stylesheet">
 {% endcompress %}
 {% endblock %}
 
 {% block js %}{{block.super}}
 {% compress js %}
+<script src="{{STATIC_URL}}main_site/js/bootstrap-switch.js"></script>
+<script src="{{STATIC_URL}}posts/js/social.js"></script>
 {% endcompress %}
 {% endblock %}
 
 {% block main_content %}
 <div class="page_content">
     <h1>Social publishing</h1>
-    <h2>for {{post.title_html|safe}}</h2>
+    <h2>{% if post.dayone_image %}
+        {% thumbnail post.dayone_image "100x100" as thumb %}
+        <img src="{{thumb.url}}" class="list_thumb" />
+        {% endthumbnail %}
+        {% endif %}
+        {{post.title|safe}}
+    </h2>
 
-    <form action="" method="POST" class="ph_form">
+    <form action="" method="POST" class="ph_form social_form">
+        {% csrf_token %}
         <div class="row question form-group">
             <div class="col-md-2">
-                <div class="text">Twitter Post</div>
+                <div class="text">Twitter</div>
                 <div class="help"></div>
             </div>
             
-            <div class="col-md-10 answers">
-                <div class="form-group form_input">
-                    {{ form.twitter_publish_intent }}
-                    {{ form.twitter_status_text }}
-                    <div class="errors">{{form.twitter_status_text.errors}}</div>
+            <div class="col-md-10 answers twitter">
+                <div class="form-group form_input section_toggle">
+                    <div class="toggle">
+                        <label for="id_twitter_publish_intent">Publish to Twitter: </label> 
+                        {{ form.twitter_publish_intent }}
+                    </div>
+
+                    {% if post.dayone_image %}
+                    <div class="toggle">
+                        <div class="include_image">
+                            <label for="id_twitter_include_image">Include Image: </label> 
+                            {{ form.twitter_include_image }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group form_input twitter_fields">
+                    
+                    <div class="mock_twitter_ui row">
+                        <div class="col-md-2 info_fields">
+                            <div class="author">
+                                <img src="{{request.user.get_profile.twitter_profile_picture_url}}" />
+                                @{{post.author.twitter_account_name}}:
+                            </div>
+                            <div class="twitter_logo hidden-xs">
+                                <i class="fa fa-twitter"></i> 
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="tweet_content_area">
+                                {{ form.twitter_status_text }}
+                                <div class="article_url">https://t.co/linkToPost</div>
+                                {% if post.dayone_image %}
+                                {% thumbnail post.dayone_image "50x50" as thumb %}
+                                <img src="{{thumb.url}}" class="list_thumb post_thumb" />
+                                {% endthumbnail %}
+                                {% endif %}
+                            </div>
+
+                            <div class="errors">{{form.twitter_status_text.errors}}</div>
+                            <div class="num_characters_remaining"><span class="number"></span> remaining</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="row question form-group">
             <div class="col-md-2">
-                <div class="text">Facebook Status</div>
+                <div class="text">Facebook</div>
                 <div class="help"></div>
             </div>
             
             <div class="col-md-10 answers">
-                <div class="form-group form_input">
-                    {{ form.twitter_publish_intent }}
-                    {{ form.facebook_status_text }}
-                    <div class="errors">{{form.facebook_status_text.errors}}</div>
+                <div class="col-md-10 answers facebook">
+                <div class="form-group form_input section_toggle">
+                    <div class="toggle">
+                        <label for="id_facebook_publish_intent">Publish to Facebook: </label> 
+                        {{ form.facebook_publish_intent }}
+                    </div>
+                </div>
+
+                <div class="form-group form_input facebook_fields">
+                    
+                    <div class="mock_facebook_ui">
+                        <div class="status_content_area">
+                            <div class="fb_photo"><img src="{{request.user.get_profile.facebook_profile_picture_url}}" /></div>
+                            <div class="fb_name">{{post.author.facebook_account_name}}</div>
+                            <div class="fb_when">Just Now</div>
+                            <div class="status_text">
+                                {{ form.facebook_status_text }}
+                                <div class="article_url">http://{{post.author.blog_domain}}{% url 'posts:post' post.author.slug post.pk %}</div>
+                            </div>
+                            <div class="post_thumb">
+                                {% if post.dayone_image %}
+                                {% thumbnail post.dayone_image "470x250" crop="center" as thumb %}
+                                <img src="{{thumb.url}}" class="list_thumb" />
+                                {% endthumbnail %}
+                                {% endif %}
+                                <div class="thumb_title">
+                                    {{post.title|truncatechars:64}}
+                                </div>
+                                <div class="thumb_body">
+                                    {{post.body|truncatechars:135}}
+                                </div>
+                                <div class="domain">
+                                    {{post.body.author.blog_domain}}
+                                </div>
+                            </div>
+                            <div class="share_stuff">
+                                Like &bull; Comment &bull; Share
+                            </div>
+                        </div>
+                        <div class="errors">{{form.facebook_status_text.errors}}</div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="row question form-group">
             <div class="col-md-2">
-                
+                <div class="text">Publish</div>
             </div>
             
             <div class="col-md-10 answers">
+
+                <div class="form-group form_input">
+                    <label for="id_publish_now">Publish Now?</label> 
+                    {{ form.publish_now }}
+                </div>
                 <div class="form-group form_input">
                     <button type="submit" class="button btn btn-primary sign_up_button">{% trans "Publish" %}</button>
                 </div>

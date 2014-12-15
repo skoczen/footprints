@@ -145,6 +145,7 @@ INSTALLED_APPS = (
     "django_extensions",
     "djcelery",
     "gunicorn",
+    "sorl.thumbnail",
     "south",
 
     "main_site",

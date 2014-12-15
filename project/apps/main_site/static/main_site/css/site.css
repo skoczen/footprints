@@ -331,6 +331,10 @@ h1 {
     color: #AAA;
     margin: 2px 4px;
 }
+.list_thumb {
+    display: inline-block;
+    vertical-align: middle;
+}
 
 .explore {
 

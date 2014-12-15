@@ -312,6 +312,15 @@ def social_share(request, post_id):
         assert post.author == request.user.get_profile()
         if request.method == "POST":
             form = SocialShareForm(request.POST, instance=post)
+            social_shares_customized = False
+            if form.is_valid():
+                if form.cleaned_data["facebook_status_text"] != post.facebook_status_text or\
+                    form.cleaned_data["twitter_status_text"] != post.twitter_status_text:
+                        social_shares_customized = True
+                post = form.save()
+                if social_shares_customized:
+                    post.social_shares_customized = True
+                    post.save()
         else:
             form = SocialShareForm(instance=post)
         
@@ -475,6 +484,7 @@ def twitter_auth_finish(request):
         author.twitter_api_secret = auth.access_token_secret
         api = authorized_tweepy_api(author)
         author.twitter_account_name = api.me().screen_name
+        author.twitter_profile_picture_url = api.me().profile_image_url_https
         author.save()
     except:
         import traceback; traceback.print_exc();
@@ -507,7 +517,6 @@ def authorized_facebook_api(author):
 def facebook_auth_start(request):
     auth = facebook_auth()
     authorization_url = auth.authorize_url('publish_actions,email')
-    print authorization_url
     return HttpResponseRedirect(authorization_url)
 
 @login_required
@@ -525,6 +534,8 @@ def facebook_auth_finish(request):
         me = api.get("me")
         author.facebook_account_name = me["name"]
         author.facebook_account_link = me["link"]
+        pic = api.get("me/picture?redirect=0&height=50&type=normal&width=50")
+        author.facebook_profile_picture_url = pic["data"]["url"]
         author.save()
     except:
         import traceback; traceback.print_exc();

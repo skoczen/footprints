@@ -49,10 +49,12 @@ class Author(BaseModel):
     facebook_account_link = models.TextField(blank=True, null=True)
     facebook_account_name = models.CharField(max_length=255, blank=True, null=True)
     facebook_expire_date = models.DateTimeField(blank=True, null=True)
+    facebook_profile_picture_url = models.TextField(blank=True, null=True)
     twitter_api_key = models.TextField(blank=True, null=True)
     twitter_api_secret = models.TextField(blank=True, null=True)
     twitter_account_name = models.CharField(max_length=255, blank=True, null=True)
     twitter_expire_date = models.DateTimeField(blank=True, null=True)
+    twitter_profile_picture_url = models.TextField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.archive and not self.user:
@@ -185,6 +187,7 @@ class AbstractPost(BaseModel):
     weather_wind_speed_kph = models.IntegerField(blank=True, null=True)
 
     twitter_publish_intent = models.BooleanField(default=True)
+    twitter_include_image = models.BooleanField(default=True)
     twitter_published = models.BooleanField(default=False, editable=False)
     twitter_status_text = models.TextField(blank=True, null=True)
     twitter_status_id = models.CharField(max_length=255, blank=True, null=True, editable=False)
@@ -193,6 +196,7 @@ class AbstractPost(BaseModel):
     facebook_published = models.BooleanField(default=False, editable=False)
     facebook_status_text = models.TextField(blank=True, null=True)
     facebook_status_id = models.CharField(max_length=255, blank=True, null=True, editable=False)
+    social_shares_customized = models.BooleanField(default=False)
 
     def __unicode__(self, *args, **kwargs):
         return self.title
@@ -200,11 +204,19 @@ class AbstractPost(BaseModel):
     def save(self, *args, **kwargs):
         self.title_html = mistune.markdown(self.title)
         self.body_html = mistune.markdown(self.body)
-        if not self.twitter_status_text:
-            self.twitter_status_text = "%s %s%s" % (self.body[:240], self.settings.BASE_URL, reverse('posts:post', self.author.slug, self.slug))
+        if not self.social_shares_customized:
+            self.twitter_status_text = "%s" % (self.title.strip()[:118],)
 
-        if not self.facebook_status_text:
-            self.facebook_status_text = "%s %s%s" % (self.body, self.settings.BASE_URL, reverse('posts:post', self.author.slug, self.slug))
+            if self.title and self.body:
+                self.facebook_status_text = "%s\n\n%s" % (self.title.strip(), self.body.strip(),)
+            elif self.body:
+                self.facebook_status_text = self.body.strip()
+            else:
+                self.facebook_status_text = self.title.strip()
+
+            if len(self.facebook_status_text) > 250:
+                self.facebook_status_text = "%s...\nRead the rest at:" % (self.facebook_status_text[:240],)
+                
 
         self.num_images = self.body_html.count("<img")
         if self.dayone_image:
@@ -214,6 +226,8 @@ class AbstractPost(BaseModel):
 
     class Meta:
         abstract = True
+
+
 
     @property
     def is_big_quote(self):

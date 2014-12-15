@@ -1,0 +1,110 @@
+.disabled  {
+    color: #CCC;
+    background: transparent;
+    opacity: 0.2;
+}
+.disabled input, .disabled textarea {
+    background: #EEE;
+    color: #DDD;
+}
+.twitter_fields textarea {
+    height: 103px;
+}
+.twitter_fields .author {
+    font-size: 18px;
+    font-weight: 100;
+    opacity: 0.8;
+}
+.twitter_fields .info_fields {
+    text-align: center;
+}
+
+.mock_twitter_ui {
+    background-color: #55ACEE;
+    padding: 20px;
+    color: #FFF;
+    border-radius: 10px;
+    margin: 0;
+}
+.ph_form .form_input .mock_twitter_ui textarea {
+    width: 100%;
+    background: #F3F3FF;
+    color: #222;
+    border: 0;
+    padding: 0;
+    resize: none;
+}
+.mock_twitter_ui .tweet_content_area {
+    position: relative;
+    background: #F3F3FF;
+    color: #222;
+    font-size: 24px;
+    font-weight: 300;
+    padding: 6px 10px;
+    border-radius: 4px
+}
+.mock_twitter_ui .twitter_logo {
+    font-size: 80px;
+    opacity: 0.6;
+}
+.mock_twitter_ui .tweet_content_area .post_thumb {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    border: 4px solid #FFF;
+}
+.mock_facebook_ui {
+    background: #E9EAED;
+    padding: 10px;
+}
+.mock_facebook_ui .status_content_area {
+    width: 500px;
+    margin: 0px auto;
+    background: #FFF;
+    border: 1px solid #DDD;
+    padding: 12px;
+}
+.mock_facebook_ui .post_thumb {
+    border: 1px solid #CCC;
+    box-shadow: 1px 1px 2px rgba(40,40,40,0.1)
+}
+.mock_facebook_ui .fb_photo {
+    float: left;
+}
+.mock_facebook_ui .status_text {
+    clear: both;
+}
+.mock_facebook_ui .status_text textarea {
+    width: 100%;
+    margin: 0;
+    padding: 4px;
+    font-size: 18px;
+    border: 0;
+    resize: none;
+}
+.toggle {
+    display: inline-block;
+    margin: 0 30px 0 0;
+}
+.toggle label {
+    font-size: 18px;
+    padding: 3px 0 0 0;
+    vertical-align: middle;
+}
+.num_characters_remaining {
+    font-size: 20px;
+    opacity: 0.4;
+    font-weight: 100;
+    transition: opacity 1s;
+}
+.num_characters_remaining.over .number {
+    /*transition: color 1s;*/
+}
+.num_characters_remaining.over {
+    opacity: 1;
+}
+.num_characters_remaining.over .number {
+    color: red;
+    font-weight: 700;
+
+}

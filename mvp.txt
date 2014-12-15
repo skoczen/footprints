@@ -11,6 +11,7 @@ Next:
         - Post types.
         - "x people agree" -> fade out
 
+- on blur of fb editing field, shorten it.
 - some bugs in post type selection based on image #s.
 - thumbnails image width: 896
 - some bugs in image height for short/narrow images (see want sexy parallax effect)

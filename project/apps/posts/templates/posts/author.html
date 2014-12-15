@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% load compress %}
+{% extends "base.html" %}{% load compress thumbnail %}
 
 {% block title %}{{author.name}}'{% if not author.name_ends_in_s %}s{% endif %} Posts{% endblock %}
 
@@ -54,7 +54,13 @@
             {% endifchanged %}
             
 
-        <li class="post"><span class="time">{{post.written_on|time}}</span> <a href="{% url "posts:post" author.slug post.slug %}">{{post.title|safe}}</a> {% if post.is_draft %}<span class="draft bubble">DRAFT</span>{% else %}{% if post.num_fantastics > 0 %}<div class="fantastics">★ {{post.num_fantastics}}</div>{% endif %} {% if post.num_reads > 0 %}<div class="reads"><i class="fa fa-eye"></i> {{post.num_reads}}</div>{% endif %}{% endif %}</li>
+        <li class="post"><span class="time">{{post.written_on|time}}</span>
+        {% if post.dayone_image %}
+        {% thumbnail post.dayone_image "50x50" as thumb %}
+        <img src="{{thumb.url}}" class="list_thumb" />
+        {% endthumbnail %}
+        {% endif %}
+         <a href="{% url "posts:post" author.slug post.slug %}">{{post.title|safe}}</a> {% if post.is_draft %}<span class="draft bubble">DRAFT</span>{% else %}{% if post.num_fantastics > 0 %}<div class="fantastics">★ {{post.num_fantastics}}</div>{% endif %} {% if post.num_reads > 0 %}<div class="reads"><i class="fa fa-eye"></i> {{post.num_reads}}</div>{% endif %}{% endif %}</li>
         {% endfor %}
         </ul>
     </div>

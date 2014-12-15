@@ -44,6 +44,7 @@ class ReadForm(forms.ModelForm):
         )
 
 class SocialShareForm(forms.ModelForm):
+    publish_now = forms.BooleanField(required=False, widget=forms.CheckboxInput())
 
     class Meta:
         model = Post
@@ -52,6 +53,8 @@ class SocialShareForm(forms.ModelForm):
             "facebook_status_text",
             "twitter_publish_intent",
             "facebook_publish_intent",
+            "twitter_include_image",
+            "publish_now",
         )
 
 
