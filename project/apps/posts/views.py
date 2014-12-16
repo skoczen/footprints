@@ -18,7 +18,7 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from annoying.decorators import render_to, ajax_request
 from posts.models import Backup, Fantastic, Post, Author, PostRevision, Read
-from posts.forms import AccountForm, FantasticForm, PostForm, ReadForm, SocialShareForm
+from posts.forms import AccountForm, FantasticForm, PostForm, ReadForm, SocialShareForm, BlogForm, BlogUserForm
 from posts.tasks import generate_backup_zip, sync_posts
 
 POSTS_PER_PAGINATION = 10
@@ -77,21 +77,37 @@ def generate_backup(request):
 @render_to("posts/my_account.html")
 @login_required
 def my_account(request):
-    from posts.forms import AuthorForm
     me = request.user
     author = me.get_profile()
     changes_saved = False
     if request.method == "POST":
         form = AccountForm(request.POST, instance=me)
-        author_form = AuthorForm(request.POST, instance=author, prefix="AUTHOR")
-        if form.is_valid() and author_form.is_valid():
+        if form.is_valid():
             me = form.save()
-            author_form.save()
             changes_saved = True
 
     else:
         form = AccountForm(instance=me)
-        author_form = AuthorForm(instance=author, prefix="AUTHOR")
+    return locals()
+
+
+@render_to("posts/blog_settings.html")
+@login_required
+def blog_settings(request):
+    me = request.user
+    author = me.get_profile()
+    changes_saved = False
+    if request.method == "POST":
+        form = BlogForm(request.POST, instance=author)
+        user_form = BlogUserForm(request.POST, instance=request.user, prefix="USER")
+        if form.is_valid() and user_form.is_valid():
+            me = form.save()
+            user_form.save()
+            changes_saved = True
+
+    else:
+        form = BlogForm(instance=author)
+        user_form = BlogUserForm(instance=request.user, prefix="USER")
     return locals()
 
 
@@ -330,7 +346,32 @@ def social_share(request, post_id):
                 changes_saved = True
 
                 if form.cleaned_data["publish_now"]:
+                    if post.twitter_publish_intent:
+                        twitter_api = authorized_tweepy_api(post.author)
+                        
+                        if post.twitter_include_image:
+                            resp = twitter_api.update_with_media(post.dayone_image.name, status=post.twitter_status_text, file=post.dayone_image)
+                        else:
+                            resp = twitter_api.update_status(post.twitter_status_text)
+                        post.twitter_status_id = resp.id
+                        post.twitter_published = True
+                        post.save()
+                    if post.facebook_publish_intent:
+                        facebook_api = authorized_facebook_api(post.author)
+                        
+                        # https://developers.facebook.com/docs/graph-api/reference/v2.2/link
+                        resp = facebook_api.post(
+                            path='me/feed',
+                            message=post.facebook_status_text,
+                            link="http://blog.inkandfeet.com/post/105340882189/black-lives-matter-the-single-hardest-thing",
+                        )
+
+                        post.facebook_status_id = resp["id"]
+                        post.facebook_published = True
+                        post.save()
+
                     print "Publish now! :)"
+                    published = True
         else:
             form = SocialShareForm(instance=post)
         
@@ -504,7 +545,7 @@ def twitter_auth_finish(request):
         author.twitter_api_key = auth.access_token
         author.twitter_api_secret = auth.access_token_secret
         api = authorized_tweepy_api(author)
-        
+
         author.twitter_full_name = api.me().name
         author.twitter_account_name = api.me().screen_name
         author.twitter_profile_picture_url = api.me().profile_image_url_https

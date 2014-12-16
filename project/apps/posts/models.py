@@ -30,6 +30,7 @@ class Author(BaseModel):
     slug = models.CharField(max_length=255, blank=True, editable=False)
     blog_name = models.CharField(max_length=255, blank=True)
     blog_domain = models.CharField(max_length=255, blank=True)
+    blog_header = models.TextField(blank=True, null=True)
 
     public_domain = models.BooleanField(default=False)
     wikipedia_url = models.TextField(blank=True, null=True)
@@ -206,8 +207,6 @@ class AbstractPost(BaseModel):
         self.title_html = mistune.markdown(self.title)
         self.body_html = mistune.markdown(self.body)
 
-        print "self.social_shares_customized"
-        print self.social_shares_customized
         if not self.social_shares_customized:
             self.twitter_status_text = "%s" % (self.title.strip()[:118],)
 
@@ -218,7 +217,7 @@ class AbstractPost(BaseModel):
             else:
                 self.facebook_status_text = self.title.strip()
 
-            if len(self.facebook_status_text) > 250:
+            if len(self.facebook_status_text) > 450:
                 self.facebook_status_text = "%s...\nRead the rest at:" % (self.facebook_status_text[:240],)
                 
 

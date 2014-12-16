@@ -1,0 +1,106 @@
+{% extends "base.html" %}{% load compress i18n %}
+
+{% block title %}Footprints: My Account{% endblock %}
+
+{% block js %}{{block.super}}
+{% compress js %}
+<script src="{{STATIC_URL}}main_site/js/site.js"></script>
+<script src="{{STATIC_URL}}main_site/js/password.js"></script>
+<script src="{{STATIC_URL}}posts/js/blog_settings.js"></script>
+{% endcompress %}
+<script type="text/javascript">
+window.Footprints = window.Footprints || {};
+Footprints.urls = Footprints.urls || {};
+Footprints.urls.find_dayone_folder = "{% url 'posts:find_dayone_folder' %}";
+Footprints.urls.sync_dayone = "{% url 'posts:sync_dayone' %}";
+Footprints.urls.sync_dayone_status = "{% url 'posts:sync_dayone_status' %}";
+Footprints.status = {};
+Footprints.status.in_sync = {{request.user.get_profile.dayone_in_sync|lower}};
+Footprints.status.ever_synced = {% if not request.user.get_profile.last_dropbox_sync %}false{% else %}true{% endif %};
+Footprints.actions = {};
+</script>
+{% endblock %}
+
+{% block css %}{{block.super}}
+{% compress css %}
+<link rel="stylesheet" href="{{STATIC_URL}}posts/css/account.css">
+{% endcompress %}
+{% endblock %}
+
+{% block content %}
+<div class="page_content">
+    <h1>Blog Settings</h1>
+    {% if changes_saved %}<div class="alert alert-success">Changes saved.</div>{% endif %}
+
+    <form class="signup ph_form" role="form" id="signup_form" method="post" action="{% url 'posts:blog_settings' %}" autocomplete="off">
+      {% csrf_token %}
+      <div class="row question form-group">
+        <div class="col-md-5">
+            <div class="text">Blog Domain</div>
+            <div class="help">The domain we should put your blog at.</div>
+        </div>
+        
+        <div class="col-md-7 answers">
+            <div class="form-group form_input">
+                <span class="http">http://</span>{{ form.blog_domain }}
+                <div class="errors">{{form.blog_domain.errors}}</div>
+            </div>
+            
+        </div>
+      </div>
+      <div class="row question form-group">
+        <div class="col-md-5">
+            <div class="text">Blog Name</div>
+            <div class="help">The name of your blog. This will show up in page titles and google results.</div>
+        </div>
+        
+        <div class="col-md-7 answers">
+            <div class="form-group form_input">
+                {{ form.blog_name }}
+                <div class="errors">{{form.blog_name.errors}}</div>
+            </div>
+        </div>
+      </div>
+      <div class="row question form-group">
+        <div class="col-md-5">
+            <div class="text">Pen Name</div>
+            <div class="help">The name your posts will be published under.</div>
+        </div>
+        
+        <div class="col-md-7 answers">
+            <div class="form-group form_input">
+                {{ user_form.first_name }}
+                <div class="errors">{{user_form.first_name.errors}}</div>
+            </div>
+        </div>
+      </div>
+      <div class="row question form-group">
+        <div class="col-md-5">
+            <div class="text">Blog Header</div>
+            <div class="help">HTML to put at the top of the page.</div>
+        </div>
+        
+        <div class="col-md-7 answers">
+            <div class="form-group form_input blog_header">
+                {{ form.blog_header }}
+                <div class="errors">{{form.blog_header.errors}}</div>
+                <div class="blog_header_preview"></div>
+            </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-5"></div>
+        <div class="col-md-7">
+            <button type="submit" class="button btn btn-primary sign_up_button">{% trans "Save Changes" %}</button>
+        </div>
+      </div>
+
+      
+      {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+      {% endif %}
+      
+    </form>
+</div>
+{% endblock %}

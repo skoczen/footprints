@@ -36,46 +36,6 @@ Footprints.actions = {};
       {% csrf_token %}
       <div class="row question form-group">
         <div class="col-md-5">
-            <div class="text">Blog Domain</div>
-            <div class="help">The domain we should put your blog at.</div>
-        </div>
-        
-        <div class="col-md-7 answers">
-            <div class="form-group form_input">
-                <span class="http">http://</span>{{ author_form.blog_domain }}
-                <div class="errors">{{author_form.blog_domain.errors}}</div>
-            </div>
-            
-        </div>
-      </div>
-      <div class="row question form-group">
-        <div class="col-md-5">
-            <div class="text">Blog Name</div>
-            <div class="help">The name of your blog. This will show up in page titles and google results.</div>
-        </div>
-        
-        <div class="col-md-7 answers">
-            <div class="form-group form_input {# valid #}">
-                {{ author_form.blog_name }}
-                <div class="errors">{{author_form.blog_name.errors}}</div>
-            </div>
-        </div>
-      </div>
-       <div class="row question form-group">
-        <div class="col-md-5">
-            <div class="text">Pen Name</div>
-            <div class="help">The name your posts will be published under.</div>
-        </div>
-        
-        <div class="col-md-7 answers">
-            <div class="form-group form_input {# valid #}">
-                {{ form.first_name }}
-                <div class="errors">{{form.first_name.errors}}</div>
-            </div>
-        </div>
-      </div>
-      <div class="row question form-group">
-        <div class="col-md-5">
             <div class="text">Email address</div>
             <div class="help">You'll use the new address to sign in.</div>
         </div>
@@ -85,7 +45,6 @@ Footprints.actions = {};
                 {{ form.email }}
                 <div class="errors">{{form.email.errors}}</div>
             </div>
-            
         </div>
       </div>
       

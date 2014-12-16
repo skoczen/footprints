@@ -46,8 +46,10 @@ $(function(){
     Footprints.share.actions.publish_now_changed = function() {
         var is_checked = $("#id_publish_now:checked").length > 0;
         if (is_checked) {
+            // $(".sign_up_button").removeClass("btn-success").addClass("btn-primary");
             $(".sign_up_button").html("Publish Now")
         } else {
+            // $(".sign_up_button").addClass("btn-success").removeClass("btn-primary");
             $(".sign_up_button").html("Save Changes and Publish Later")
         }
     }

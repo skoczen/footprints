@@ -177,6 +177,7 @@ body {
     
     font-weight: 400;
     font-size: 16px;
+    line-height: 21px;
 }
 .post .draft_badge, .post.draft.editing .draft_badge {
     display: none;

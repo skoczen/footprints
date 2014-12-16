@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^my-blog/?$', views.my_blog, name='my_blog'),
     
     url(r'^my-account/?$', views.my_account, name='my_account'),
+    url(r'^blog-settings/?$', views.blog_settings, name='blog_settings'),
     url(r'^my-backups/?$', views.my_backups, name='my_backups'),
     url(r'^generate-backup/?$', views.generate_backup, name='generate_backup'),
     url(r'^new-post$', views.new, name='new'),

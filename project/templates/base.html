@@ -95,6 +95,7 @@
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ request.user.get_profile.name }} <b class="caret"></b></a>
                   <ul class="dropdown-menu" >
                     <li><a href="{% url "posts:my_account" %}">Account</a></li>
+                    <li><a href="{% url "posts:blog_settings" %}">Blog Settings</a></li>
                     <li><a href="{% url "posts:my_backups" %}">Backups</a></li>
                     <li><a id="Intercom" href="mailto:54156ce0511ce28204deb410e8c6d52cd03264ba@incoming.intercom.io">Help</a></li>
                     {# <li class="divider"></li> #}
@@ -111,6 +112,7 @@
           </div><!-- /.container-fluid -->
         </nav>
         {% endif %}
+        {% block blog_header %}{% endblock %}
         <div id="main" role="main">
             {% block main_content %}
             <div class="page_content">

@@ -77,32 +77,38 @@ class SignupForm(forms.Form):
         user.first_name = self.cleaned_data['first_name']
         user.save()
             
-class AuthorForm(forms.ModelForm):
-    # blog_name = forms.CharField(
-    #     max_length=255,
-    #     label='Blog Name',
-    #     help_text="The name of your blog. This will show up in page titles and google results.",
-    #     widget=forms.TextInput(attrs={'placeholder': 'Adventures in Awesome'}),
-    # )
-    # blog_domain = forms.CharField(
-    #     max_length=255,
-    #     label='Blog Domain',
-    #     help_text="Your domain, i.e. blog.inkandfeet.com.  You don't need the 'http://' part.",
-    #     widget=forms.TextInput(attrs={'placeholder': 'blog.myawesomesite.com'}),
-    # )
-
+class BlogForm(forms.ModelForm):
+    blog_name = forms.CharField(
+        max_length=255,
+        label='Blog Name',
+        help_text="The name of your blog. This will show up in page titles and google results.",
+        widget=forms.TextInput(attrs={'placeholder': 'Adventures in Awesome'}),
+    )
+    blog_domain = forms.CharField(
+        max_length=255,
+        label='Blog Domain',
+        help_text="Your domain, i.e. blog.inkandfeet.com.  You don't need the 'http://' part.",
+        widget=forms.TextInput(attrs={'placeholder': 'blog.myawesomesite.com'}),
+    )
+    
     class Meta:
         model = Author
-        fields = ("blog_name", "blog_domain", )
+        fields = ("blog_name", "blog_domain", "blog_header")
 
-
-class AccountForm(forms.ModelForm):
+class BlogUserForm(forms.ModelForm):
     first_name = forms.CharField(
         max_length=255,
         label='Publication Name',
         help_text="The name your posts will be published under.",
         widget=forms.TextInput(attrs={'placeholder': 'Nom de Plume'}),
     )
+
+    class Meta:
+        model = User
+        fields = ("first_name",)
+
+class AccountForm(forms.ModelForm):
+    
     password = forms.CharField(
         max_length=255,
         label='Password',
@@ -112,7 +118,7 @@ class AccountForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ("first_name", "email", )
+        fields = ("email", )
 
     def save(self):
         if self.cleaned_data['password'] and self.cleaned_data['password'] != "":

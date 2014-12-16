@@ -34,7 +34,7 @@
     <h2>{{post.title|safe}}</h2>
 
     {% if published %}
-        <div class="alert alert-success">Changes saved.</div>
+        <div class="alert alert-success">Published!</div>
     {% else %}
         {% if changes_saved %}<div class="alert alert-success">Changes saved.</div>{% endif %}
     {% endif %}
@@ -53,6 +53,9 @@
                     <a href="{% url 'posts:twitter_auth_start' %}?redirect_to={{request.path}}" class="button btn btn-primary"><i class="fa fa-twitter"></i> Connect to Twitter</a>
                 {% else %}
                 <div class="form-group form_input section_toggle">
+                    {% if post.twitter_published %}
+                    <a href="https://twitter.com/{{post.twitter_status_id}}">Published on twitter.</a>
+                    {% else %}
                     <div class="toggle">
                         <label for="id_twitter_publish_intent">Publish to Twitter: </label> 
                         {{ form.twitter_publish_intent }}
@@ -67,7 +70,7 @@
                     </div>
                     {% endif %}
                 </div>
-
+                {% endif %}
                 <div class="form-group form_input twitter_fields">
                     
                     <div class="mock_twitter_ui row">
@@ -111,12 +114,16 @@
                     <p>Your Facebook account isn't connected to Footprints yet.</p>
                     <a href="{% url 'posts:twitter_auth_start' %}?redirect_to={{request.path}}" class="button btn btn-primary"><i class="fa fa-facebook"></i> Connect to Facebook</a>
                 {% else %}
+                {% if post.facebook_published %}
+                    <a href="https://facebook.com/{{post.facebook_status_id}}">Published on facebook.</a>
+                {% else %}
                 <div class="form-group form_input section_toggle">
                     <div class="toggle">
                         <label for="id_facebook_publish_intent">Publish to Facebook: </label> 
                         {{ form.facebook_publish_intent }}
                     </div>
                 </div>
+                {% endif %}
 
                 <div class="form-group form_input facebook_fields">
                     
