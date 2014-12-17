@@ -160,6 +160,7 @@ class AbstractPost(BaseModel):
     body_html = models.TextField(blank=True, null=True, editable=False)
     post_type = models.IntegerField(choices=POST_TYPES)
     num_images = models.IntegerField(default=0)
+    permalink_path = models.CharField(max_length=500, blank=True, null=True, editable=False)
 
     is_draft = models.BooleanField(default=True)
     allow_comments = models.BooleanField(default=True)
@@ -208,7 +209,7 @@ class AbstractPost(BaseModel):
         self.body_html = mistune.markdown(self.body)
 
         if not self.social_shares_customized:
-            self.twitter_status_text = "%s" % (self.title.strip()[:118],)
+            self.twitter_status_text = "%s %s" % (self.title.strip()[:118], self.full_permalink)
 
             if self.title and self.body:
                 self.facebook_status_text = "%s\n\n%s" % (self.title.strip(), self.body.strip(),)
@@ -218,8 +219,7 @@ class AbstractPost(BaseModel):
                 self.facebook_status_text = self.title.strip()
 
             if len(self.facebook_status_text) > 450:
-                self.facebook_status_text = "%s...\nRead the rest at:" % (self.facebook_status_text[:240],)
-                
+                self.facebook_status_text = "%s...\nRead the rest at: %s" % (self.facebook_status_text[:410], self.full_permalink)
 
         self.num_images = self.body_html.count("<img")
         if self.dayone_image:
@@ -251,6 +251,31 @@ class AbstractPost(BaseModel):
     @property
     def is_body_with_no_title(self):
         return self.post_type == BODY_WITH_NO_TITLE
+
+    @property
+    def twitter_url(self):
+        return "https://twitter.com/%s/status/%s" % (self.author.twitter_account_name, self.twitter_status_id)
+
+    @property
+    def facebook_url(self):
+        sections = self.facebook_status_id.split("_")
+        return "%sposts/%s" % (self.author.facebook_account_link, sections[1])
+
+    @property
+    def all_published(self):
+        return self.facebook_published and self.twitter_published
+
+    @property
+    def permalink(self):
+        if self.permalink_path:
+            return self.permalink_path
+        else:
+            return reverse('posts:post', args=(self.author.slug, self.slug))
+
+    @property
+    def full_permalink(self):
+        return "http://%s%s" % (self.author.blog_domain, self.permalink)
+
 
 class Post(AbstractPost):
     started_at = models.DateTimeField(blank=True, null=True, editable=False, auto_now_add=True)
@@ -292,6 +317,10 @@ class Post(AbstractPost):
 
             if old_me.title != self.title or old_me.body != self.body:
                 make_revision = True
+
+            if not self.is_draft:
+                if not self.permalink_path or old_me.is_draft:
+                    self.permalink_path = reverse('posts:post', args=(self.author.slug, self.slug))
 
         # if make_revision:
         #     cleaned_body = self.body.replace("<br/>", "\n").replace("<br>", "\n").replace("</div>", "\n")

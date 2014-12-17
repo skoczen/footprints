@@ -363,10 +363,15 @@ def social_share(request, post_id):
                         resp = facebook_api.post(
                             path='me/feed',
                             message=post.facebook_status_text,
-                            link="http://blog.inkandfeet.com/post/105340882189/black-lives-matter-the-single-hardest-thing",
+                            link=post.full_permalink,
                         )
-
+                        print resp
                         post.facebook_status_id = resp["id"]
+                        # print post.facebook_status_id
+                        # resp = facebook_api.get(
+                        #     path="/%s" % post.facebook_status_id
+                        # )
+                        # print resp
                         post.facebook_published = True
                         post.save()
 
@@ -605,7 +610,6 @@ def facebook_auth_finish(request):
         author.facebook_expire_date = datetime.datetime.now() + datetime.timedelta(seconds=int(response["expires"][0]))
         api = authorized_facebook_api(author)
         me = api.get("me")
-        author.facebook_account_name = me["name"]
         author.facebook_account_link = me["link"]
         pic = api.get("me/picture?redirect=0&height=50&type=normal&width=50")
         author.facebook_profile_picture_url = pic["data"]["url"]

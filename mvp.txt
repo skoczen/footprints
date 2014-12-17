@@ -12,18 +12,19 @@ Next:
         - "x people agree" -> fade out
         - Logo for FB, Twitter, Dropbox
             - https://apps.twitter.com/app/7640201/settings
+        - update twitter look to look like twitter.
+        - // TODO:  // THe end
 
-
-- update twitter look to look like twitter.
-- actual wired up posting!
-
+        - actual wired up posting!
+        - change posted links to real links, not http://blog.inkandfeet.com/post/105340882189/black-lives-matter-the-single-hardest-thing",
+- cleaner urls, with subdomains
 - some bugs in post type selection based on image #s.
 - thumbnails image width: 896
 - some bugs in image height for short/narrow images (see want sexy parallax effect)
 - posts link to detail pages.
 - rss feed
 - fix love this multi-clicks
-- // TODO:  // THe end
+- social stats, likes, shares, retweets
 - dates?
 
 - Want: sexy parallax effect
@@ -36,11 +37,10 @@ Little things:
 Actual, me MVP:
     - Hit publish in DayOne
     - Have it show up on a beautiful blog, formatted fantastically.
-- Have a place I can push publish on, 
-    - Nice, simple wizard for twitter + fb. Easy.
-    - Have that content + nice links show up on FB + Twitter.
+    - Have a place I can push publish on, 
+        - Nice, simple wizard for twitter + fb. Easy.
+        - Have that content + nice links show up on FB + Twitter.
 - Handle domain, with pretty urls.
-
 - Import tumblr direct post:
      (screenshot epic)
      - peanut

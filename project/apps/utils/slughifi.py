@@ -61,7 +61,7 @@ def slughifi(value, do_slugify=True, overwrite_char_map={}):
     if do_slugify:
         value = slugify(value)
 
-    value = value.title()
+    value = value.title()[:240]
 
     return value.encode('utf-8', 'ignore')
 

@@ -40,21 +40,39 @@
     {% endif %}
     <form action="" method="POST" class="ph_form social_form">
         {% csrf_token %}
-
+        <div class="row question form-group">
+            <div class="col-md-2">
+                <div class="text">Permalink</div>
+                <div class="help"></div>
+            </div>
+            
+            <div class="col-md-10 answers permalink">
+                <code>{{post.full_permalink}}</code>
+            </div>
+        </div>
         <div class="row question form-group">
             <div class="col-md-2">
                 <div class="text">Twitter</div>
                 <div class="help"></div>
             </div>
             
-            <div class="col-md-10 answers twitter">
+            <div class="col-md-10 answers twitter {% if post.twitter_published %}published{% endif %}">
                 {% if not post.author.twitter_valid %}
                     <p>Your twitter account isn't connected to Footprints yet.</p>
                     <a href="{% url 'posts:twitter_auth_start' %}?redirect_to={{request.path}}" class="button btn btn-primary"><i class="fa fa-twitter"></i> Connect to Twitter</a>
                 {% else %}
                 <div class="form-group form_input section_toggle">
+                    <script>
+                        window.Footprints = window.Footprints || {};
+                        Footprints.share = Footprints.share || {};
+                        Footprints.share.state = Footprints.share.state || {};
+                        Footprints.share.state.permalink_url = "{{post.full_permalink}}";
                     {% if post.twitter_published %}
-                    <a href="https://twitter.com/{{post.twitter_status_id}}">Published on twitter.</a>
+                        Footprints.share.state.twitter_published = true;
+                    {% endif %}
+                    </script>
+                    {% if post.twitter_published %}
+                    <a href="{{post.twitter_url}}" class="button btn btn-success published_btn" ><i class="fa fa-check"></i> Published on Twitter.</a>
                     {% else %}
                     <div class="toggle">
                         <label for="id_twitter_publish_intent">Publish to Twitter: </label> 
@@ -88,7 +106,6 @@
                         <div class="num_characters_remaining"><span class="number"></span> characters remaining</div>
                         <div class="tweet_content_area">
                             {{ form.twitter_status_text }}
-                            <div class="article_url">https://t.co/linkToPost</div>
                             {% if post.dayone_image %}
                             {% thumbnail post.dayone_image "510x250" crop="center" as thumb %}
                             <img src="{{thumb.url}}" class="list_thumb post_thumb" />
@@ -109,13 +126,19 @@
                 <div class="help"></div>
             </div>
             
-            <div class="col-md-10 answers facebook">
+            <div class="col-md-10 answers facebook {% if post.twitter_published %}published{% endif %}">
                 {% if not post.author.facebook_valid %}
                     <p>Your Facebook account isn't connected to Footprints yet.</p>
                     <a href="{% url 'posts:twitter_auth_start' %}?redirect_to={{request.path}}" class="button btn btn-primary"><i class="fa fa-facebook"></i> Connect to Facebook</a>
                 {% else %}
                 {% if post.facebook_published %}
-                    <a href="https://facebook.com/{{post.facebook_status_id}}">Published on facebook.</a>
+                    <script>
+                        window.Footprints = window.Footprints || {};
+                        Footprints.share = Footprints.share || {};
+                        Footprints.share.state = Footprints.share.state || {};
+                        Footprints.share.state.facebook_published = true;
+                    </script>
+                    <a href="{{post.author.facebook_account_link}}" class="button btn btn-success published_btn" ><i class="fa fa-check"></i> Published on Facebook.</a>
                 {% else %}
                 <div class="form-group form_input section_toggle">
                     <div class="toggle">
@@ -126,7 +149,6 @@
                 {% endif %}
 
                 <div class="form-group form_input facebook_fields">
-                    
                     <div class="mock_facebook_ui">
                         <div class="status_content_area">
                             <div class="fb_photo"><img src="{{request.user.get_profile.facebook_profile_picture_url}}" /></div>
@@ -143,7 +165,7 @@
                             </div>
                             <div class="status_text">
                                 {{ form.facebook_status_text }}
-                                <div class="article_url">http://{{post.author.blog_domain}}{% url 'posts:post' post.author.slug post.pk %}</div>
+                                <!-- <div class="article_url">http://{{post.author.blog_domain}}{% url 'posts:post' post.author.slug post.pk %}</div> -->
                             </div>
                             <div class="post_thumb">
                                 {% if post.dayone_image %}
@@ -173,6 +195,7 @@
                 {% endif %}
             </div>
         </div>
+        {% if not post.all_published %}
         <div class="row question form-group">
             <div class="col-md-2">
                 <div class="text">Publish</div>
@@ -189,6 +212,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
         
         
     </form>
