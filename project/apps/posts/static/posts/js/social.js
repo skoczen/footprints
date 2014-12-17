@@ -18,7 +18,7 @@ $(function(){
         $(".twitter_fields").toggleClass("hidden", hide_twitter);
         $(".twitter .include_image").toggleClass("disabled", hide_twitter);
         // $(".twitter .section_toggle").toggleClass("disabled", hide_twitter)
-        if (hide_twitter || Footprints.share.state.twitter_published === true) {
+        if (Footprints.share.state.twitter_published === true) {
             $(".twitter_fields input, .twitter_fields textarea").attr("disabled", "disabled");
         } else {
             $(".twitter_fields input, .twitter_fields textarea").removeAttr("disabled");

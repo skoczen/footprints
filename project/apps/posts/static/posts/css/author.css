@@ -12,9 +12,64 @@
     padding: 2px 4px;
     transition: color 0.3s ease;
 }
+.post {
+    /*border: 1px solid #DDD;*/
+    background-color: #FDFDFD;
+    /*border-width: 0 0 1px 0;*/
+    /*margin-left: 20px;*/
+    margin: 0 0 40px 20px;
+    min-height: 40px;
+    /*padding: 4px 0;*/
+}
+.post.published {
+    background-color: #FBFBFB;
+}
+.post.published:hover {
+    background-color: #EEE;
+}
+.post .time {
+    color: #DDD;
+}
+.post .post_body {
+    /*font-weight: 100;*/
+    font-size: 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    vertical-align: middle;
+}
+.post a.post_body {
+    color: #888;
+}
+.published.post a.post_body {
+    color: #646464;
+}
+.post a.post_body:hover {
+    color: #333;
+    text-decoration: none;
+}
 .post:hover .fantastics, .post:hover .reads {
     color: #BBB;
+}
+.post .thumb_col {
+    text-align: left;
+    padding: 0;
+}
+.post.published .publish_col {
+    min-height: 80px;
+    border: 10px solid #4f66ff;
+    border-right: 10px solid #4f66ff;
+    border-left: 1px solid #EEE;
+    border-top: 0;
+    border-bottom: 0;
 
+    color: #FFF;
+}
+.post .thumb_col img {
+    float: left;
+    margin-right: 10px;
+}
+.post .post_body .title {
+    /*display: inline-block;*/
 }
 
 h2 {
@@ -25,8 +80,62 @@ h3 {
     border-width: 0 0 1px 0;
 }
 h5 {
-    margin-left: 20px;
+    /*margin-left: 20px;*/
 }
+.love_col {
+
+}
+.love_col.published {
+    background-color: #a30000;
+    color: #FFF;
+}
+
+.published .facebook_col {
+    /*background-color: #CAD2EA;*/
+}
+.facebook_col.published {
+    background-color: #4862A3;
+    color: #FFF;
+}
+
+.published .twitter_col {
+    /*background-color: #D7ECFF;*/
+}
+.twitter_col.published {
+    background-color: #55ACEE;
+    color: #FFF;
+}
+.stats_col {
+    position: relative;
+    min-height: 80px;
+    text-align: center;
+    padding: 0;
+}
+.stats_col i.bg_icon {
+    position: absolute;
+    font-size: 30px;
+    opacity: 0.2;
+    bottom: 4px;
+    left: 12px;
+    color: #FFF;
+}
+.unpublished.stats_col i.bg_icon {
+    color: #454545;
+    opacity: 0.1;
+}
+.stats_col.love_col i.bg_icon {
+    left: 12px;
+}
+.stats_col.facebook_col i.bg_icon {
+    left: 16px;
+}
+.stats_col .number {
+    font-size: 30px;
+    margin-top: 6px;
+    text-align: center;
+    opacity: 0.9;
+}
+
 .work_group {
     margin-left: 20px;
 }

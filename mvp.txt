@@ -18,6 +18,7 @@ Next:
         - actual wired up posting!
         - change posted links to real links, not http://blog.inkandfeet.com/post/105340882189/black-lives-matter-the-single-hardest-thing",
 - cleaner urls, with subdomains
+- flag for email campaign
 - some bugs in post type selection based on image #s.
 - thumbnails image width: 896
 - some bugs in image height for short/narrow images (see want sexy parallax effect)

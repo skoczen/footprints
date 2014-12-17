@@ -31,36 +31,53 @@
 {% block content %}
 <div class="page_content author">
     {% if is_me %}<a href="{% url "posts:new" %}" class="new_draft_button button">Start a new draft</a>{% endif %}
-    <h1>{{author.name}}{% if is_me %} <span class="is_me bubble">me!</span>{% endif %}</h1>
+    <h1>{{author.blog_name}}</h1>
     
     <h2>All Posts</h2>
     <div class="work_group">
-        <ul>
         {% for post in posts %}
             {% ifchanged post.written_on.year %}
-            </ul>
             <h3>{% if post.written_on %}{{post.written_on.year}}{% else %}Unknown year {% endif %}</h3>
-            <ul class="posts">    
             {% endifchanged %}
             {% ifchanged post.written_on.month %}
-            </ul>
-            <h4>{% if post.written_on %}{{post.written_on|date:"F"}}{% else %}Unknown month {% endif %}</h4>
-            <ul class="posts">    
+            <h4>{% if post.written_on %}{{post.written_on|date:"F"}}{% else %}Unknown month {% endif %}</h4>  
             {% endifchanged %}
             {% ifchanged post.written_on.day %}
-            </ul>
             <h5>{% if post.written_on %}{{post.written_on.day}}{% else %}Unknown day {% endif %}</h5>
-            <ul class="posts">    
             {% endifchanged %}
             
 
-        <li class="post"><span class="time">{{post.written_on|time}}</span>
-        {% if post.dayone_image %}
-        {% thumbnail post.dayone_image "50x50" as thumb %}
-        <img src="{{thumb.url}}" class="list_thumb" />
-        {% endthumbnail %}
-        {% endif %}
-         <a href="{% url "posts:post" author.slug post.slug %}">{{post.title|safe}}</a> {% if post.is_draft %}<span class="draft bubble">DRAFT</span>{% else %}{% if post.num_fantastics > 0 %}<div class="fantastics">★ {{post.num_fantastics}}</div>{% endif %} {% if post.num_reads > 0 %}<div class="reads"><i class="fa fa-eye"></i> {{post.num_reads}}</div>{% endif %}{% endif %}</li>
+        <div class="post row {% if not post.is_draft %}published{% endif %}">
+            <a href="{% url "posts:post" author.slug post.slug %}" class="col-xs-9 thumb_col post_body">
+                {% if post.dayone_image %}
+                {% thumbnail post.dayone_image "80x80" crop="center" as thumb %}
+                <img src="{{thumb.url}}" class="list_thumb" />
+                {% endthumbnail %}
+                {% endif %}
+                <div class="title">
+                    {{post.title|default:"No title"|safe}}
+                </div>
+                <!-- <span class="time">{{post.written_on|time}}</span> -->
+            </a>
+            <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 love_col stats_col {% if not post.is_draft %}published{% else %}unpublished{% endif %}">
+                    {% if not post.is_draft %}
+                        <div class="number">{% if post.num_fantastics > 0 %}{{post.num_fantastics}}{% endif %}</div>
+                        <i class="fa fa-heart bg_icon"></i>
+                    {% endif %}
+            </a>
+            <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 facebook_col stats_col {% if post.facebook_published %}published{% else %}unpublished{% endif %}">
+                    {% if not post.is_draft %}
+                    <div class="number">{% if post.num_facebook_likes or post.num_facebook_shares %}{{post.num_facebook_likes}}/{{post.num_facebook_shares}}{% endif %}</div>
+                    <i class="fa fa-facebook bg_icon"></i>
+                    {% endif %}
+            </a>
+            <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 twitter_col stats_col {% if post.twitter_published %}published{% else %}unpublished{% endif %}">
+                {% if not post.is_draft %}
+                    <div class="number">{% if post.num_twitter_rts > 0 %}{{post.num_twitter_rts}}{% endif %}</div>
+                    <i class="fa fa-twitter bg_icon"></i>
+                {% endif %}
+            </a>
+        </div>
         {% endfor %}
         </ul>
     </div>
