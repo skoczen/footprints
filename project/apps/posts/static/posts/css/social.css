@@ -70,7 +70,8 @@ h2 {
     font-size: 14px;
     font-weight: normal;
     font-family: Arial;
-    height: 40px;
+    height: 60px;
+    margin-bottom: 6px;
 }
 .ph_form .form_input .mock_twitter_ui textarea:hover, .ph_form .mock_facebook_ui .status_text textarea:hover {
     background: #FBFF95;
@@ -185,16 +186,24 @@ h2 {
     vertical-align: middle;
 }
 .twitter .num_characters_remaining {
+    top: 8px;
     right: -212px;
     color: #999;
     opacity: 1;
-
+}
+.twitter .missing_link {
+    margin-top: 10px;
+    color: #FF7847;
 }
 .permalink code {
     padding: 4px 10px;
     font-size: 14px;
     padding-top: 6px;
     display: inline-block;
+}
+.publish_now_group .errors {
+    margin-left: 20px;
+    color: #AAA;
 }
 .twitter .num_characters_remaining.over .number {
     /*transition: color 1s;*/
@@ -224,7 +233,14 @@ h2 {
     color: #454545;
 }
 @media all and (max-width: 600px) {
-    .facebook .num_characters_remaining {
+    .twitter .num_characters_remaining {
+        left: inherit;
+        right: inherit;
+        top: inherit;
+        margin: 0;
+        width: 100%;
+    }
+    .num_characters_remaining {
         display: block;
         position: relative;
         background: #EEE;
@@ -236,6 +252,9 @@ h2 {
         color: #888;
         padding: 8px;
     }
+    .mock_twitter_ui .tweet_content_area {
+        width: 100%;
+    }
     .mock_facebook_ui {
         margin: 0;
         padding: 0;
@@ -246,7 +265,11 @@ h2 {
     }
     .mock_facebook_ui .thumb_body img {
         width: 100%;
-
     }
+    img {
+        max-width:100%;
+        max-height:auto;
+    }
+
 
 }

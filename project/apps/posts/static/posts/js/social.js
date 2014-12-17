@@ -15,7 +15,7 @@ $(function(){
         if (true === Footprints.share.state.twitter_published) {
             hide_twitter = false;
         }
-        $(".twitter_fields").toggleClass("disabled", hide_twitter);
+        $(".twitter_fields").toggleClass("hidden", hide_twitter);
         $(".twitter .include_image").toggleClass("disabled", hide_twitter);
         // $(".twitter .section_toggle").toggleClass("disabled", hide_twitter)
         if (hide_twitter || Footprints.share.state.twitter_published === true) {
@@ -28,26 +28,39 @@ $(function(){
             hide_facebook = false;
         }
         if (!hide_facebook) {
-            $(".facebook_fields").removeClass("disabled");
+            $(".facebook_fields").removeClass("hidden");
             if (true != Footprints.share.state.facebook_published) {
                 $(".facebook_fields input, .facebook_fields textarea").removeAttr("disabled");
             } else {
                 $(".facebook_fields input, .facebook_fields textarea").attr("disabled", "disabled");    
             }
         } else {
-            $(".facebook_fields").addClass("disabled");
-            $(".facebook_fields input, .facebook_fields textarea").attr("disabled", "disabled");
+            $(".facebook_fields").addClass("hidden");
+            // $(".facebook_fields input, .facebook_fields textarea").attr("disabled", "disabled");
         }
     }
     Footprints.share.handlers.input_changed = function() {
         var content = $(".twitter_fields textarea").val();
-        console.log(content.indexOf(Footprints.share.state.permalink_url))
-        if (content.indexOf(Footprints.share.state.permalink_url) != -1){
+        missing_link = true;
+        if (content.indexOf(" " + Footprints.share.state.permalink_url) != -1){
             content = content.replace(Footprints.share.state.permalink_url, "0123456789012345678901");
+            missing_link = false;
         }
         var num_remaining = 140-content.length;
         $(".twitter .num_characters_remaining .number").html(num_remaining);
         $(".twitter .num_characters_remaining").toggleClass("over", num_remaining < 0)
+        if (num_remaining < 0 && $("#id_twitter_publish_intent:checked").length == 1) {
+            $(".publish_now_group .errors").html("Twitter content is too long.")
+            $("#id_publish_now").bootstrapSwitch('state', false, false);
+            $("#id_publish_now").bootstrapSwitch('disabled', true, true);
+            // $(".publish_button").attr("disabled","disabled")
+        } else {
+            $(".publish_now_group .errors").html("")
+            // $("#id_publish_now").bootstrapSwitch('state', true, true);
+            $("#id_publish_now").bootstrapSwitch('disabled', false, false);
+            // $(".publish_button").removeAttr("disabled")
+        }
+        $(".twitter .missing_link").toggleClass("hidden", !missing_link)
 
         var num_remaining = 450-$(".facebook_fields textarea").val().length;
         $(".facebook .num_characters_remaining .number").html(Math.abs(num_remaining));
@@ -62,22 +75,23 @@ $(function(){
     Footprints.share.actions.publish_now_changed = function() {
         var is_checked = $("#id_publish_now:checked").length > 0;
         if (is_checked) {
-            // $(".sign_up_button").removeClass("btn-success").addClass("btn-primary");
-            $(".sign_up_button").html("Publish Now")
+            // $(".publish_button").removeClass("btn-success").addClass("btn-primary");
+            $(".publish_button").html("Publish Now")
         } else {
-            // $(".sign_up_button").addClass("btn-success").removeClass("btn-primary");
-            $(".sign_up_button").html("Save Changes and Publish Later")
+            // $(".publish_button").addClass("btn-success").removeClass("btn-primary");
+            $(".publish_button").html("Save Changes and Publish Later")
         }
     }
     Footprints.share.handlers.publish_now_clicked = function() {
         var is_checked = $("#id_publish_now:checked").length > 0;
         if (is_checked) {
-            $(".sign_up_button").attr("disabled","disabled").removeClass("btn-primary");
-            $(".sign_up_button").html("<i class='fa fa-spinner fa-spin'></i> Publishing...")
+            $(".publish_button").attr("disabled","disabled").removeClass("btn-primary");
+            $(".publish_button").html("<i class='fa fa-spinner fa-spin'></i> Publishing...")
         } else {
-            $(".sign_up_button").attr("disabled","disabled").removeClass("btn-primary");
-            $(".sign_up_button").html("<i class='fa fa-spinner fa-spin'></i> Saving...")
+            $(".publish_button").attr("disabled","disabled").removeClass("btn-primary");
+            $(".publish_button").html("<i class='fa fa-spinner fa-spin'></i> Saving...")
         }
+        $("input, textarea").removeAttr("disabled");
         return true;
     }
     
@@ -89,7 +103,7 @@ $(function(){
         $(".twitter_fields textarea").keyup(Footprints.share.handlers.input_changed);
         $(".facebook_fields textarea").keyup(Footprints.share.handlers.input_changed);
         $(".facebook_fields textarea").autosize();
-        $(".sign_up_button").click(function(){
+        $(".publish_button").click(function(){
             setTimeout(Footprints.share.handlers.publish_now_clicked, 15)
         });
 

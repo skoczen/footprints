@@ -15,7 +15,6 @@
 {% block css %}{{block.super}}
 {% compress css %}
 <link rel="stylesheet" href="{{STATIC_URL}}posts/css/social.css">
-<link href="{{STATIC_URL}}main_site/css/bootstrap.css" rel="stylesheet">
 <link href="{{STATIC_URL}}main_site/css/bootstrap-switch.css" rel="stylesheet">
 {% endcompress %}
 {% endblock %}
@@ -103,7 +102,9 @@
                                 @{{post.author.twitter_account_name}} &bull; Just now
                             </div>
                         </div>
-                        <div class="num_characters_remaining"><span class="number"></span> characters remaining</div>
+                        <div class="num_characters_remaining"><span class="number">140</span> characters remaining
+                            <div class="missing_link hidden">The link to your post is missing, or incorrect.</div>
+                        </div>
                         <div class="tweet_content_area">
                             {{ form.twitter_status_text }}
                             {% if post.dayone_image %}
@@ -196,7 +197,7 @@
             </div>
         </div>
         {% if not post.all_published %}
-        <div class="row question form-group">
+        <div class="row question form-group publish_now_group">
             <div class="col-md-2">
                 <div class="text">Publish</div>
             </div>
@@ -206,9 +207,10 @@
                 <div class="form-group form_input">
                     <label for="id_publish_now">Publish Now?</label> 
                     {{ form.publish_now }}
+                    <span class="errors"></span>
                 </div>
                 <div class="form-group form_input">
-                    <button type="submit" class="button btn btn-primary sign_up_button">{% trans "Publish" %}</button>
+                    <button type="submit" class="button btn btn-primary publish_button">{% trans "Publish" %}</button>
                 </div>
             </div>
         </div>
