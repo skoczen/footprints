@@ -17,8 +17,8 @@
     background-color: #FDFDFD;
     /*border-width: 0 0 1px 0;*/
     /*margin-left: 20px;*/
-    margin: 0 0 40px 20px;
-    min-height: 40px;
+    margin: 0 0 0 0;
+    height: 80px;
     /*padding: 4px 0;*/
 }
 .post.published {
@@ -64,13 +64,33 @@
 
     color: #FFF;
 }
-.post .thumb_col img {
+.post .thumb_col {
+
+}
+.post .thumb_col img, .post .thumb_col .image_placeholder {
     float: left;
     margin-right: 10px;
+    background-color: #FAFAFA;
+    width: 80px;
+    height: 80px;
+}
+.published.post .title {
+    font-weight: bold;
 }
 .post .post_body .title {
+    height: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /*line-height: 80px;*/
+    vertical-align: middle;
     /*display: inline-block;*/
 }
+.post .post_body .title span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;   
+}
+
 
 h2 {
     margin-top: 20px;
@@ -80,6 +100,14 @@ h3 {
     border-width: 0 0 1px 0;
 }
 h5 {
+    background-color: #F9F9F9;
+    border: 1px solid #EEE;
+    border-width: 1px 0;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    margin: 0;
+    margin: 10px 0 2px 0;
+    color: #454545;
+    padding: 4px;
     /*margin-left: 20px;*/
 }
 .love_col {
@@ -110,28 +138,31 @@ h5 {
     min-height: 80px;
     text-align: center;
     padding: 0;
+    text-decoration: none
 }
+a.stats_col:hover {
+    text-decoration: none
+}
+
 .stats_col i.bg_icon {
-    position: absolute;
     font-size: 30px;
     opacity: 0.2;
-    bottom: 4px;
-    left: 12px;
+    text-align: center;
     color: #FFF;
+    position: absolute;
+    bottom: 4px;
+    margin: 0 auto;
+    width: 100%;
+    left: 0;
 }
 .unpublished.stats_col i.bg_icon {
     color: #454545;
     opacity: 0.1;
-}
-.stats_col.love_col i.bg_icon {
-    left: 12px;
-}
-.stats_col.facebook_col i.bg_icon {
-    left: 16px;
+
 }
 .stats_col .number {
-    font-size: 30px;
-    margin-top: 6px;
+    font-size: 34px;
+    margin-top: 2px;
     text-align: center;
     opacity: 0.9;
 }

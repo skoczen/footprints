@@ -43,7 +43,7 @@
             <h4>{% if post.written_on %}{{post.written_on|date:"F"}}{% else %}Unknown month {% endif %}</h4>  
             {% endifchanged %}
             {% ifchanged post.written_on.day %}
-            <h5>{% if post.written_on %}{{post.written_on.day}}{% else %}Unknown day {% endif %}</h5>
+            <h5>{{post.written_on|date:"F"}} {% if post.written_on %}{{post.written_on.day}}{% else %}Unknown day {% endif %}</h5>
             {% endifchanged %}
             
 
@@ -53,6 +53,8 @@
                 {% thumbnail post.dayone_image "80x80" crop="center" as thumb %}
                 <img src="{{thumb.url}}" class="list_thumb" />
                 {% endthumbnail %}
+                {% else %}
+                <span class="image_placeholder"></span>
                 {% endif %}
                 <div class="title">
                     {{post.title|default:"No title"|safe}}
@@ -61,20 +63,20 @@
             </a>
             <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 love_col stats_col {% if not post.is_draft %}published{% else %}unpublished{% endif %}">
                     {% if not post.is_draft %}
-                        <div class="number">{% if post.num_fantastics > 0 %}{{post.num_fantastics}}{% endif %}</div>
                         <i class="fa fa-heart bg_icon"></i>
+                        <div class="number">{% if post.num_fantastics > 0 %}{{post.num_fantastics}}{% endif %}</div>
                     {% endif %}
             </a>
             <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 facebook_col stats_col {% if post.facebook_published %}published{% else %}unpublished{% endif %}">
                     {% if not post.is_draft %}
-                    <div class="number">{% if post.num_facebook_likes or post.num_facebook_shares %}{{post.num_facebook_likes}}/{{post.num_facebook_shares}}{% endif %}</div>
                     <i class="fa fa-facebook bg_icon"></i>
+                    <div class="number">{% if post.num_facebook_likes or post.num_facebook_shares %}{{post.num_facebook_likes}}/{{post.num_facebook_shares}}{% endif %}</div>
                     {% endif %}
             </a>
             <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 twitter_col stats_col {% if post.twitter_published %}published{% else %}unpublished{% endif %}">
                 {% if not post.is_draft %}
-                    <div class="number">{% if post.num_twitter_rts > 0 %}{{post.num_twitter_rts}}{% endif %}</div>
                     <i class="fa fa-twitter bg_icon"></i>
+                    <div class="number">{% if post.num_twitter_rts > 0 %}{{post.num_twitter_rts}}{% endif %}</div>
                 {% endif %}
             </a>
         </div>
