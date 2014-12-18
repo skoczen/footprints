@@ -2,12 +2,12 @@
 
 {% block title %}Social share for {{post.title}} by {{post.author.name}}{% endblock %}
 {% block description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
-{% block author %}{% url "posts:author" post.author.slug %}{% endblock %}
+{% block author %}{{post.author.name}}{% endblock %}
 {% block schema_name %}{{post.title}} by {{post.author.name}}{% endblock %}
 {% block schema_description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
 {% block schema_author %}{{post.author.name}}{% endblock %}
 {% block og_title %}{{post.title}} by {{post.author.name}}{% endblock %}
-{% block og_url %}{% url "posts:post" post.author.slug post.slug %}{% endblock %}
+{% block og_url %}{% url "posts:post" post.slug %}{% endblock %}
 {% block og_description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
 {% block og_publish_time %}{{post.published_at|date:"c"}}{% endblock %}
 {% block og_update_time %}{{post.sort_datetime|date:"c"}}{% endblock %}
@@ -166,7 +166,7 @@
                             </div>
                             <div class="status_text">
                                 {{ form.facebook_status_text }}
-                                <!-- <div class="article_url">http://{{post.author.blog_domain}}{% url 'posts:post' post.author.slug post.pk %}</div> -->
+                                {# <div class="article_url">{{post.permalink}}</div> #}
                             </div>
                             <div class="post_thumb">
                                 {% if post.dayone_image %}

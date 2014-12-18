@@ -15,6 +15,11 @@
 
 {% block content %}
 <div class="home page_content">
+    {% if is_author %}
+    <h1>Welcome to your footprints.</h1>
+
+    <h2>{{author.blog_name}} is all ready to go.</h2>
+    {% else %}
     <h1>Footprints is a simple, beautiful publication platform.</h1>
 
     <div class="home_sections hero_section">
@@ -73,5 +78,6 @@
             </div>
             
     </div>
+    {% endif %}
 </div>
 {% endblock %}

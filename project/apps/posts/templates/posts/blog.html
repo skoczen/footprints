@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% load compress %}
+{% extends "posts/base.html" %}{% load compress %}
 
 {% block title %}{{author.blog_name}}{% endblock %}
 {% block description %}A blog by {{author.name}}. Published on Footprints.{% endblock %}
@@ -33,10 +33,6 @@
 {% endcompress %}
 {% endblock %}
 
-{% block logo_url %}{{STATIC_URL}}main_site/img/logo-name-90-066.png{% endblock %}
-
-{% block blog_header %}{% if author.blog_header %}{{author.blog_header|safe}}{% endif %}{% endblock %}
-
 {% block main_content %}
 <div class="posts">
     {% include "posts/_posts.html" %}
@@ -44,4 +40,6 @@
 <div class="the_start">
     &mdash; the start &mdash;
 </div>
+
+
 {% endblock %}

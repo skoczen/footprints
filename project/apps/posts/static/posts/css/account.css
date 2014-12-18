@@ -9,7 +9,7 @@
     margin-right: 2px;
 }
 
-.ph_form .form_input.blog_header textarea {
+.ph_form .form_input.blog_header textarea, .ph_form .form_input.blog_footer textarea {
     width: 100%;
     font-size: 12px;
     font-family: courier, fixed;

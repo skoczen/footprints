@@ -44,6 +44,7 @@ ALLOWED_HOSTS = [
     "footprintsapp.com",
     "*.footprintsapp.com",
     "www.footprintsapp.com",
+    "*",
 ]
 
 # TIME_ZONE = 'America/Vancouver'

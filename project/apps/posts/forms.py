@@ -17,9 +17,7 @@ class PostForm(forms.ModelForm):
             "written_on",
             "is_draft",
             # "display_type",
-            "allow_comments",
-            "twitter_status_text",
-            "facebook_status_text",
+            # "allow_comments",
         )
 
 
@@ -93,7 +91,7 @@ class BlogForm(forms.ModelForm):
     
     class Meta:
         model = Author
-        fields = ("blog_name", "blog_domain", "blog_header")
+        fields = ("blog_name", "blog_domain", "blog_header", "blog_footer")
 
 class BlogUserForm(forms.ModelForm):
     first_name = forms.CharField(

@@ -28,7 +28,7 @@
     <ul>
     {% endifchanged %}
     {% ifchanged read.post.pk or read.read_at.month %}
-    <li><a href="{% url "posts:post" read.post.author.slug read.post.slug %}">{{read.post.title|safe}}</a> by {{read.post.author.name}} {% if read.fantasticed_this_post %}★{% endif %}</li> 
+    <li><a href="{% url "posts:post" read.post.slug %}">{{read.post.title|safe}}</a> by {{read.post.author.name}} {% if read.fantasticed_this_post %}★{% endif %}</li> 
     {% endifchanged %}
     {% empty %}
     <li>Looks like you haven't read anything yet!

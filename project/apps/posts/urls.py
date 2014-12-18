@@ -23,7 +23,9 @@ urlpatterns = patterns('',
     url(r'^$', views.home, name='home'),
     url(r'^explore/?$', views.explore, name='explore'),
     url(r'^my-writing/?$', views.my_writing, name='my_writing'),
+    url(r'^my-published/?$', views.my_published, name='my_published'),
     url(r'^my-reading/?$', views.my_reading, name='my_reading'),
+    url(r'^my-drafts/?$', views.my_drafts, name='my_drafts'),
     url(r'^my-blog/?$', views.my_blog, name='my_blog'),
     
     url(r'^my-account/?$', views.my_account, name='my_account'),
@@ -40,11 +42,13 @@ urlpatterns = patterns('',
 
     url(r'^{author:slug}/{title:slug}/revisions/?$', views.revisions, name='revisions'),
     url(r'^{author:slug}/revision/{pk:digits}/?$', views.revision, name='revision'),
-    url(r'^{author:slug}/?$', views.author, name='author'),
+    # url(r'^{author:slug}/?$', views.author, name='author'),
+    # url(r'^$', views.blog, name='blog'),
 
     # url(r'^{author:slug}/{title:slug}/revision/{revision_umb?$', views.revisions, name='revisions'),
 
-    url(r'^{author:slug}/{title:slug}/?$', views.post, name='post'),
+    url(r'^edit/{title:slug}/?$', views.edit, name='edit'),
+    url(r'^{title:slug}/?$', views.post, name='post'),
  
 
 )

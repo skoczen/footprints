@@ -2,7 +2,7 @@
 
 {% block title %}{{post.title}}{% endblock %}
 {% block description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
-{% block author %}{% url "posts:author" post.author.slug %}{% endblock %}
+{% block author %}{{post.author.name}}{% endblock %}
 {% block schema_name %}{{post.title}}{% endblock %}
 {% block schema_description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
 {% block schema_author %}{{post.author.name}}{% endblock %}
@@ -11,7 +11,7 @@
 {% block og_image %}{{MEDIA_URL}}{{post.dayone_image}}{% endblock %}
 {% endif %}
 
-{% block og_url %}{% url "posts:post" post.author.slug post.slug %}{% endblock %}
+{% block og_url %}{% url "posts:post" post.slug %}{% endblock %}
 {% block og_description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
 {% block og_publish_time %}{{post.published_at|date:"c"}}{% endblock %}
 {% block og_update_time %}{{post.sort_datetime|date:"c"}}{% endblock %}
@@ -63,7 +63,7 @@
         <h1 class="title"><div class="editable" id="post_title">{{post.title|safe}}</div></h1>
 
         <div class="body"><div class="editable" id="post_body">{{post.body_html|safe}}</div></div>
-        <div class="display author">by <a href="{% url "posts:author" post.author.slug %}">{{post.author.name}}</a></div>
+        <div class="display author">by {{post.author.name}}</div>
         <div class="print author">by {{post.author.name}}</div>
     </div>
 </div>
@@ -104,6 +104,8 @@
         {% endif %}
         {% if not post.is_draft and post.num_reads > 1 %}<span class="num_reads"><span class="num">{{post.num_reads}}</span> reads.</span>{% endif %}
     </div>
-    <div class="copyright">{% if post.public_domain %}Written by <a href="{% url "posts:author" post.author.slug %}">{{post.author.name}}</a>, in the public domain.</a> {% if post.author.wikipedia_url %}<br/>Learn about {{post.author.name}} on <a href="{{post.author.wikipedia_url}}" target="_blank">Wikipedia</a>{% endif %}{% else %}Copyright <a href="{% url "posts:author" post.author.slug %}">{{post.author.name}}</a>, all rights reserved.{% endif %}</div>
+    <div class="copyright">{% if post.public_domain %}Written by {{post.author.name}}, in the public domain.</a> {% if post.author.wikipedia_url %}<br/>Learn about {{post.author.name}} on <a href="{{post.author.wikipedia_url}}" target="_blank">Wikipedia</a>{% endif %}{% else %}Copyright {{post.author.name}}, all rights reserved.{% endif %}</div>
 </div>
 {% endblock %}
+
+{% block blog_footer %}{% endblock %}

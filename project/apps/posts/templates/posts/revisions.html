@@ -18,10 +18,10 @@
 
 {% block content %}
 <div class="page_content">
-    <h2>Revisions for <a href="{% url "posts:post" post.author.slug post.slug %}">{{post.title|safe}}</a></h2>
+    <h2>Revisions for <a href="{% url "posts:post" post.slug %}">{{post.title|safe}}</a></h2>
     <ul>
         {# <li> #}
-            {# <a href="{% url "posts:post" post.author.slug post.slug %}">Current Version</a> #}
+            {# <a href="{% url "posts:post" post.slug %}">Current Version</a> #}
         {# </li> #}
         {% for revision in revisions %}
         <li>

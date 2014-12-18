@@ -17,19 +17,20 @@ Next:
 
         - actual wired up posting!
         - change posted links to real links, not http://blog.inkandfeet.com/post/105340882189/black-lives-matter-the-single-hardest-thing",
-- cleaner urls, with subdomains
+        - cleaner urls, with subdomains
+        - fix love this multi-clicks
+        - thumbnails image width: 896
+        - some bugs in post type selection based on image #s.
+        - posts link to detail pages.
+
 - flag for email campaign
-- some bugs in post type selection based on image #s.
-- thumbnails image width: 896
-- some bugs in image height for short/narrow images (see want sexy parallax effect)
-- posts link to detail pages.
 - rss feed
-- fix love this multi-clicks
-- social stats, likes, shares, retweets
+- social stats, likes, shares, retweets are pulled.
 - dates?
 
 - Want: sexy parallax effect
     - also, save image height in the db, so we can be clever.
+    - some bugs in image height for short/narrow images (see want sexy parallax effect)
 
 Little things:
  - timezone wonkiness
@@ -41,11 +42,12 @@ Actual, me MVP:
     - Have a place I can push publish on, 
         - Nice, simple wizard for twitter + fb. Easy.
         - Have that content + nice links show up on FB + Twitter.
-- Handle domain, with pretty urls.
+    - Handle domain, with pretty urls.
 - Import tumblr direct post:
      (screenshot epic)
      - peanut
 - Handle old links
+- Editor?
 
 
 

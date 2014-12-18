@@ -25,7 +25,7 @@
   <meta property="og:type" content="article" /> 
   <meta property="og:url" content="http://www.footprintsapp.com{% block og_url %}{% endblock %}" />
   <meta property="og:image" content="{% block og_image %}{{STATIC_URL}}main_site/img/logo-600.png{% endblock %}" />
-  <meta property="og:description" content="{% block og_description %}{% endblock %}" /> 
+  <meta property="og:description" content="{% block og_description %}{% endblock %}" der/> 
   <meta property="og:site_name" content="footprints" /> 
   <meta property="article:published_time" content="{% block og_publish_time %}{% endblock %}" /> 
   <meta property="article:modified_time" content="{% block og_update_time %}{% endblock %}" /> 
@@ -82,10 +82,10 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
-                {# <li><a href="{% url "posts:explore" %}">Explore</a></li> #}
-                <li><a href="{% url "posts:my_writing" %}">My Posts</a></li>
+                <li><a href="{% url "posts:my_writing" %}">All Writing</a></li>
+                <li><a href="{% url "posts:my_drafts" %}">Drafts</a></li>
+                <li><a href="{% url "posts:my_published" %}">Published</a></li>
                 <li><a href="{% url "posts:my_blog" %}">My Blog</a></li>
-                {# <li><a href="{% url "posts:my_reading" %}">My Reading</a></li> #}
               </ul>
               
               <ul class="nav navbar-nav navbar-right">
@@ -116,12 +116,13 @@
         <div id="main" role="main">
             {% block main_content %}
             <div class="page_content">
-        	{% block content %}
+            	{% block content %}
 
-        	{% endblock %}
+            	{% endblock %}
             </div>
             {% endblock %}
         </div>
+        {% block blog_footer %}{% endblock %}
     </div>
 </div>
 {% if request.user.is_authenticated %}

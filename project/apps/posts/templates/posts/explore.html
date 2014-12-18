@@ -25,7 +25,7 @@
             <h1>Recently read</h1>
             <ul>
             {% for r in recent_reads %} 
-                <li><a href="{% url "posts:post" r.post.author.slug r.post.slug %}">{{r.post.title|safe}}</a></li>
+                <li><a href="{% url "posts:post".slug r.post.slug %}">{{r.post.title|safe}}</a></li>
             {% endfor %}
             </ul>
         </div>
@@ -33,7 +33,7 @@
             <h1>Recently published</h1>
             <ul>
             {% for post in recent_published %}
-                <li><a href="{% url "posts:post" post.author.slug post.slug %}">{{post.title|safe}}</a></li>
+                <li><a href="{% url "posts:post" post.slug %}">{{post.title|safe}}</a></li>
             {% endfor %}
             </ul>
         </div>
@@ -43,7 +43,7 @@
             <h1>Classics</h1>
             <ul>
             {% for post in top_classics %}
-                <li><a href="{% url "posts:post" post.author.slug post.slug %}">{{post.title|safe}}</a> {# <span class="author">by {{post.author.name}}</span> #}</li>
+                <li><a href="{% url "posts:post" post.slug %}">{{post.title|safe}}</a> {# <span class="author">by {{post.author.name}}</span> #}</li>
             {% endfor %}
             </ul>
         </div>
@@ -70,7 +70,7 @@
             <h1>Most popular posts</h1>
             <ul>
             {% for post in most_favorited %}
-                <li><a href="{% url "posts:post" post.author.slug post.slug %}">{{post.title|safe}}</a></li>
+                <li><a href="{% url "posts:post" post.slug %}">{{post.title|safe}}</a></li>
             {% endfor %}
             </ul>
         </div>

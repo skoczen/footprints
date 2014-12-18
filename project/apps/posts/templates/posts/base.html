@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% load compress %}
+
+{% block title %}{{author.blog_name}}{% endblock %}
+{% block description %}A blog by {{author.name}}. Published on Footprints.{% endblock %}
+{% block author %}{% url "posts:blog" author.slug %}{% endblock %}
+{% block schema_name %}{{author.blog_name}}{% endblock %}
+{% block schema_description %}A blog by {{author.name}}. Published on Footprints.{% endblock %}
+{% block schema_author %}{{author.name}}{% endblock %}
+{% block og_title %}{{author.blog_name}}{% endblock %}
+
+{% block og_description %}A blog by {{author.name}}. Published on Footprints.{% endblock %}
+{% block og_publish_time %}{{post.published_at|date:"c"}}{% endblock %}
+{% block og_update_time %}{{post.sort_datetime|date:"c"}}{% endblock %}
+
+{% block css %}{{block.super}}
+{% compress css %}
+<link rel="stylesheet" href="{{STATIC_URL}}posts/css/posts.css">
+{% endcompress %}
+{% endblock %}
+
+{% block blog_header %}{% if author.blog_header %}{{author.blog_header|safe}}{% endif %}{% endblock %}
+{% block blog_footer %}{% if author.blog_footer %}{{author.blog_footer|safe}}{% endif %}{% endblock %}

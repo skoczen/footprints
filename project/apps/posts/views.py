@@ -28,15 +28,6 @@ POSTS_PER_PAGINATION = 10
 def home(request):
     return locals()
 
-
-def my_writing(request):
-    try:
-        author = request.user.get_profile()
-        return HttpResponseRedirect(reverse("posts:author", args=(author.slug,)))
-    except:
-        return HttpResponseRedirect("%s?next=%s" % (reverse("account_login",), reverse("posts:my_writing")))
-
-
 @render_to("posts/explore.html")
 def explore(request):
     # Yeah, I know.  I'll move this to a cached, non-db killing thing once we've got a few people.
@@ -112,23 +103,116 @@ def blog_settings(request):
 
 
 @render_to("posts/author.html")
-def author(request, author=None):
-    author = Author.objects.get(slug__iexact=author)
-    if author.user == request.user:
-        is_me = True
-        posts = Post.objects.filter(author=author).order_by("-written_on", "title")
-    else:
-        is_me = False
-        posts = Post.objects.filter(author=author, is_draft=False).order_by("-written_on", "title")
+@login_required
+def my_writing(request, author=None):
+    author = request.user.get_profile()
+    is_me = True
+    posts = Post.objects.filter(author=author).order_by("-written_on", "title")
+    return locals()
+
+@render_to("posts/author.html")
+@login_required
+def my_published(request, author=None):
+    author = request.user.get_profile()
+    is_me = True
+    posts = Post.objects.filter(is_draft=False, author=author).order_by("-written_on", "title")
     return locals()
 
 
+@render_to("posts/author.html")
+@login_required
+def my_drafts(request, author=None):
+    author = request.user.get_profile()
+    is_me = True
+    posts = Post.objects.filter(is_draft=True, author=author).order_by("-written_on", "title")
+    return locals()
+
+
+def get_author_from_domain(request):
+    domain = request.get_host()
+    if domain[:4] == "www.":
+        domain = domain[":4"]
+    domain = Author.objects.get(blog_domain__iexact=domain)
+    return domain
+
+
+@render_to("posts/blog.html")
+def blog(request):
+    try:
+        author = get_author_from_domain(request)
+        posts = Post.objects.filter(author=author, is_draft=False).order_by("-written_on", "title")
+        if author.user == request.user:
+            is_me = True
+
+        return locals()
+    except:
+        import traceback; traceback.print_exc();
+        from main_site.views import home
+        return home(request)
+        # pass
+
 @render_to("posts/post.html")
-def post(request, author=None, title=None):
+def post(request, title=None):
+    try:
+        author = get_author_from_domain(request)
+    except:
+        if request.user.is_authenticated():
+            author = request.user.get_profile()
+        else:
+            return HttpResponseRedirect(reverse("posts:home"))
+
     if not request.user.is_authenticated():
         if "uuid" not in request.session:
             request.session["uuid"] = uuid.uuid1()
-    post = Post.objects.get(slug__iexact=title, author__slug__iexact=author)
+
+    post = Post.objects.get(slug__iexact=title, author=author)
+    is_mine = post.author.user == request.user
+
+    if not is_mine and post.is_draft:
+        raise Http404("Post not found. Maybe it never was, maybe it's a draft and you're not logged in!")
+
+    if is_mine:
+        form = PostForm(instance=post)
+    else:
+        fantastic_form = FantasticForm()
+        read_form = ReadForm()
+
+        read = None
+        fantastic = None
+        if not is_mine:
+            if request.user.is_authenticated():
+                try:
+                    read = Read.objects.filter(post=post, reader=request.user.get_profile()).order_by("-read_at")[0]
+                except IndexError:
+                    pass
+                try:
+                    fantastic = Fantastic.objects.filter(post=post, reader=request.user.get_profile()).order_by("-marked_at")[0]
+                except IndexError:
+                    pass
+            else:
+                if "uuid" in request.session:
+                    try:
+                        read = Read.objects.filter(post=post, uuid=request.session["uuid"]).order_by("-read_at")[0]
+                    except IndexError:
+                        pass
+                    try:
+                        fantastic = Fantastic.objects.filter(post=post, uuid=request.session["uuid"]).order_by("-marked_at")[0]
+                    except IndexError:
+                        pass
+    return locals()
+
+@render_to("posts/edit.html")
+def edit(request, title=None):
+    try:
+        author = get_author_from_domain(request)
+    except:
+        if request.user.is_authenticated():
+            author = request.user.get_profile()
+
+    if not request.user.is_authenticated():
+        if "uuid" not in request.session:
+            request.session["uuid"] = uuid.uuid1()
+    post = Post.objects.get(slug__iexact=title, author=author)
     is_mine = post.author.user == request.user
 
     if not is_mine and post.is_draft:
@@ -181,7 +265,7 @@ def save_revision(request, author=None, title=None):
         new_post = form.save()
         success = True
         if old_slug != new_post.slug or not was_published and not new_post.is_draft:
-            new_url = reverse("posts:post", args=(post.author.slug, new_post.slug,))
+            new_url = reverse("posts:post", args=(new_post.slug,))
     else:
         print form
 
@@ -207,7 +291,7 @@ def revision(request, author=None, pk=None):
             (not post.is_draft and post.post.show_published_revisions)):
         pass
     else:
-        return HttpResponseRedirect(reverse("posts:post", args=(post.author.slug, post.post.slug) ))
+        return HttpResponseRedirect(reverse("posts:post", args=(post.post.slug,) ))
 
     return locals()
 
@@ -215,7 +299,7 @@ def revision(request, author=None, pk=None):
 def new(request):
     author = Author.objects.get(user=request.user)
     post = Post.objects.create(author=author)
-    return HttpResponseRedirect("%s?editing=true" % reverse("posts:post", args=(post.author.slug, post.slug,)))
+    return HttpResponseRedirect("%s?editing=true" % reverse("posts:post", args=(post.slug,)))
 
 
 @ajax_request
@@ -224,14 +308,12 @@ def this_was_fantastic(request, post_id):
 
     fantastic_form = FantasticForm(request.POST)
     if fantastic_form.is_valid():
-        fantastic = fantastic_form.save(commit=False)
-        fantastic.post = post
         if request.user.is_authenticated():
-            fantastic.reader = request.user.get_profile()
+            fantastic = Fantastic.objects.get_or_create(post=post, reader=request.user.get_profile())[0]
         else:
-            if "uuid" in request.session:
-                fantastic.uuid = request.session["uuid"]
-            fantastic.reader = None
+            fantastic = Fantastic.objects.get_or_create(post=post, uuid=request.session["uuid"])[0]
+
+        fantastic.on = fantastic_form.cleaned_data["on"]
         fantastic.save()
 
         return {"success": True, "num_people": post.num_fantastics, "post_id": post.pk}
@@ -297,27 +379,31 @@ def next_10_annotated_posts_and_forms(author, request, last_timestamp=None):
                 except IndexError:
                     pass
 
-@login_required
+
 @render_to("posts/blog.html")
+@login_required
 def my_blog(request, author=None):
-    
-    
     fantastic_form = FantasticForm()
+    is_me = False
+    is_mine = False
     author = request.user.get_profile()
+    if request.user.get_profile() == author:
+        is_me = True
+        is_mine = True
     posts = author.published_posts[:POSTS_PER_PAGINATION]
     last_timestamp = posts[len(posts)-1].written_on.strftime("%s")
     return locals()
 
-@render_to("posts/blog.html")
-def blog(request, author=None):
-    if not request.user.is_authenticated():
-        if "uuid" not in request.session:
-            request.session["uuid"] = uuid.uuid1()
-    fantastic_form = FantasticForm()
-    author = Author.objects.get(slug__iexact=author)
-    posts = author.published_posts[:POSTS_PER_PAGINATION]
-    last_timestamp = posts[len(posts)-1].written_on.strftime("%s")
-    return locals()
+# @render_to("posts/blog.html")
+# def blog(request, author=None):
+#     if not request.user.is_authenticated():
+#         if "uuid" not in request.session:
+#             request.session["uuid"] = uuid.uuid1()
+#     fantastic_form = FantasticForm()
+#     author = Author.objects.get(slug__iexact=author)
+#     posts = author.published_posts[:POSTS_PER_PAGINATION]
+#     last_timestamp = posts[len(posts)-1].written_on.strftime("%s")
+#     return locals()
 
 
 @login_required
@@ -365,7 +451,6 @@ def social_share(request, post_id):
                             message=post.facebook_status_text,
                             link=post.full_permalink,
                         )
-                        print resp
                         post.facebook_status_id = resp["id"]
                         # print post.facebook_status_id
                         # resp = facebook_api.get(

@@ -3,12 +3,12 @@
 {% block title %}{{author.name}}'{% if not author.name_ends_in_s %}s{% endif %} Posts{% endblock %}
 
 {% block description %}Posts written by {{author.name}}. Published on Footprints.{% endblock %}
-{% block author %}{% url "posts:author" author.slug %}{% endblock %}
+{% block author %}http://{{author.blog_domain}}{% endblock %}
 {% block schema_name %}{{author.name}}'{% if not author.name_ends_in_s %}s{% endif %} Posts{% endblock %}
 {% block schema_description %}Posts written by {{author.name}}. Published on Footprints.{% endblock %}
 {% block schema_author %}{{author.name}}{% endblock %}
 {% block og_title %}{{author.name}}'{% if not author.name_ends_in_s %}s{% endif %} Posts{% endblock %}
-{% block og_url %}{% url "posts:author" author.slug %}{% endblock %}
+{% block og_url %}http://{{author.blog_domain}}{% endblock %}
 {% block og_description %}Posts written by {{author.name}}. Published on Footprints.{% endblock %}
 {% block og_publish_time %}{{author.created_at|date:"c"}}{% endblock %}
 {% block og_update_time %}{{author.most_recent_update|date:"c"}}{% endblock %}
@@ -48,7 +48,7 @@
             
 
         <div class="post row {% if not post.is_draft %}published{% endif %}">
-            <a href="{% url "posts:post" author.slug post.slug %}" class="col-xs-9 thumb_col post_body">
+            <a href="{% url "posts:post" post.slug %}" class="col-xs-9 thumb_col post_body">
                 {% if post.dayone_image %}
                 {% thumbnail post.dayone_image "80x80" crop="center" as thumb %}
                 <img src="{{thumb.url}}" class="list_thumb" />

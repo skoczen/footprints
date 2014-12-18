@@ -29,8 +29,9 @@ class Author(BaseModel):
     premium_user = models.BooleanField(default=False)
     slug = models.CharField(max_length=255, blank=True, editable=False)
     blog_name = models.CharField(max_length=255, blank=True)
-    blog_domain = models.CharField(max_length=255, blank=True)
+    blog_domain = models.CharField(max_length=255, blank=True, unique=True)
     blog_header = models.TextField(blank=True, null=True)
+    blog_footer = models.TextField(blank=True, null=True)
 
     public_domain = models.BooleanField(default=False)
     wikipedia_url = models.TextField(blank=True, null=True)
@@ -270,7 +271,7 @@ class AbstractPost(BaseModel):
         if self.permalink_path:
             return self.permalink_path
         else:
-            return reverse('posts:post', args=(self.author.slug, self.slug))
+            return reverse('posts:post', args=(self.slug,))
 
     @property
     def full_permalink(self):
@@ -320,7 +321,7 @@ class Post(AbstractPost):
 
             if not self.is_draft:
                 if not self.permalink_path or old_me.is_draft:
-                    self.permalink_path = reverse('posts:post', args=(self.author.slug, self.slug))
+                    self.permalink_path = reverse('posts:post', args=(self.slug,))
 
         # if make_revision:
         #     cleaned_body = self.body.replace("<br/>", "\n").replace("<br>", "\n").replace("</div>", "\n")

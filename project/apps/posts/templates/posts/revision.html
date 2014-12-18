@@ -15,10 +15,10 @@
     <h1 class="title"><div class="editable" id="post_title">{{post.title|safe}}</div></h1>
 
     <div class="body"><div class="editable" id="post_body">{{post.body|safe}}</div></div>
-    <div class="author">by <a href="{% url "posts:author" post.author.slug %}">{{post.author.name}}</a></div>
+    <div class="author">by {{post.author.name}}</div>
 </div>
 
 <div class="timeline">
-    <div class="copyright">Copyright <a href="{% url "posts:author" post.author.slug %}">{{post.author.name}}</a>, all rights reserved.</div>
+    <div class="copyright">Copyright {{post.author.name}}, all rights reserved.</div>
 </div>
 {% endblock %}
