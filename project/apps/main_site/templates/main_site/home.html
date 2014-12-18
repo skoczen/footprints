@@ -15,10 +15,13 @@
 
 {% block content %}
 <div class="home page_content">
-    {% if is_author %}
-    <h1>Welcome to your footprints.</h1>
+    {% if request.user.is_authenticated %}
+    <h1> Welcome to your footprints.</h1>
+    <center>
+        <h2>{{request.user.get_profile.blog_name}} is all ready to go.</h2>
+        <img src="{{STATIC_URL}}main_site/img/logo-264.png"/>
+    </center>
 
-    <h2>{{author.blog_name}} is all ready to go.</h2>
     {% else %}
     <h1>Footprints is a simple, beautiful publication platform.</h1>
 

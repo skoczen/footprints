@@ -1,0 +1,50 @@
+{% extends "posts/base.html" %}{% load compress %}
+
+{% block title %}{{post.title}}{% endblock %}
+{% block description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
+{% block author %}{{post.author.name}}{% endblock %}
+{% block schema_name %}{{post.title}}{% endblock %}
+{% block schema_description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
+{% block schema_author %}{{post.author.name}}{% endblock %}
+{% block og_title %}{{post.title}}{% endblock %}
+{% if post.dayone_image %}
+{% block og_image %}{{MEDIA_URL}}{{post.dayone_image}}{% endblock %}
+{% endif %}
+
+{% block og_url %}{% url "posts:post" post.slug %}{% endblock %}
+{% block og_description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
+{% block og_publish_time %}{{post.published_at|date:"c"}}{% endblock %}
+{% block og_update_time %}{{post.sort_datetime|date:"c"}}{% endblock %}
+
+{% block css %}{{block.super}}
+{% compress css %}
+<link rel="stylesheet" href="{{STATIC_URL}}posts/css/blog.css">
+<link rel="stylesheet" href="{{STATIC_URL}}posts/css/posts.css">
+{% endcompress %}
+{% endblock %}
+
+{% block js %}{{block.super}}
+{% compress js %}
+<script type="text/javascript">
+    window.Footprints = window.Footprints || {};
+    Footprints.urls = Footprints.urls || {};
+    Footprints.state = Footprints.state || {};
+</script>
+<script src="{{STATIC_URL}}base/js/ajaxForm.js"></script>
+<script src="{{STATIC_URL}}posts/js/nicEdit.js"></script>
+<script src="{{STATIC_URL}}posts/js/blog.js"></script>
+{% endcompress %}
+{% endblock %}
+
+{% block main_content %}
+{% if is_mine %}
+<div class="edit_bar">
+    <a href="{% url "posts:revisions" post.author.slug post.slug %}" class="button revisions_button" target="_blank"><i class="icon-revisions" ></i> Revisions</a>
+    <a href="{% url 'posts:social_share' post.pk %}" class="button social_share_button"><i class="icon-twitter" ></i> Social Share</a>
+    <a href="{% url 'posts:edit' post.slug %}?editing=true" class="button start_editing_button edit_button"><i class="icon-edit" ></i> Edit</a>
+</div>
+{% endif %}
+
+{% include "posts/_blog_post.html" %}
+
+{% endblock %}
