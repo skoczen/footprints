@@ -202,6 +202,8 @@ class AbstractPost(BaseModel):
     facebook_status_id = models.CharField(max_length=255, blank=True, null=True, editable=False)
     social_shares_customized = models.BooleanField(default=False)
 
+    email_publish_intent = models.BooleanField(default=False)
+
     def __unicode__(self, *args, **kwargs):
         return self.title
 
@@ -265,6 +267,10 @@ class AbstractPost(BaseModel):
     @property
     def all_published(self):
         return self.facebook_published and self.twitter_published
+
+    @property
+    def email_published(self):
+        return self.email_publish_intent
 
     @property
     def permalink(self):

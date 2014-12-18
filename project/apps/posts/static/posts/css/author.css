@@ -125,13 +125,16 @@ h5 {
     background-color: #4862A3;
     color: #FFF;
 }
-
 .published .twitter_col {
     /*background-color: #D7ECFF;*/
 }
 .twitter_col.published {
     background-color: #55ACEE;
     color: #FFF;
+}
+.email_col.published {
+    background-color: #999;
+    color: #CCC;
 }
 .stats_col {
     position: relative;

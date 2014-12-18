@@ -377,6 +377,17 @@ h1 {
     padding: 5px 0;
     color: #BBB;
 }
+.good_to_go {
+    text-align: center;
+
+}
+.good_to_go h1 {
+    margin-bottom: 20px;
+}
+.good_to_go h2 {
+    margin-bottom: 60px;
+
+}
 @media (max-width: 1024px) {
     #nav a {
         padding: 11px 15px 9px 15px;

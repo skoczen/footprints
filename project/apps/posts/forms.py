@@ -17,7 +17,7 @@ class PostForm(forms.ModelForm):
             "written_on",
             "is_draft",
             # "display_type",
-            # "allow_comments",
+            "dayone_image",
         )
 
 
@@ -53,6 +53,7 @@ class SocialShareForm(forms.ModelForm):
             "facebook_publish_intent",
             "twitter_include_image",
             "publish_now",
+            "email_publish_intent",
         )
 
 

@@ -16,8 +16,8 @@
 {% block content %}
 <div class="home page_content">
     {% if request.user.is_authenticated %}
-    <h1> Welcome to your footprints.</h1>
-    <center>
+    <div class="good_to_go">
+        <h1> Welcome to your footprints.</h1>
         <h2>{{request.user.get_profile.blog_name}} is all ready to go.</h2>
         <img src="{{STATIC_URL}}main_site/img/logo-264.png"/>
     </center>

@@ -201,6 +201,9 @@ h2 {
     padding-top: 6px;
     display: inline-block;
 }
+.row.question.publish_now_group  {
+    padding-top: 40px;
+}
 .publish_now_group .errors {
     margin-left: 20px;
     color: #AAA;

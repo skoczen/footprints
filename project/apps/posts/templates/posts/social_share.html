@@ -196,25 +196,43 @@
                 {% endif %}
             </div>
         </div>
-        {% if not post.all_published %}
+        <div class="row question form-group">
+            <div class="col-md-2">
+                <div class="text">Email</div>
+                <div class="help"></div>
+            </div>
+            
+            <div class="col-md-10 answers permalink">
+                <div class="toggle">
+                    {% if post.email_publish_intent %}
+                    <div><button class="button btn btn-success published_btn" ><i class="fa fa-check"></i> Publishing to Email.</button></div>
+                    {% endif %}
+                    <label for="id_email_publish_intent">Publish to email list: </label> 
+                    {{ form.email_publish_intent }}
+                </div>
+            </div>
+        </div>
+
+        
         <div class="row question form-group publish_now_group">
             <div class="col-md-2">
                 <div class="text">Publish</div>
             </div>
             
             <div class="col-md-10 answers">
-
+                {% if not post.all_published %}
                 <div class="form-group form_input">
                     <label for="id_publish_now">Publish Now?</label> 
                     {{ form.publish_now }}
                     <span class="errors"></span>
                 </div>
+                {% endif %}
                 <div class="form-group form_input">
                     <button type="submit" class="button btn btn-primary publish_button">{% trans "Publish" %}</button>
                 </div>
             </div>
         </div>
-        {% endif %}
+        
         
         
     </form>

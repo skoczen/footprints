@@ -265,7 +265,7 @@ def save_revision(request, author=None, title=None):
         new_post = form.save()
         success = True
         if old_slug != new_post.slug or not was_published and not new_post.is_draft:
-            new_url = reverse("posts:post", args=(new_post.slug,))
+            new_url = reverse("posts:edit", args=(new_post.slug,))
     else:
         print form
 

@@ -79,7 +79,11 @@ $(function(){
             $(".publish_button").html("Publish Now")
         } else {
             // $(".publish_button").addClass("btn-success").removeClass("btn-primary");
-            $(".publish_button").html("Save Changes and Publish Later")
+            if (Footprints.share.state.facebook_published && Footprints.share.state.twitter_published) {
+                $(".publish_button").html("Save Changes");
+            } else {
+                $(".publish_button").html("Save Changes and Publish Later")
+            }
         }
     }
     Footprints.share.handlers.publish_now_clicked = function() {
