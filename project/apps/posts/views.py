@@ -139,6 +139,7 @@ def get_author_from_domain(request):
 @render_to("posts/blog.html")
 def blog(request):
     try:
+        on_blog = True
         author = get_author_from_domain(request)
         posts = Post.objects.filter(author=author, is_draft=False).order_by("-written_on", "title")
         if author.user == request.user:

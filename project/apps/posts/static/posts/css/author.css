@@ -46,7 +46,7 @@
 }
 .published.post a.post_body {
 }
-.post a.post_body:hover {
+.post a.post_body:hover, .post a.post_body:visited {
     color: #333;
     text-decoration: none;
 }
