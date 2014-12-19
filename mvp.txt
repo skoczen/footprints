@@ -27,6 +27,7 @@ Next:
 - rss feed
 - social stats, likes, shares, retweets are pulled.
 - header/footer as iframe preview
+- link back to main blog from detail
 
 Actual, me MVP:
     - Hit publish in DayOne

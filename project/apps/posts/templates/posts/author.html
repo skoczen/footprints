@@ -58,14 +58,16 @@
                 {% endif %}
                 <div class="title">
                     {{post.title|default:"No title"|safe}}
+                    <div class="body">
+                        {{post.body|truncatewords_html:50|safe}}
+                    </div>
                 </div>
                 <!-- <span class="time">{{post.written_on|time}}</span> -->
             </a>
-            <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 love_col stats_col {% if not post.is_draft %}published{% else %}unpublished{% endif %}">
-                    {% if not post.is_draft %}
-                        <i class="fa fa-heart bg_icon"></i>
-                        <div class="number">{% if post.num_fantastics > 0 %}{{post.num_fantastics}}{% endif %}</div>
-                    {% endif %}
+            <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 email_col stats_col {% if post.email_published %}published{% else %}unpublished{% endif %}">
+                {% if not post.is_draft %}
+                    <i class="fa fa-envelope-o bg_icon"></i>
+                {% endif %}
             </a>
             <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 facebook_col stats_col {% if post.facebook_published %}published{% else %}unpublished{% endif %}">
                     {% if not post.is_draft %}
@@ -79,10 +81,11 @@
                     <div class="number">{% if post.num_twitter_rts > 0 %}{{post.num_twitter_rts}}{% endif %}</div>
                 {% endif %}
             </a>
-            <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 email_col stats_col {% if post.email_published %}published{% else %}unpublished{% endif %}">
-                {% if not post.is_draft %}
-                    <i class="fa fa-envelope-o bg_icon"></i>
-                {% endif %}
+            <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 love_col stats_col {% if not post.is_draft %}published{% else %}unpublished{% endif %}">
+                    {% if not post.is_draft %}
+                        <i class="fa fa-heart bg_icon"></i>
+                        <div class="number">{% if post.num_fantastics > 0 %}{{post.num_fantastics}}{% endif %}</div>
+                    {% endif %}
             </a>
         </div>
         {% endfor %}
