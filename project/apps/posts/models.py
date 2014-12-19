@@ -3,8 +3,9 @@ import re
 import mistune
 
 from django.db import models
-from django.core.cache import cache
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
 from utils.slughifi import unique_slug, slughifi
@@ -171,7 +172,7 @@ class AbstractPost(BaseModel):
     dayone_posted = models.DateTimeField(blank=True, null=True, editable=False)
     dayone_last_modified = models.DateTimeField(blank=True, null=True, editable=False)
     dayone_last_rev = models.CharField(max_length=255, blank=True, null=True, editable=False)
-    dayone_image = models.ImageField(upload_to="dayone_images", blank=True, null=True)
+    dayone_image = models.ImageField(verbose_name="Hero Image", upload_to="dayone_images", blank=True, null=True)
 
     location_area = models.CharField(max_length=255, blank=True, null=True,)
     location_country = models.CharField(max_length=255, blank=True, null=True,)
@@ -382,6 +383,11 @@ class Post(AbstractPost):
     def num_reads(self):
         return self.read_set.all().count()
 
+
+    @property
+    def all_images(self):
+        return self.postimage_set.all()
+
     def __unicode__(self):
         return "%s" % self.title
 
@@ -399,6 +405,14 @@ class PostRevision(AbstractPost):
     def __unicode__(self):
         return "%s (%s)" % (self.title, self.revised_at)
 
+
+class PostImage(BaseModel):
+    post = models.ForeignKey(Post)
+    image = models.ImageField(upload_to="post_images", blank=True, null=True)
+
+    @property
+    def full_permalink(self):
+        return self.image.url
 
 class Fantastic(BaseModel):
     post = models.ForeignKey(Post)

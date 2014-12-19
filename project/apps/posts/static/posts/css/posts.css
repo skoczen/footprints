@@ -307,8 +307,9 @@ body {
 }
 .post_meta {
     position: absolute;
-    top: 120px;
-    right: -400px;
+    top: 160px;
+    right: -600px;
+    width: 600px;
     display: none;
 }
 .options_toggle {

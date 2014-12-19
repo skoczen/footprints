@@ -22,19 +22,11 @@ Next:
         - thumbnails image width: 896
         - some bugs in post type selection based on image #s.
         - posts link to detail pages.
-
-- flag for email campaign
+        - flag for email campaign
+        - pretty working editor
 - rss feed
 - social stats, likes, shares, retweets are pulled.
-- dates?
-
-- Want: sexy parallax effect
-    - also, save image height in the db, so we can be clever.
-    - some bugs in image height for short/narrow images (see want sexy parallax effect)
-
-Little things:
- - timezone wonkiness
- - on blur of fb editing field, shorten it.?
+- header/footer as iframe preview
 
 Actual, me MVP:
     - Hit publish in DayOne
@@ -43,14 +35,31 @@ Actual, me MVP:
         - Nice, simple wizard for twitter + fb. Easy.
         - Have that content + nice links show up on FB + Twitter.
     - Handle domain, with pretty urls.
+    - Editor?
 - Import tumblr direct post:
      (screenshot epic)
      - peanut
 - Handle old links
-- Editor?
+    - old_link
+
+
+V2:
+    - pay to use
+    - wire up auto domain adds
 
 
 
+
+- Want: 
+    - much prettier editor
+    - sexy parallax effect
+    - dates?
+    - also, save image height in the db, so we can be clever.
+    - some bugs in image height for short/narrow images (see want sexy parallax effect)
+
+    Little things:
+     - timezone wonkiness
+     - on blur of fb editing field, shorten it.?
 
 Someday maybe:
 - Post directly from footprints?

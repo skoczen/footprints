@@ -39,6 +39,7 @@ urlpatterns = patterns('',
     url(r'^blog/{author:slug}/next/?$', views.next_posts, name='next_posts'),
     url(r'^blog/{author:slug}/?$', views.blog, name='blog'),
     url(r'^social-share/{post_id:digits}?$', views.social_share, name='social_share'),
+    url(r'^image-upload/{post_id:digits}?$', views.image_upload, name='image_upload'),
 
     url(r'^{author:slug}/{title:slug}/revisions/?$', views.revisions, name='revisions'),
     url(r'^{author:slug}/revision/{pk:digits}/?$', views.revision, name='revision'),

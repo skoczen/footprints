@@ -17,7 +17,7 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from annoying.decorators import render_to, ajax_request
-from posts.models import Backup, Fantastic, Post, Author, PostRevision, Read
+from posts.models import Backup, Fantastic, Post, Author, PostRevision, Read, PostImage
 from posts.forms import AccountForm, FantasticForm, PostForm, ReadForm, SocialShareForm, BlogForm, BlogUserForm
 from posts.tasks import generate_backup_zip, sync_posts
 
@@ -260,7 +260,7 @@ def save_revision(request, author=None, title=None):
         raise Exception("Either this isn't your post, or you're not logged in!")
 
     success = False
-    form = PostForm(request.POST, instance=post)
+    form = PostForm(request.POST, request.FILES, instance=post)
     if form.is_valid():
         new_post = form.save()
         success = True
@@ -470,6 +470,29 @@ def social_share(request, post_id):
     except:
         import traceback; traceback.print_exc();
         return HttpResponseRedirect(reverse('main_site:home'))
+
+
+@login_required
+@ajax_request
+@csrf_exempt
+def image_upload(request, post_id):
+    try:
+        post = Post.objects.get(pk=post_id)
+        print request.FILES
+        image = request.FILES['file']
+        post_image = PostImage.objects.create(post=post, image=image)
+
+        return {
+            'success': True,
+            'url': post_image.full_permalink
+        }
+
+    except:
+        import traceback; traceback.print_exc();
+        return {
+            'success': False,
+        }
+
 
 @ajax_request
 def next_posts(request, author=None):

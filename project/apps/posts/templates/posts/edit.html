@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% load compress %}
+{% extends "base.html" %}{% load compress thumbnail %}
 
 {% block title %}{{post.title}}{% endblock %}
 {% block description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
@@ -19,26 +19,33 @@
 {% block css %}{{block.super}}
 {% compress css %}
 <link rel="stylesheet" href="{{STATIC_URL}}posts/css/posts.css">
+<link rel="stylesheet" href="{{STATIC_URL}}posts/lib/css/editor.css">
+<link rel="stylesheet" href="{{STATIC_URL}}posts/lib/dropzone/css/dropzone.css">
 {% endcompress %}
 {% endblock %}
 
 {% block js %}{{block.super}}
 {% compress js %}
 <script src="{{STATIC_URL}}base/js/ajaxForm.js"></script>
-<script src="{{STATIC_URL}}posts/js/nicEdit.js"></script>
+<!-- <script src="{{STATIC_URL}}posts/js/nicEdit.js"></script> -->
+<script src="{{STATIC_URL}}posts/lib/js/editor.js"></script>
+<script src="{{STATIC_URL}}posts/lib/js/marked.js"></script>
+<script src="{{STATIC_URL}}posts/lib/dropzone/dropzone.js"></script>
+
 <script type="text/javascript">
     window.Footprints = window.Footprints || {};
     Footprints.urls = Footprints.urls || {};
+    Footprints.urls.upload_image = "{% url 'posts:image_upload' post.pk %}";
     Footprints.state = Footprints.state || {};
 </script>
-<script src="{{STATIC_URL}}posts/js/post.js"></script>
+<script src="{{STATIC_URL}}posts/js/edit.js"></script>
 {% endcompress %}
 {% endblock %}
 
 {% block logo_url %}{{STATIC_URL}}main_site/img/logo-name-90-066.png{% endblock %}
 
 {% block main_content %}
-<form action="{% url "posts:save_revision" author=post.author.slug title=post.slug %}" class="post_form" method="POST">
+<form action="{% url "posts:save_revision" author=post.author.slug title=post.slug %}" class="post_form" method="POST" enctype="multipart/form-data" >
 
 {% if is_mine %}
 <div class="edit_bar">
@@ -61,11 +68,8 @@
     <div id="edit_pane_area"><div id="edit_pane"></div></div>
     <div class="draft_badge"></div>
     <div class="text_and_title">
-        <h1 class="title"><div class="editable" id="post_title">{{post.title|safe}}</div></h1>
-
-        <div class="body"><div class="editable" id="post_body">{{post.body_html|safe}}</div></div>
-        <div class="display author">by {{post.author.name}}</div>
-        <div class="print author">by {{post.author.name}}</div>
+        <textarea class="edit_holder" id="edit_title">{{post.title}}</textarea>
+        <textarea class="edit_holder" id="edit_body">{{post.body}}</textarea>
     </div>
 </div>
 
@@ -78,35 +82,20 @@
     {{form.as_table}}
     </table>
     {% csrf_token %}
-</div>
-{% endif %}
-</form>
-{% if not post.is_draft and not is_mine %}
-<div class="kudos">
-<form class="fantastic_form" action="{% url "posts:this_was_fantastic" post.pk %}" method="POST">
-    {% csrf_token %}
-    {{fantastic_form.as_p}}
-    <button type="submit" href="#" class="fantastic_button button {% if fantastic.on %}clicked{% endif %}"><span class="num_agree"></span><span class="unclicked_star">☆</span><span class="clicked_star">★</span> This was fantastic.</button>
-</form>
-</div>
-<form class="read_form" action="{% url "posts:mark_read" post.pk %}" method="POST">
-    {% csrf_token %}
-    {{read_form.as_p}}
-</form>
-{% endif %}
-
-
-<div class="timeline">
-    <div class="published">
-        {% if post.is_draft %}Draft.{% else %}{% if not post.written_on %}Unknown publication date.{% else %}Written {% if post.approximate_publication_date %}around {{post.written_on|date:"Y" }}.{% else %}on {{post.written_on|date}}.{% endif%}{% endif %}{% endif %}
-        {% if post.revisions_visible or is_mine %}
-            <span class="revised_text">{% if post.has_been_revised and not post.imported %}<a href="{% url "posts:revisions" post.author.slug post.slug %}">Last revised</a> {{post.most_recent_revision.revised_at|date}}{% endif %}
-            </span>
-        {% endif %}
-        {% if not post.is_draft and post.num_reads > 1 %}<span class="num_reads"><span class="num">{{post.num_reads}}</span> reads.</span>{% endif %}
+    <h3>Other images:</h3>
+    <div class="all_images">
+    {% for i in post.all_images %}
+        <div>{% thumbnail i.image "100x100" crop="center" as thumb %}
+            <img src="{{thumb.url}}" class="list_thumb" />
+            {% endthumbnail %}
+            <code>{{i.full_permalink}}</code>
+        </div>
+    {% endfor %}
     </div>
-    <div class="copyright">{% if post.public_domain %}Written by {{post.author.name}}, in the public domain.</a> {% if post.author.wikipedia_url %}<br/>Learn about {{post.author.name}} on <a href="{{post.author.wikipedia_url}}" target="_blank">Wikipedia</a>{% endif %}{% else %}Copyright {{post.author.name}}, all rights reserved.{% endif %}</div>
+    <div class="dropzone more_images" id="postImages"></div>
 </div>
+{% endif %}
+</form>
 {% endblock %}
 
 {% block blog_footer %}{% endblock %}

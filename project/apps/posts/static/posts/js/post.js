@@ -26,21 +26,33 @@ $(function(){
         $(".post").addClass("editing");
         $(".post_form").addClass("editing");
         // $(".revisions_button").hide();
-        Footprints.post.editor.add_nicedit_editors();
+        Footprints.post.editor.add_editors();
+        
         return false;
     };
-    Footprints.post.editor.add_nicedit_editors = function() {
-        Footprints.post.editor.editing_node = new nicEditor({
-                fullPanel : true,
-                // buttonList : ['bold','italic','underline', 'blockquote', 'link']
-                // Currently broke as fuck.  ,'left','center','right'
-        }).panelInstance("edit_pane", {hasPanel: true});
-        $(".post .editable").each(function(){
-            id = $(this).attr("id");
-            Footprints.post.editor.editing_node.addInstance(id, {hasPanel : true});
-            Footprints.post.editor.editing_nodes[id] = ed;
+    Footprints.post.editor.add_editors = function() {
+        Footprints.post.editor.editor_body = new Editor({
+            element: '#id_body',
+
         });
-        $(".title .nicEdit-main").focus();
+        // Footprints.post.editor.editor_title = new Editor({
+        //     "element": "#title",
+        //     "tools": false
+        // });
+        Footprints.post.editor.editor_body.render();
+        // Footprints.post.editor.editor_title.render();
+
+        // Footprints.post.editor.editing_node = new nicEditor({
+        //         fullPanel : true,
+        //         // buttonList : ['bold','italic','underline', 'blockquote', 'link']
+        //         // Currently broke as fuck.  ,'left','center','right'
+        // }).panelInstance("edit_pane", {hasPanel: true});
+        // $(".post .editable").each(function(){
+        //     id = $(this).attr("id");
+        //     Footprints.post.editor.editing_node.addInstance(id, {hasPanel : true});
+        //     Footprints.post.editor.editing_nodes[id] = ed;
+        // });
+        // $(".title .nicEdit-main").focus();
     };
     Footprints.post.editor.cancel_editing = function() {
         $(".edit_bar").removeClass("editing");
@@ -48,17 +60,20 @@ $(function(){
         $(".post_form").removeClass("editing");
         $(".post_form").removeClass("show_options");
         // $(".revisions_button").show();
-        Footprints.post.editor.remove_nicedit_editors();
+        Footprints.post.editor.remove_editors();
         return false;
     };
-    Footprints.post.editor.remove_nicedit_editors = function() {
-        $(".post .editable").each(function(){
-            id = $(this).attr("id");
-            var new_html = nicEditors.findEditor(id).getContent();
-            $(this).html(new_html);
-        });
-        Footprints.post.editor.editing_node.removeInstance("edit_pane");
-        Footprints.post.editor.editing_node = null;
+    Footprints.post.editor.remove_editors = function() {
+        // $(".post .editable").each(function(){
+        //     id = $(this).attr("id");
+        //     var new_html = nicEditors.findEditor(id).getContent();
+        //     $(this).html(new_html);
+        // });
+        // Footprints.post.editor.editing_node.removeInstance("edit_pane");
+        // Footprints.post.editor.editing_node = null;
+        console.log(Footprints.post.editor.editor_title.codemirror.getValue());
+        console.log(Footprints.post.editor.editor_body.codemirror.getValue());
+        // $("")
     };
     Footprints.post.toggle_fantastic = function() {
         $(".fantastic_form").submit();
@@ -101,8 +116,8 @@ $(function(){
     Footprints.post.actions.init = function() {
         $(".post_form").ajaxForm({
             beforeSerialize: function() {
-                $("#id_title").val(nicEditors.findEditor("post_title").getContent());
-                $("#id_body").val(nicEditors.findEditor("post_body").getContent());
+                // $("#id_title").val(nicEditors.findEditor("post_title").getContent());
+                // $("#id_body").val(nicEditors.findEditor("post_body").getContent());
             },
             success: function(json) {
                 Footprints.post.editor.cancel_editing();
@@ -154,7 +169,7 @@ $(function(){
         if (window.location.href.indexOf("?editing=true") != -1) {
             Footprints.post.editor.start_editing();
         }
-        bkLib.onDomLoaded(nicEditors.allTextAreas);
+        // bkLib.onDomLoaded(nicEditors.allTextAreas);
     };
     Footprints.post.actions.init();
 
