@@ -362,6 +362,45 @@ body {
 .num_agree.visible {
     opacity: 1;
 }
+a.all_posts {
+    position: absolute;
+    left: 10px;
+    top: -70px;
+    color: #CCC;
+    z-index: 0;
+    cursor: pointer;
+}
+a.all_posts .posts_icon {
+    font-size: 48px;
+    line-height: 48px;
+    color: #DDD;
+    opacity: 0.2;
+    transition: opacity 1s;
+}
+a.all_posts .caption {
+    display: inline-block;
+    color: #FFF;
+    opacity: 0;
+    transition: opacity 1s;
+    font-size: 30px;
+    line-height: 48px;
+    vertical-align: top;
+    padding-top: 2px;
+    width: auto;
+    text-align: left;
+    font-weight: 100;
+    margin: 0;
+}
+a.all_posts:hover .posts_icon {
+    opacity: 0.8;
+}
+a.all_posts:hover .caption {
+    opacity: 0.6;
+}
+a.all_posts:hover {
+    text-decoration: none;
+}
+
 @page  
 { 
     size: auto;   /* auto is the initial value */ 

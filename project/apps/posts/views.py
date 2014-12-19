@@ -252,8 +252,8 @@ def edit(request, title=None):
 
 @ajax_request
 def save_revision(request, author=None, title=None):
-    new_url = None
     post = Post.objects.get(slug__iexact=title, author__slug__iexact=author)
+    new_url = reverse("posts:post", args=(post.slug,))
     old_slug = post.slug
     was_published = not post.is_draft
     is_mine = post.author.user == request.user
@@ -266,11 +266,13 @@ def save_revision(request, author=None, title=None):
         new_post = form.save()
         success = True
         if old_slug != new_post.slug or not was_published and not new_post.is_draft:
-            new_url = reverse("posts:edit", args=(new_post.slug,))
+            new_url = reverse("posts:post", args=(new_post.slug,))
     else:
         print form
-
-    return {"success": success, "new_url": new_url}
+    
+    ret = {"success": success, "new_url": new_url}
+    print ret
+    return ret
 
 
 @render_to("posts/revisions.html")

@@ -137,6 +137,10 @@ class Author(BaseModel):
     def facebook_valid(self):
         return self.facebook_api_key and self.facebook_account_name
 
+    @property
+    def full_blog_domain(self):
+        return "http://%s" % self.blog_domain
+
     def __unicode__(self):
         return "%s" % self.name
 
@@ -280,9 +284,12 @@ class AbstractPost(BaseModel):
         else:
             return reverse('posts:post', args=(self.slug,))
 
+    def get_absolute_url(self):
+        return self.full_permalink
+
     @property
     def full_permalink(self):
-        return "http://%s%s" % (self.author.blog_domain, self.permalink)
+        return "%s%s" % (self.author.full_blog_domain, self.permalink)
 
 
 class Post(AbstractPost):

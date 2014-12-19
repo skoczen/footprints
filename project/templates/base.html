@@ -31,6 +31,11 @@
   <meta property="article:modified_time" content="{% block og_update_time %}{% endblock %}" /> 
   <meta property="article:section" content="Writing" /> 
   <meta property="article:tag" content="Writing" /> 
+  {% if post %}
+  <link rel="alternate" type="application/rss+xml" href="{{post.author.full_blog_domain}}/rss">
+  {% elif author %}
+  <link rel="alternate" type="application/rss+xml" href="{{author.full_blog_domain}}/rss">
+  {% endif %}
 
   <meta name="viewport" content="width=device-width,initial-scale=1">
   {% analytical_head_top %}
@@ -112,7 +117,7 @@
           </div><!-- /.container-fluid -->
         </nav>
         {% endif %}
-        {% block blog_header %}{% endblock %}
+        <span class="blog_header">{% block blog_header %}{% endblock %}</span>
         <div id="main" role="main">
             {% block main_content %}
             <div class="page_content">
@@ -122,7 +127,7 @@
             </div>
             {% endblock %}
         </div>
-        {% block blog_footer %}{% endblock %}
+        <span class="blog_footer">{% block blog_footer %}{% endblock %}</span>
     </div>
 </div>
 {% if request.user.is_authenticated %}

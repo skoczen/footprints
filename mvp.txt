@@ -24,10 +24,10 @@ Next:
         - posts link to detail pages.
         - flag for email campaign
         - pretty working editor
-- rss feed
+        - rss feed
+        - link back to main blog from detail
+        - header/footer as iframe preview
 - social stats, likes, shares, retweets are pulled.
-- header/footer as iframe preview
-- link back to main blog from detail
 
 Actual, me MVP:
     - Hit publish in DayOne

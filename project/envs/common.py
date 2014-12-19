@@ -59,12 +59,12 @@ USE_I18N = False
 USE_L10N = True
 
 MEDIA_ROOT = join(PROJECT_ROOT, "media_root")
-MEDIA_URL = '/media/'
 
 STATIC_ROOT = join(PROJECT_ROOT, "collected_static")
 STATIC_URL = '/static/'
 
 BASE_URL = "http://localhost:8001"
+MEDIA_URL = '%s/media/' % BASE_URL
 
 STATICFILES_DIRS = ()
 STATICFILES_FINDERS = (

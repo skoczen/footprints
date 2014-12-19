@@ -4,6 +4,7 @@ parser = dselector.Parser()
 url = parser.url
 
 from posts import views
+from feeds import LatestEntriesFeed
 
 urlpatterns = patterns('',
     # Connections
@@ -18,7 +19,7 @@ urlpatterns = patterns('',
     url(r'^connect/sync-dayone$', views.sync_dayone, name='sync_dayone'),
     url(r'^connect/sync-dayone-status$', views.sync_dayone_status, name='sync_dayone_status'),
     
-
+    url(r'^rss/?$', LatestEntriesFeed()),
 
     url(r'^$', views.home, name='home'),
     url(r'^explore/?$', views.explore, name='explore'),

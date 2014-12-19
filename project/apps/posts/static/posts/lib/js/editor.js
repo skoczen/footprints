@@ -7208,7 +7208,6 @@ Editor.prototype.render = function(el) {
   }
 
   this.element = el;
-  var options = this.options;
 
   var self = this;
   var keyMaps = {};
@@ -7220,12 +7219,7 @@ Editor.prototype.render = function(el) {
       };
     })(key);
   }
-
-  keyMaps["Enter"] = "newlineAndIndentContinueMarkdownList";
-  keyMaps['Tab'] = 'tabAndIndentContinueMarkdownList';
-  keyMaps['Shift-Tab'] = 'shiftTabAndIndentContinueMarkdownList';
-
-  this.codemirror = CodeMirror.fromTextArea(el, {
+  var options = {
     mode: 'markdown',
     theme: 'paper',
     tabSize: '2',
@@ -7233,7 +7227,16 @@ Editor.prototype.render = function(el) {
     lineNumbers: false,
     autofocus: true,
     extraKeys: keyMaps
-  });
+  }
+  for (var key in this.options) {
+    options[key] = this.options[key];
+  }
+
+  keyMaps["Enter"] = "newlineAndIndentContinueMarkdownList";
+  keyMaps['Tab'] = 'tabAndIndentContinueMarkdownList';
+  keyMaps['Shift-Tab'] = 'shiftTabAndIndentContinueMarkdownList';
+
+  this.codemirror = CodeMirror.fromTextArea(el, options);
 
   if (options.toolbar !== false) {
     this.createToolbar();

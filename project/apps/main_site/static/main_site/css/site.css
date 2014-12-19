@@ -76,7 +76,7 @@ code {
     vertical-align: top;
     border-radius: 0;
     border: 0;
-    z-index: 1000;
+    z-index: 10000;
     margin-bottom: 0;
 }
 #nav a {
@@ -115,6 +115,9 @@ code {
 }
 #nav .account_links {
     float: right;
+}
+.blog_header, .blog_footer {
+    z-index: 10000;
 }
 #main {
     top: 0;

@@ -74,7 +74,7 @@ Footprints.actions = {};
             </div>
         </div>
       </div>
-      <div class="row question form-group">
+      <div class="row question form-group blog_header_question">
         <div class="col-md-5">
             <div class="text">Blog Header</div>
             <div class="help">HTML to put at the top of the page.</div>
@@ -84,11 +84,12 @@ Footprints.actions = {};
             <div class="form-group form_input blog_header">
                 {{ form.blog_header }}
                 <div class="errors">{{form.blog_header.errors}}</div>
-                <div class="blog_header_preview"></div>
             </div>
         </div>
       </div>
-      <div class="row question form-group">
+      <iframe class="blog_header_preview"></iframe>
+
+      <div class="row question form-group blog_footer_question">
         <div class="col-md-5">
             <div class="text">Blog Footer</div>
             <div class="help">HTML to put at the bottom of the page.</div>
@@ -98,12 +99,12 @@ Footprints.actions = {};
             <div class="form-group form_input blog_footer">
                 {{ form.blog_footer }}
                 <div class="errors">{{form.blog_footer.errors}}</div>
-                <div class="blog_footer_preview"></div>
             </div>
         </div>
       </div>
+      <iframe class="blog_footer_preview"></iframe>
 
-      <div class="row">
+      <div class="row submit_question">
         <div class="col-md-5"></div>
         <div class="col-md-7">
             <button type="submit" class="button btn btn-primary sign_up_button">{% trans "Save Changes" %}</button>

@@ -43,7 +43,16 @@
     <a href="{% url 'posts:social_share' post.pk %}" class="button social_share_button"><i class="icon-twitter" ></i> Social Share</a>
     <a href="{% url 'posts:edit' post.slug %}?editing=true" class="button start_editing_button edit_button"><i class="icon-edit" ></i> Edit</a>
 </div>
+<a href="{% url 'posts:my_blog'  %}" class="all_posts">
+{% else %}
+<a href="{% url 'posts:home'  %}" class="all_posts">
 {% endif %}
+    <span class="posts_icon">
+        <i class="fa fa-chevron-circle-left"></i>
+    </span>
+    <span class="caption">All Posts</span>
+</a>
+
 
 {% include "posts/_blog_post.html" %}
 

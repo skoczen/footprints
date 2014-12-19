@@ -32,15 +32,18 @@ $(function(){
     Footprints.post.editor.add_editors = function() {
         Footprints.post.editor.editor_body = new Editor({
             element: $('#edit_body')[0],
-            "status": false
+            "status": false,
+            "autofocus": false,
         });
         Footprints.post.editor.editor_title = new Editor({
             "element": "#edit_title",
             "toolbar": false,
-            "status": false
+            "status": false,
+            "autofocus": false
         });
         Footprints.post.editor.editor_body.render();
         Footprints.post.editor.editor_title.render();
+        $("body").click();
     };
     Footprints.post.editor.cancel_editing = function() {
         $(".edit_bar").removeClass("editing");
@@ -59,14 +62,16 @@ $(function(){
     
     Footprints.post.actions.init = function() {
         $(".post_form").ajaxForm({
+            dataType: 'json',
             beforeSerialize: function() {
                 $("#id_title").val(Footprints.post.editor.editor_title.codemirror.getValue());
                 $("#id_body").val(Footprints.post.editor.editor_body.codemirror.getValue());
             },
             success: function(json) {
                 // Footprints.post.editor.cancel_editing();
+                console.log(json)
                 if (json.new_url) {
-                    document.location = json.new_url;
+                document.location = json.new_url;
                 }
             }
         });
