@@ -71,30 +71,30 @@ class Author(BaseModel):
         return self.post_set.filter(is_draft=False).order_by("-written_on").all()
 
     @property
-    def dayone_sync_cache_key(self):
+    def sync_cache_key(self):
         return "DayOne-In-Sync-%s" % self.pk
 
     @property
     def dayone_in_sync(self):
-        return cache.get(self.dayone_sync_cache_key) == True
+        return cache.get(self.sync_cache_key) == True
 
     @property
-    def dayone_sync_start_time_cache_key(self):
+    def sync_start_time_cache_key(self):
         return "DayOne-In-Sync-Started-%s" % self.pk
 
     @property
-    def dayone_sync_total_key(self):
+    def sync_total_key(self):
         return "DayOne-In-Sync-Total-%s" % self.pk
 
     @property
-    def dayone_sync_current_key(self):
+    def sync_current_key(self):
         return "DayOne-In-Sync-Current-%s" % self.pk
 
     def start_dayone_sync(self):
-        cache.set(self.dayone_sync_cache_key, True)
+        cache.set(self.sync_cache_key, True)
 
     def finish_dayone_sync(self):
-        cache.delete(self.dayone_sync_cache_key, True)
+        cache.delete(self.sync_cache_key, True)
 
     @property
     def name(self):
@@ -141,6 +141,10 @@ class Author(BaseModel):
     def full_blog_domain(self):
         return "http://%s" % self.blog_domain
 
+    @property
+    def redirects(self):
+        return self.redirect_set.order_by("old_url").all()
+    
     def __unicode__(self):
         return "%s" % self.name
 
@@ -200,11 +204,17 @@ class AbstractPost(BaseModel):
     twitter_published = models.BooleanField(default=False, editable=False)
     twitter_status_text = models.TextField(blank=True, null=True)
     twitter_status_id = models.CharField(max_length=255, blank=True, null=True, editable=False)
+    twitter_retweets = models.IntegerField(blank=True, null=True, default=0)
+    twitter_favorites = models.IntegerField(blank=True, null=True, default=0)
 
     facebook_publish_intent = models.BooleanField(default=True)
     facebook_published = models.BooleanField(default=False, editable=False)
     facebook_status_text = models.TextField(blank=True, null=True)
     facebook_status_id = models.CharField(max_length=255, blank=True, null=True, editable=False)
+    facebook_likes = models.IntegerField(blank=True, null=True, default=0)
+    facebook_shares = models.IntegerField(blank=True, null=True, default=0)
+    facebook_comments = models.IntegerField(blank=True, null=True, default=0)
+
     social_shares_customized = models.BooleanField(default=False)
 
     email_publish_intent = models.BooleanField(default=False)
@@ -215,19 +225,6 @@ class AbstractPost(BaseModel):
     def save(self, *args, **kwargs):
         self.title_html = mistune.markdown(self.title)
         self.body_html = mistune.markdown(self.body)
-
-        if not self.social_shares_customized:
-            self.twitter_status_text = "%s %s" % (self.title.strip()[:118], self.full_permalink)
-
-            if self.title and self.body:
-                self.facebook_status_text = "%s\n\n%s" % (self.title.strip(), self.body.strip(),)
-            elif self.body:
-                self.facebook_status_text = self.body.strip()
-            else:
-                self.facebook_status_text = self.title.strip()
-
-            if len(self.facebook_status_text) > 450:
-                self.facebook_status_text = "%s...\nRead the rest at: %s" % (self.facebook_status_text[:410], self.full_permalink)
 
         self.num_images = self.body_html.count("<img")
         if self.dayone_image:
@@ -278,6 +275,14 @@ class AbstractPost(BaseModel):
         return self.email_publish_intent
 
     @property
+    def num_facebook_activity(self):
+        return (self.facebook_likes or 0) + (self.facebook_shares or 0) + (self.facebook_comments or 0)
+
+    @property
+    def num_twitter_activity(self):
+        return (self.twitter_favorites or 0) + (self.twitter_retweets or 0)
+
+    @property
     def permalink(self):
         if self.permalink_path:
             return self.permalink_path
@@ -315,6 +320,8 @@ class Post(AbstractPost):
         else:
             self.post_type = ARTICLE_MULTIPLE_IMAGES
 
+
+
         make_revision = False
         if not self.pk:
             make_revision = True
@@ -337,6 +344,18 @@ class Post(AbstractPost):
                 if not self.permalink_path or old_me.is_draft:
                     self.permalink_path = reverse('posts:post', args=(self.slug,))
 
+        if not self.social_shares_customized:
+            self.twitter_status_text = "%s %s" % (self.title.strip()[:118], self.full_permalink)
+
+            if self.title and self.body:
+                self.facebook_status_text = "%s\n\n%s" % (self.title.strip(), self.body.strip(),)
+            elif self.body:
+                self.facebook_status_text = self.body.strip()
+            else:
+                self.facebook_status_text = self.title.strip()
+
+            if len(self.facebook_status_text) > 450:
+                self.facebook_status_text = "%s...\nRead the rest at: %s" % (self.facebook_status_text[:410], self.full_permalink)
         # if make_revision:
         #     cleaned_body = self.body.replace("<br/>", "\n").replace("<br>", "\n").replace("</div>", "\n")
         #     cleaned_body = ENTITY_REGEX.sub(" ", cleaned_body)
@@ -389,7 +408,6 @@ class Post(AbstractPost):
     @property
     def num_reads(self):
         return self.read_set.all().count()
-
 
     @property
     def all_images(self):
@@ -455,6 +473,11 @@ class Backup(BaseModel):
 
     class Meta:
         ordering = ("-backup_at",)
+
+class Redirect(BaseModel):
+    author = models.ForeignKey(Author)
+    old_url = models.CharField(max_length=600, blank=True, null=True)
+    new_url = models.CharField(max_length=600, blank=True, null=True)
 
 
 # def create_user_profile(sender, instance, created, **kwargs):

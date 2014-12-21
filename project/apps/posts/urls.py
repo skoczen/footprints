@@ -50,7 +50,7 @@ urlpatterns = patterns('',
     # url(r'^{author:slug}/{title:slug}/revision/{revision_umb?$', views.revisions, name='revisions'),
 
     url(r'^edit/{title:slug}/?$', views.edit, name='edit'),
-    url(r'^{title:slug}/?$', views.post, name='post'),
+    url(r'^{title:any}/?$', views.post, name='post'),
  
 
 )

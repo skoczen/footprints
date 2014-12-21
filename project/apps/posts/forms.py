@@ -89,7 +89,8 @@ class BlogForm(forms.ModelForm):
         help_text="Your domain, i.e. blog.inkandfeet.com.  You don't need the 'http://' part.",
         widget=forms.TextInput(attrs={'placeholder': 'blog.myawesomesite.com'}),
     )
-    
+    redirects = forms.CharField(required=False, widget=forms.HiddenInput())
+
     class Meta:
         model = Author
         fields = ("blog_name", "blog_domain", "blog_header", "blog_footer")

@@ -1,4 +1,6 @@
 import datetime
+import json
+import re
 import uuid
 
 from dropbox.client import DropboxOAuth2Flow, DropboxClient
@@ -17,9 +19,10 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from annoying.decorators import render_to, ajax_request
-from posts.models import Backup, Fantastic, Post, Author, PostRevision, Read, PostImage
+from posts.models import Backup, Fantastic, Post, Author, PostRevision, Read, PostImage, Redirect
 from posts.forms import AccountForm, FantasticForm, PostForm, ReadForm, SocialShareForm, BlogForm, BlogUserForm
 from posts.tasks import generate_backup_zip, sync_posts
+from posts.social import twitter_auth, authorized_tweepy_api, facebook_auth, authorized_facebook_api
 
 POSTS_PER_PAGINATION = 10
 
@@ -94,6 +97,19 @@ def blog_settings(request):
         if form.is_valid() and user_form.is_valid():
             me = form.save()
             user_form.save()
+            redirects = json.loads(form.cleaned_data["redirects"])["data"]
+            current_pks = []
+            for redirect in redirects:
+                if redirect[0] or redirect[1]:
+                    if redirect[1] and redirect[1][0] != "/":
+                        redirect[1] = "/%s" % redirect[1]
+                    if redirect[0] and redirect[0][0] != "/":
+                        redirect[0] = "/%s" % redirect[0]
+                    r = Redirect.objects.get_or_create(author=author, old_url=redirect[0], new_url=redirect[1])[0]
+                    current_pks.append(r.pk)                
+
+            # I hate __ins, but it should be ok for this super rare, limited size query.  Hopefully.
+            Redirect.objects.filter(author=author).exclude(pk__in=current_pks).delete()
             changes_saved = True
 
     else:
@@ -159,15 +175,23 @@ def post(request, title=None):
     except:
         if request.user.is_authenticated():
             author = request.user.get_profile()
-        else:
-            return HttpResponseRedirect(reverse("posts:home"))
+    
+    if Post.objects.filter(slug__iexact=title, author=author).count() == 0:
+        print request.path
+        for r in Redirect.objects.filter(author=author):
+            if re.match("%s" % r.old_url, request.path) or re.match(r"%s" % r.old_url, request.path, flags=re.IGNORECASE):
+                print "matched: %s" % r.new_url
+                return HttpResponseRedirect(r.new_url)
+
+        return HttpResponseRedirect(reverse("posts:home"))
+    
+    post = Post.objects.get(slug__iexact=title, author=author)
+    is_mine = post.author.user == request.user
 
     if not request.user.is_authenticated():
         if "uuid" not in request.session:
             request.session["uuid"] = uuid.uuid1()
 
-    post = Post.objects.get(slug__iexact=title, author=author)
-    is_mine = post.author.user == request.user
 
     if not is_mine and post.is_draft:
         raise Http404("Post not found. Maybe it never was, maybe it's a draft and you're not logged in!")
@@ -559,9 +583,9 @@ def sync_dayone_status(request):
 
         resp = {
             "in_sync": author.dayone_in_sync,
-            "start_time": cache.get(author.dayone_sync_start_time_cache_key),
-            "total": cache.get(author.dayone_sync_total_key),
-            "current": cache.get(author.dayone_sync_current_key),
+            "start_time": cache.get(author.sync_start_time_cache_key),
+            "total": cache.get(author.sync_total_key),
+            "current": cache.get(author.sync_current_key),
             "success": True
         }
         return resp
@@ -616,17 +640,6 @@ def dropbox_auth_finish(request):
         http_status(403)
 
 
-def twitter_auth():
-    twitter_callback_url = "%s%s" % (settings.BASE_URL, reverse("posts:twitter_auth_finish"))
-    print twitter_callback_url
-    return tweepy.OAuthHandler(settings.TWITTER_APP_KEY, settings.TWITTER_APP_SECRET, twitter_callback_url)
-
-def authorized_tweepy_api(author):
-    auth = twitter_auth()
-    auth.set_access_token(author.twitter_api_key, author.twitter_api_secret)
-
-    return tweepy.API(auth)
-
 # api.update_status / update_status_with_media
 
 @login_required
@@ -678,17 +691,6 @@ def twitter_auth_finish(request):
         
     return HttpResponseRedirect(reverse("posts:my_account"))
 
-
-def facebook_auth():
-    facebook_callback_url = "%s%s" % (settings.BASE_URL, reverse("posts:facebook_auth_finish"))
-    return  OAuth2(settings.FACEBOOK_APP_KEY, settings.FACEBOOK_APP_SECRET, 
-                "https://www.facebook.com/",
-                facebook_callback_url,
-                "dialog/oauth", "oauth/access_token"
-            )
-
-def authorized_facebook_api(author):
-    return GraphAPI(author.facebook_api_key)
 
 # # Get my latest posts
 # graph.get('me/posts')

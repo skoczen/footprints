@@ -1,4 +1,6 @@
 $(function() {
+    var tableObj;
+
     var update_header_preview = function() {
         $(".blog_header_preview").contents().find('html').html($("#id_blog_header").val());
     }
@@ -8,8 +10,36 @@ $(function() {
     var update_footer_preview = function() {
         $(".blog_footer_preview").contents().find('html').html($("#id_blog_footer").val());
     }
-    $("#id_blog_footer").change(update_footer_preview);
-    $("#id_blog_footer").keyup(update_footer_preview);
-    update_header_preview()
-    update_footer_preview()
+    var set_redirect_data = function() {
+        $("#id_redirects").val(JSON.stringify({data: tableObj.getData()}));
+    }
+
+    var init = function() {
+        update_header_preview();
+        update_footer_preview();
+
+        $("#id_blog_footer").change(update_footer_preview);
+        $("#id_blog_footer").keyup(update_footer_preview);
+
+        var container = document.getElementById('redirectTable');
+        tableObj = new Handsontable(container,
+        {
+            data: Footprints.data.redirects,
+            minSpareRows: 1,
+            colHeaders: true,
+            contextMenu: true,
+            colHeaders: ["Old URL", "Footprints URL"],
+            stretchH: 'all',
+            width: "100%",
+            afterChange: function (change, source) {
+                if (source === 'loadData') {
+                  return; //don't save this change
+                }
+                set_redirect_data();
+            }
+        });
+        set_redirect_data();
+        
+    };
+    init();
 });

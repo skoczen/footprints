@@ -27,7 +27,8 @@ Next:
         - rss feed
         - link back to main blog from detail
         - header/footer as iframe preview
-- social stats, likes, shares, retweets are pulled.
+        - handle stale cache key
+        - social stats, likes, shares, retweets are pulled.
 
 Actual, me MVP:
     - Hit publish in DayOne
@@ -37,11 +38,12 @@ Actual, me MVP:
         - Have that content + nice links show up on FB + Twitter.
     - Handle domain, with pretty urls.
     - Editor?
+- Handle old links
+    - old_link
+- actually wire up domain
 - Import tumblr direct post:
      (screenshot epic)
      - peanut
-- Handle old links
-    - old_link
 
 
 V2:

@@ -72,13 +72,13 @@
             <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 facebook_col stats_col {% if post.facebook_published %}published{% else %}unpublished{% endif %}">
                     {% if not post.is_draft %}
                     <i class="fa fa-facebook bg_icon"></i>
-                    <div class="number">{% if post.num_facebook_likes or post.num_facebook_shares %}{{post.num_facebook_likes}}/{{post.num_facebook_shares}}{% endif %}</div>
+                    <div class="number">{% if post.num_facebook_activity > 0 %}{{post.num_facebook_activity}}{% endif %}</div>
                     {% endif %}
             </a>
             <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 twitter_col stats_col {% if post.twitter_published %}published{% else %}unpublished{% endif %}">
                 {% if not post.is_draft %}
                     <i class="fa fa-twitter bg_icon"></i>
-                    <div class="number">{% if post.num_twitter_rts > 0 %}{{post.num_twitter_rts}}{% endif %}</div>
+                    <div class="number">{% if post.num_twitter_activity > 0 %}{{post.num_twitter_activity}}{% endif %}</div>
                 {% endif %}
             </a>
             <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 love_col stats_col {% if not post.is_draft %}published{% else %}unpublished{% endif %}">

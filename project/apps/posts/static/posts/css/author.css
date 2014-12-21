@@ -124,27 +124,35 @@ h5 {
 
 }
 .love_col.published {
-    background-color: #a30000;
-    color: #FFF;
+    /*background-color: #a30000;
+    color: #FFF;*/
+    color: #a30000;
+    /*color: #FFF;*/
 }
 
 .published .facebook_col {
     /*background-color: #CAD2EA;*/
 }
 .facebook_col.published {
-    background-color: #4862A3;
-    color: #FFF;
+    /*background-color: #4862A3;*/
+    /*color: #FFF;*/
+    /*background-color: #4862A3;*/
+    color: #4862A3;
 }
 .published .twitter_col {
     /*background-color: #D7ECFF;*/
 }
 .twitter_col.published {
-    background-color: #55ACEE;
-    color: #FFF;
+/*    background-color: #55ACEE;
+    color: #FFF;*/
+    color: #55ACEE;
+
 }
 .email_col.published {
-    background-color: #999;
-    color: #CCC;
+    /*background-color: #999;
+    color: #CCC;*/
+    color: #454545;
+    /*color: #CCC;*/
 }
 .stats_col {
     position: relative;
@@ -158,10 +166,10 @@ a.stats_col:hover {
 }
 
 .stats_col i.bg_icon {
-    font-size: 30px;
-    opacity: 0.2;
+    font-size: 20px;
+    /*opacity: 0.2;*/
     text-align: center;
-    color: #FFF;
+    /*color: #FFF;*/
     position: absolute;
     bottom: 4px;
     margin: 0 auto;
@@ -174,8 +182,8 @@ a.stats_col:hover {
 
 }
 .stats_col .number {
-    font-size: 34px;
-    margin-top: 2px;
+    font-size: 20px;
+    margin-top: 22px;
     text-align: center;
     opacity: 0.9;
 }

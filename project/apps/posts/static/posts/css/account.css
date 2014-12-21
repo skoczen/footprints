@@ -25,6 +25,9 @@ iframe {
     border: 1px solid #EEE;
     height: 160px;
 }
-.blog_footer_question, .submit_question {
+.blog_footer_question {
     margin-top: 200px;
+}
+.submit_question {
+    margin-top: 20px;
 }
