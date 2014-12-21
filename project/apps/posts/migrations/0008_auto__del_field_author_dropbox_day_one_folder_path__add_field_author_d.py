@@ -8,39 +8,39 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting field 'Author.dropbox_dayone_folder_path'
-        db.delete_column(u'posts_author', 'dropbox_dayone_folder_path')
+        # # Deleting field 'Author.dropbox_dayone_folder_path'
+        # db.delete_column(u'poems_author', 'dropbox_dayone_folder_path')
 
         # Adding field 'Author.dropbox_dayone_folder_path'
-        db.add_column(u'posts_author', 'dropbox_dayone_folder_path',
+        db.add_column(u'poems_author', 'dropbox_dayone_folder_path',
                       self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True),
                       keep_default=False)
 
         # Adding field 'Author.dropbox_dayone_entry_hash'
-        db.add_column(u'posts_author', 'dropbox_dayone_entry_hash',
+        db.add_column(u'poems_author', 'dropbox_dayone_entry_hash',
                       self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True),
                       keep_default=False)
 
         # Adding field 'Author.dropbox_dayone_image_hash'
-        db.add_column(u'posts_author', 'dropbox_dayone_image_hash',
+        db.add_column(u'poems_author', 'dropbox_dayone_image_hash',
                       self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True),
                       keep_default=False)
 
 
     def backwards(self, orm):
         # Adding field 'Author.dropbox_dayone_folder_path'
-        db.add_column(u'posts_author', 'dropbox_dayone_folder_path',
-                      self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True),
-                      keep_default=False)
+        # db.add_column(u'poems_author', 'dropbox_dayone_folder_path',
+        #               self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True),
+        #               keep_default=False)
 
         # Deleting field 'Author.dropbox_dayone_folder_path'
-        db.delete_column(u'posts_author', 'dropbox_dayone_folder_path')
+        db.delete_column(u'poems_author', 'dropbox_dayone_folder_path')
 
         # Deleting field 'Author.dropbox_dayone_entry_hash'
-        db.delete_column(u'posts_author', 'dropbox_dayone_entry_hash')
+        db.delete_column(u'poems_author', 'dropbox_dayone_entry_hash')
 
         # Deleting field 'Author.dropbox_dayone_image_hash'
-        db.delete_column(u'posts_author', 'dropbox_dayone_image_hash')
+        db.delete_column(u'poems_author', 'dropbox_dayone_image_hash')
 
 
     models = {
