@@ -176,6 +176,9 @@ def post(request, title=None):
         if request.user.is_authenticated():
             author = request.user.get_profile()
     
+    if not author:
+        return HttpResponseRedirect(reverse("posts:home"))
+
     if Post.objects.filter(slug__iexact=title, author=author).count() == 0:
         print request.path
         for r in Redirect.objects.filter(author=author):
