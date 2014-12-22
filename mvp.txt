@@ -40,7 +40,10 @@ Actual, me MVP:
     - Editor?
     - Handle old links
         - old_link
-- deploy
+    - deploy
+- bugs:
+    - facebook account
+    - pre-generate thumbnails
 - actually wire up domain
 - import all old links
 - Import tumblr direct post:

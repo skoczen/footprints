@@ -132,10 +132,7 @@ def periodic_sync():
     for a in Author.objects.all():
         print "%s: %s" % (a, a.dayone_valid)
         print cache.get(a.sync_start_time_cache_key)
-        if cache.get(a.sync_cache_key) or not cache.get(a.sync_start_time_cache_key, False) or cache.get(a.sync_start_time_cache_key)+MAX_SYNC_TIMEOUT < datetime.datetime.now():
-            sync_posts(a.pk)
-        else:
-            print "Sync for %s already running." % a
+        sync_posts(a.pk)
 
 
 def get_from_plist_if_exists(key, plist):
@@ -163,198 +160,200 @@ def sync_posts(author_id):
     from posts.models import Author, Post
     from posts.social import twitter_auth, authorized_tweepy_api, facebook_auth, authorized_facebook_api
     author = Author.objects.get(pk=author_id)
+    if cache.get(author.sync_cache_key) or not cache.get(author.sync_start_time_cache_key, False) or cache.get(author.sync_start_time_cache_key)+MAX_SYNC_TIMEOUT < datetime.datetime.now():
+        cache.set(author.sync_cache_key, True)
+        try:
+            cache.set(author.sync_start_time_cache_key, datetime.datetime.now())
+            cache.set(author.sync_total_key, "~%s" % cache.get(author.sync_total_key, "0"))
+            cache.set(author.sync_current_key, 0)
 
-    cache.set(author.sync_cache_key, True)
-    try:
-        cache.set(author.sync_start_time_cache_key, datetime.datetime.now())
-        cache.set(author.sync_total_key, "~%s" % cache.get(author.sync_total_key, "0"))
-        cache.set(author.sync_current_key, 0)
+            if author.dayone_valid:
+                client = DropboxClient(author.dropbox_access_token)
+                full_dayone_entry_path = "%s/entries" % author.dropbox_dayone_folder_path
+                full_dayone_image_path = "%s/photos" % author.dropbox_dayone_folder_path
+                file_list = client.metadata(full_dayone_entry_path)
+                image_list = client.metadata(full_dayone_image_path)
 
-        if author.dayone_valid:
-            client = DropboxClient(author.dropbox_access_token)
-            full_dayone_entry_path = "%s/entries" % author.dropbox_dayone_folder_path
-            full_dayone_image_path = "%s/photos" % author.dropbox_dayone_folder_path
-            file_list = client.metadata(full_dayone_entry_path)
-            image_list = client.metadata(full_dayone_image_path)
+                cache.set(author.sync_total_key, len(file_list["contents"]))
+                count = 0
+                for f in file_list["contents"]:
+                    do_update = False
+                    dayone_id = f["path"].split("/")[-1]
 
-            cache.set(author.sync_total_key, len(file_list["contents"]))
-            count = 0
-            for f in file_list["contents"]:
-                do_update = False
-                dayone_id = f["path"].split("/")[-1]
-
-                cache.set(author.sync_current_key, count)
-                exists = False
-                if Post.objects.filter(dayone_id=dayone_id).count() > 0:
-                    exists = True
-                    p = Post.objects.get(dayone_id=dayone_id)
-                    if p.dayone_last_rev != f["revision"]:
-                        dayone_update_time = datetime_from_utc_to_local(datetime.datetime(*time.strptime(f["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6]))
-                        if dayone_update_time > p.updated_at:
-                            do_update = True
-                        if not do_update:
-                            image = get_matching_image_meta_if_exists(dayone_id, image_list)
-                            if image:
-                                image_update_time = datetime_from_utc_to_local(datetime.datetime(*time.strptime(image["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6]))
-                                if image_update_time > p.updated_at:
-                                    do_update = True
-                else:
-                    do_update = True
-
-                if do_update:
-                    if not cache.get(author.sync_cache_key):
-                        print "Interrupted."
-                        break;
-
-                    with client.get_file(f["path"]) as fh:
-                        plist = plistlib.readPlist(fh)
-                    content = u"%s" % plist["Entry Text"]
-
-                    split = content.split("\n")
-                    title = split[0]
-
-                    body = "\n".join(split[1:])
-                    draft = "Publish URL" not in plist
-                    
-                    image = get_matching_image_meta_if_exists(dayone_id, image_list)
-                    if image:
-                        print "getting image"
-                        m = hashlib.sha1()
-                        m.update("%s %s" % (dayone_id, datetime.datetime.now()))
-                        image_name = "%s%s" % (dayone_id.split(".")[0], m.hexdigest())
-
-                    kwargs = {
-                        "author": author,
-                        "title": title,
-                        "body": body,
-                        "dayone_post": True,
-                        "dayone_id": dayone_id,
-                        
-                        "dayone_last_modified": datetime_from_utc_to_local(datetime.datetime(*time.strptime(f["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6])),
-                        "dayone_last_rev": f["revision"],
-                        "is_draft": draft,
-                        "dayone_posted": datetime_from_utc_to_local(get_from_plist_if_exists("Creation Date", plist)),
-                        "written_on": get_from_plist_if_exists("Creation Date", plist),
-                        
-                        "location_area": get_from_plist_if_exists("Location.Administrative Area", plist),
-                        "location_country": get_from_plist_if_exists("Location.Country", plist),
-                        "latitude": get_from_plist_if_exists("Location.Latitude", plist),
-                        "longitude": get_from_plist_if_exists("Location.Longitude", plist),
-                        "location_name": get_from_plist_if_exists("Location.Place Name", plist),
-                        "time_zone_string": get_from_plist_if_exists("Location.Time Zone", plist),
-                        
-                        "weather_temp_f": get_from_plist_if_exists("Weather.Fahrenheit", plist),
-                        "weather_temp_c": get_from_plist_if_exists("Weather.Celsius", plist),
-                        "weather_description": get_from_plist_if_exists("Weather.Description", plist),
-                        "weather_icon": get_from_plist_if_exists("Weather.IconName", plist),
-                        "weather_pressure": get_from_plist_if_exists("Weather.Pressure MB", plist),
-                        "weather_relative_humidity": get_from_plist_if_exists("Weather.Relative Humidity", plist),
-                        "weather_wind_bearing": get_from_plist_if_exists("Weather.Wind Bearing", plist),
-                        "weather_wind_chill_c": get_from_plist_if_exists("Weather.Wind Chill Celsius", plist),
-                        "weather_wind_speed_kph": get_from_plist_if_exists("Weather.Wind Speed KPH", plist),
-                    }
-                    if exists:
-                        for (key, value) in kwargs.items():
-                            setattr(p, key, value)
-                        if image:
-                            image_file = client.get_file(image["path"])
-                            p.dayone_image.save(
-                                "%s.jpg" % image_name,
-                                ContentFile(StringIO(image_file.read()).getvalue())
-                            )
-                            image_file.close()
-                        p.save()
+                    cache.set(author.sync_current_key, count)
+                    exists = False
+                    if Post.objects.filter(dayone_id=dayone_id).count() > 0:
+                        exists = True
+                        p = Post.objects.get(dayone_id=dayone_id)
+                        if p.dayone_last_rev != f["revision"]:
+                            dayone_update_time = datetime_from_utc_to_local(datetime.datetime(*time.strptime(f["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6]))
+                            if dayone_update_time > p.updated_at:
+                                do_update = True
+                            if not do_update:
+                                image = get_matching_image_meta_if_exists(dayone_id, image_list)
+                                if image:
+                                    image_update_time = datetime_from_utc_to_local(datetime.datetime(*time.strptime(image["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6]))
+                                    if image_update_time > p.updated_at:
+                                        do_update = True
                     else:
-                        p = Post.objects.create(**kwargs)
+                        do_update = True
+
+                    if do_update:
+                        if not cache.get(author.sync_cache_key):
+                            print "Interrupted."
+                            break;
+
+                        with client.get_file(f["path"]) as fh:
+                            plist = plistlib.readPlist(fh)
+                        content = u"%s" % plist["Entry Text"]
+
+                        split = content.split("\n")
+                        title = split[0]
+
+                        body = "\n".join(split[1:])
+                        draft = "Publish URL" not in plist
+                        
+                        image = get_matching_image_meta_if_exists(dayone_id, image_list)
                         if image:
-                            image_file = client.get_file(image["path"])
+                            print "getting image"
+                            m = hashlib.sha1()
+                            m.update("%s %s" % (dayone_id, datetime.datetime.now()))
+                            image_name = "%s%s" % (dayone_id.split(".")[0], m.hexdigest())
 
-                            p.dayone_image.save(
-                                "%s.jpg" % image_name,
-                                ContentFile(StringIO(image_file.read()).getvalue())
-                            )
-
+                        kwargs = {
+                            "author": author,
+                            "title": title,
+                            "body": body,
+                            "dayone_post": True,
+                            "dayone_id": dayone_id,
+                            
+                            "dayone_last_modified": datetime_from_utc_to_local(datetime.datetime(*time.strptime(f["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6])),
+                            "dayone_last_rev": f["revision"],
+                            "is_draft": draft,
+                            "dayone_posted": datetime_from_utc_to_local(get_from_plist_if_exists("Creation Date", plist)),
+                            "written_on": get_from_plist_if_exists("Creation Date", plist),
+                            
+                            "location_area": get_from_plist_if_exists("Location.Administrative Area", plist),
+                            "location_country": get_from_plist_if_exists("Location.Country", plist),
+                            "latitude": get_from_plist_if_exists("Location.Latitude", plist),
+                            "longitude": get_from_plist_if_exists("Location.Longitude", plist),
+                            "location_name": get_from_plist_if_exists("Location.Place Name", plist),
+                            "time_zone_string": get_from_plist_if_exists("Location.Time Zone", plist),
+                            
+                            "weather_temp_f": get_from_plist_if_exists("Weather.Fahrenheit", plist),
+                            "weather_temp_c": get_from_plist_if_exists("Weather.Celsius", plist),
+                            "weather_description": get_from_plist_if_exists("Weather.Description", plist),
+                            "weather_icon": get_from_plist_if_exists("Weather.IconName", plist),
+                            "weather_pressure": get_from_plist_if_exists("Weather.Pressure MB", plist),
+                            "weather_relative_humidity": get_from_plist_if_exists("Weather.Relative Humidity", plist),
+                            "weather_wind_bearing": get_from_plist_if_exists("Weather.Wind Bearing", plist),
+                            "weather_wind_chill_c": get_from_plist_if_exists("Weather.Wind Chill Celsius", plist),
+                            "weather_wind_speed_kph": get_from_plist_if_exists("Weather.Wind Speed KPH", plist),
+                        }
+                        if exists:
+                            for (key, value) in kwargs.items():
+                                setattr(p, key, value)
+                            if image:
+                                image_file = client.get_file(image["path"])
+                                p.dayone_image.save(
+                                    "%s.jpg" % image_name,
+                                    ContentFile(StringIO(image_file.read()).getvalue())
+                                )
+                                image_file.close()
                             p.save()
-                            image_file.close()
-                    
+                        else:
+                            p = Post.objects.create(**kwargs)
+                            if image:
+                                image_file = client.get_file(image["path"])
 
-                    print p.slug
-                count += 1
+                                p.dayone_image.save(
+                                    "%s.jpg" % image_name,
+                                    ContentFile(StringIO(image_file.read()).getvalue())
+                                )
 
-            author.last_dropbox_sync = datetime.datetime.now()
-            author.save()
+                                p.save()
+                                image_file.close()
+                        
 
-        # Pull all social stats:
-        twitter_api = authorized_tweepy_api(author)
-        facebook_api =  authorized_facebook_api(author)
-        for p in author.published_posts:
-            # Twitter
-            do_save = False
-            if p.twitter_published:
-                try:
-                    status = twitter_api.get_status(p.twitter_status_id)
-                    p.twitter_retweets = status.retweet_count
-                    p.twitter_favorites = status.favorite_count
-                    do_save = True
-                except:
-                    p.twitter_published = False
-                    p.twitter_status_id = None
-                    p.twitter_retweets = 0
-                    p.twitter_favorites = 0
-                    do_save = True
-                    import traceback; traceback.print_exc();
-                    pass
+                        print p.slug
+                    count += 1
 
-            # Facebook
-            if p.facebook_published:
-                try:
-                    resp = facebook_api.get(
-                        path="/%s" % p.facebook_status_id.split("_")[1]
-                    )
+                author.last_dropbox_sync = datetime.datetime.now()
+                author.save()
+
+            # Pull all social stats:
+            twitter_api = authorized_tweepy_api(author)
+            facebook_api =  authorized_facebook_api(author)
+            for p in author.published_posts:
+                # Twitter
+                do_save = False
+                if p.twitter_published:
                     try:
-                        resp = facebook_api.get(
-                            path="/%s/likes/?summary=true" % p.facebook_status_id.split("_")[1]
-                        )
-                        if "summary" in resp:
-                            p.facebook_likes = resp["summary"]["total_count"]
-
-                        resp = facebook_api.get(
-                            path="/%s/comments/?summary=true" % p.facebook_status_id.split("_")[1]
-                        )
-                        if "summary" in resp:
-                            p.facebook_comments = resp["summary"]["total_count"]
-
-                        resp = facebook_api.get(
-                            path="/%s/sharedposts/?summary=true" % p.facebook_status_id.split("_")[1]
-                        )
-                        if "summary" in resp:
-                            p.facebook_shares = resp["summary"]["total_count"]
-
+                        status = twitter_api.get_status(p.twitter_status_id)
+                        p.twitter_retweets = status.retweet_count
+                        p.twitter_favorites = status.favorite_count
                         do_save = True
                     except:
+                        p.twitter_published = False
+                        p.twitter_status_id = None
+                        p.twitter_retweets = 0
+                        p.twitter_favorites = 0
+                        do_save = True
                         import traceback; traceback.print_exc();
                         pass
-                    # p.facebook_published = False
-                    # p.facebook_status_id = None
-                    # p.facebook_likes = 0
-                    # p.facebook_shares = 0
-                    # p.facebook_comments = 0
-                except:
-                    p.facebook_published = False
-                    p.facebook_status_id = None
-                    p.facebook_likes = 0
-                    p.facebook_shares = 0
-                    p.facebook_comments = 0
-                    do_save = True
 
-                    
-                    pass
-            if do_save:
-                p.save()
+                # Facebook
+                if p.facebook_published:
+                    try:
+                        resp = facebook_api.get(
+                            path="/%s" % p.facebook_status_id.split("_")[1]
+                        )
+                        try:
+                            resp = facebook_api.get(
+                                path="/%s/likes/?summary=true" % p.facebook_status_id.split("_")[1]
+                            )
+                            if "summary" in resp:
+                                p.facebook_likes = resp["summary"]["total_count"]
 
-    except:
-        import traceback; traceback.print_exc();
-        pass
-    cache.delete(author.sync_cache_key)
-    cache.delete(author.sync_start_time_cache_key)
+                            resp = facebook_api.get(
+                                path="/%s/comments/?summary=true" % p.facebook_status_id.split("_")[1]
+                            )
+                            if "summary" in resp:
+                                p.facebook_comments = resp["summary"]["total_count"]
+
+                            resp = facebook_api.get(
+                                path="/%s/sharedposts/?summary=true" % p.facebook_status_id.split("_")[1]
+                            )
+                            if "summary" in resp:
+                                p.facebook_shares = resp["summary"]["total_count"]
+
+                            do_save = True
+                        except:
+                            import traceback; traceback.print_exc();
+                            pass
+                        # p.facebook_published = False
+                        # p.facebook_status_id = None
+                        # p.facebook_likes = 0
+                        # p.facebook_shares = 0
+                        # p.facebook_comments = 0
+                    except:
+                        p.facebook_published = False
+                        p.facebook_status_id = None
+                        p.facebook_likes = 0
+                        p.facebook_shares = 0
+                        p.facebook_comments = 0
+                        do_save = True
+
+                        
+                        pass
+                if do_save:
+                    p.save()
+
+        except:
+            import traceback; traceback.print_exc();
+            pass
+        cache.delete(author.sync_cache_key)
+        cache.delete(author.sync_start_time_cache_key)
+    else:
+        print "Sync for %s already running." % a
     print "Done"
