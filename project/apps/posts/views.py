@@ -425,7 +425,10 @@ def my_blog(request, author=None):
         is_me = True
         is_mine = True
     posts = author.published_posts[:POSTS_PER_PAGINATION]
-    last_timestamp = posts[len(posts)-1].written_on.strftime("%s")
+    if len(posts) > 0:
+        last_timestamp = posts[len(posts)-1].written_on.strftime("%s")
+    else:
+        last_timestamp = False
     return locals()
 
 # @render_to("posts/blog.html")

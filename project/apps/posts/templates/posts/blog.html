@@ -19,9 +19,6 @@
 {% endblock %}
 
 {% block js %}{{block.super}}
-{% compress js %}
-<script src="{{STATIC_URL}}base/js/ajaxForm.js"></script>
-{# <script src="{{STATIC_URL}}posts/js/nicEdit.js"></script> #}
 <script type="text/javascript">
     window.Footprints = window.Footprints || {};
     Footprints.urls = Footprints.urls || {};
@@ -29,6 +26,8 @@
     Footprints.urls.load_next_posts = "{% url 'posts:next_posts' author.slug %}";
     Footprints.state.last_timestamp = {{last_timestamp}};
 </script>
+{% compress js %}
+<script src="{{STATIC_URL}}base/js/ajaxForm.js"></script>
 <script src="{{STATIC_URL}}posts/js/blog.js"></script>
 {% endcompress %}
 {% endblock %}
