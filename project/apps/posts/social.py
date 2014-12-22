@@ -1,5 +1,6 @@
 from facepy import GraphAPI
 import tweepy
+from requests_oauth2 import OAuth2
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
