@@ -6,15 +6,15 @@ from envs.common import *
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-BASE_URL = "http://footprintsapp.com"
+BASE_URL = "https://footprintsapp.com"
 
 EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
 MAILGUN_ACCESS_KEY = os.environ['MAILGUN_API_KEY']
 MAILGUN_SERVER_NAME = 'mg.footprintsapp.com'
 BROKER_URL = os.environ["REDISTOGO_URL"]
 
-MEDIA_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
-STATIC_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+MEDIA_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+STATIC_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 ADMIN_MEDIA_PREFIX = '%sadmin/' % STATIC_URL
 COMPRESS_URL = STATIC_URL
 FAVICON_URL = "%sfavicon.ico" % STATIC_URL
@@ -30,3 +30,4 @@ COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 GOOGLE_ANALYTICS_PROPERTY_ID = os.environ.get("GOOGLE_ANALYTICS_PROPERTY_ID", "")
 INTERCOM_APP_ID = os.environ.get('INTERCOM_APP_ID', "")
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

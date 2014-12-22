@@ -1,5 +1,7 @@
 from envs.common import *
 
+
+
 if False:
     MIDDLEWARE_CLASSES =  (
         'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -9,6 +11,7 @@ if False:
 
     INSTALLED_APPS += ("debug_toolbar", )
 
+SSLIFY_DISABLE = True
 INTERNAL_IPS = ('127.0.0.1',)
 
 # Uncomment to turn on intercom

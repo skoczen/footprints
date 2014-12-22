@@ -14,6 +14,7 @@ django-extensions
 django-mailgun
 django-nose
 django-selector
+django-sslify
 django-staticfiles
 django-storages
 django-ses
