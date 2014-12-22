@@ -10,7 +10,7 @@ def home(request):
         else:
             is_author = True
     except:
-        import traceback; traceback.print_exc();
+        # import traceback; traceback.print_exc();
         pass
     return site_home(request, locals())
 
