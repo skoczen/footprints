@@ -727,7 +727,7 @@ def facebook_auth_finish(request):
         auth = facebook_auth()
         auth.site = "https://graph.facebook.com/"
         response = auth.get_token(code)
-
+        print response
         author = request.user.get_profile()
         author.facebook_api_key = response["access_token"][0]
         author.facebook_expire_date = datetime.datetime.now() + datetime.timedelta(seconds=int(response["expires"][0]))

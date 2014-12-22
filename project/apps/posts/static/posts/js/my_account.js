@@ -5,6 +5,8 @@ $(function() {
         console.log(resp)
         if (resp.success == true) {
             $(".dayone_response_text").html("Connected!");
+            $(".find_dayone_folder").hide();
+            document.location = document.location;
         } else {
             $(".dayone_response_text").html("Couldn't find the DayOne folder. Have you set DayOne to sync using dropbox?");
         }
