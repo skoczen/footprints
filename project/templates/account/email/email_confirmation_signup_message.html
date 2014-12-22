@@ -1,0 +1,8 @@
+{% load i18n %}{% blocktrans with site.domain as site_domain and user.first_name as name and user.email as email %}Hey {{name}}, it's footprints.
+
+You're receiving this e-mail because you signed up, and we're making sure this is your email address. 
+
+If it's you, click here: {{ activate_url }}
+
+Thanks for using footprints!
+{% endblocktrans %}
