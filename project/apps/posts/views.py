@@ -170,6 +170,7 @@ def blog(request):
 
 @render_to("posts/post.html")
 def post(request, title=None):
+    author = None
     try:
         author = get_author_from_domain(request)
     except:

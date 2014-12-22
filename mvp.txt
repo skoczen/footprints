@@ -38,12 +38,15 @@ Actual, me MVP:
         - Have that content + nice links show up on FB + Twitter.
     - Handle domain, with pretty urls.
     - Editor?
-- Handle old links
-    - old_link
+    - Handle old links
+        - old_link
+- deploy
 - actually wire up domain
+- import all old links
 - Import tumblr direct post:
      (screenshot epic)
      - peanut
+- test it out!
 
 
 V2:
