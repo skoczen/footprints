@@ -88,6 +88,8 @@
                     {% endif %}
             </a>
         </div>
+        {% empty %}
+        <div class="no_posts">No posts yet.  Sync with <a href="{% url 'posts:my_account' %}">DayOne</a>, or <a href="{% url "posts:new" %}">start a new post</a>!</div>
         {% endfor %}
         </ul>
     </div>

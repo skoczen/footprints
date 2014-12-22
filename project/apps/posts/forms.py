@@ -66,7 +66,9 @@ class SignupForm(forms.Form):
     )
 
     def signup(self, request, user):
+        print "signup"
         author = Author.objects.get_or_create(user=user)[0]
+        print author
         if "uuid" in request.session:
             uuid = request.session["uuid"]
             Fantastic.objects.filter(uuid=uuid).update(reader=author)

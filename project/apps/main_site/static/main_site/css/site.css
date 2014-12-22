@@ -128,6 +128,7 @@ code {
     width: 80%;
     margin: 0 auto;
     max-width: 1024px;
+    min-height: 600px;
 }
 
 .button, .button:hover, a.button, a.button:hover, button, button:hover, button.button, button.button:hover, .primaryAction, .primaryAction:hover, .ph_form.home_buttons .form_input input.primaryAction {

@@ -30,7 +30,7 @@ class Author(BaseModel):
     premium_user = models.BooleanField(default=False)
     slug = models.CharField(max_length=255, blank=True, editable=False)
     blog_name = models.CharField(max_length=255, blank=True)
-    blog_domain = models.CharField(max_length=255, blank=True, unique=True)
+    blog_domain = models.CharField(max_length=255, blank=True, null=True, unique=True)
     blog_header = models.TextField(blank=True, null=True)
     blog_footer = models.TextField(blank=True, null=True)
 

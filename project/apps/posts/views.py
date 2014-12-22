@@ -175,7 +175,10 @@ def post(request, title=None):
         author = get_author_from_domain(request)
     except:
         if request.user.is_authenticated():
-            author = request.user.get_profile()
+            try:
+                author = request.user.get_profile()
+            except:
+                pass
     
     if not author:
         return HttpResponseRedirect(reverse("posts:home"))
@@ -330,7 +333,7 @@ def revision(request, author=None, pk=None):
 def new(request):
     author = Author.objects.get(user=request.user)
     post = Post.objects.create(author=author)
-    return HttpResponseRedirect("%s?editing=true" % reverse("posts:post", args=(post.slug,)))
+    return HttpResponseRedirect("%s?editing=true" % reverse("posts:edit", args=(post.slug,)))
 
 
 @ajax_request

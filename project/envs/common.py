@@ -187,7 +187,8 @@ ACCOUNT_EMAIL_VERIFICATION = "optional"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_LOGOUT_REDIRECT_URL = "/logged-out/"
-# ACCOUNT_SIGNUP_FORM_CLASS = "posts.forms.SignupForm"
+ACCOUNT_SIGNUP_FORM_CLASS = "posts.forms.SignupForm"
+AUTH_PROFILE_MODULE = "posts.Author"
 # ACCOUNT_USER_DISPLAY = lambda user: user.get_profile().name
 
 SITE_ID = 1
@@ -196,7 +197,6 @@ import djcelery
 djcelery.setup_loader()
 BROKER_URL = 'redis://localhost:6379/7'
 
-AUTH_PROFILE_MODULE = "posts.Author"
 LOGIN_REDIRECT_URL = "/my-writing/"
 STATICFILES_EXCLUDED_APPS = []
 COMPRESS_ROOT = STATIC_ROOT
