@@ -31,15 +31,14 @@
 <script src="{{STATIC_URL}}posts/lib/js/editor.js"></script>
 <script src="{{STATIC_URL}}posts/lib/js/marked.js"></script>
 <script src="{{STATIC_URL}}posts/lib/dropzone/dropzone.js"></script>
-
+<script src="{{STATIC_URL}}posts/js/edit.js"></script>
+{% endcompress %}
 <script type="text/javascript">
     window.Footprints = window.Footprints || {};
     Footprints.urls = Footprints.urls || {};
     Footprints.urls.upload_image = "{% url 'posts:image_upload' post.pk %}";
     Footprints.state = Footprints.state || {};
 </script>
-<script src="{{STATIC_URL}}posts/js/edit.js"></script>
-{% endcompress %}
 {% endblock %}
 
 {% block logo_url %}{{STATIC_URL}}main_site/img/logo-name-90-066.png{% endblock %}
