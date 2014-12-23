@@ -42,20 +42,18 @@ Actual, me MVP:
         - old_link
     - deploy
     - pre-generate thumbnails
-- bugs:
     - facebook account
-
-- actually wire up domain
 - import all old links
 - Import tumblr direct post:
      (screenshot epic)
      - peanut
      - guys
 - test it out!
-- social share checks facebook API key.
 
 
 V2:
+    - auto-wire up domain, instructions
+    - social share checks facebook API key.
     - pay to use
     - wire up auto domain adds
 

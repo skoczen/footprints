@@ -345,7 +345,9 @@ def this_was_fantastic(request, post_id):
         if request.user.is_authenticated():
             fantastic = Fantastic.objects.get_or_create(post=post, reader=request.user.get_profile())[0]
         else:
-            fantastic = Fantastic.objects.get_or_create(post=post, uuid=request.session["uuid"])[0]
+            if not "uuid" in request.session:
+                request.session["uuid"] = uuid.uuid1()
+                fantastic = Fantastic.objects.get_or_create(post=post, uuid=request.session["uuid"])[0]
 
         fantastic.on = fantastic_form.cleaned_data["on"]
         fantastic.save()
