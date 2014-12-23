@@ -486,6 +486,9 @@ a.all_posts:hover {
     .post .text_and_title, .post.narrow .text_and_title {
         padding: 8px 16px 0px 16px;
         text-align: justify;
+        -webkit-hyphens: auto;  
+        -moz-hyphens: auto;  
+        hyphens: auto;  
     }
     .post .text_and_title h1, .post.narrow .text_and_title h1 {
         text-align: left;
