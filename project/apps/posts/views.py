@@ -347,7 +347,7 @@ def this_was_fantastic(request, post_id):
         else:
             if not "uuid" in request.session:
                 request.session["uuid"] = uuid.uuid1()
-                fantastic = Fantastic.objects.get_or_create(post=post, uuid=request.session["uuid"])[0]
+            fantastic = Fantastic.objects.get_or_create(post=post, uuid=request.session["uuid"])[0]
 
         fantastic.on = fantastic_form.cleaned_data["on"]
         fantastic.save()

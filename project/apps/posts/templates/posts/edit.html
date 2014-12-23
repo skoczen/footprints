@@ -64,7 +64,7 @@
 
 
 <div class="post {% if post.is_draft %}draft{% endif %} {% if post.narrow %}narrow{% endif %}">
-    {% if post.dayone_image %}<a href="{{MEDIA_URL}}{{post.dayone_image}}" target="_blank"><div class="post_image full_bleed"><img src="{{post.dayone_image_blog_size_url}}" class="list_thumb" /></a></div>{% endif blog
+    {% if post.dayone_image %}<a href="{{MEDIA_URL}}{{post.dayone_image}}" target="_blank"><div class="post_image full_bleed"><img src="{{post.dayone_image_blog_size_url}}" class="list_thumb" /></a></div>{% endif %}
     <div id="edit_pane_area"><div id="edit_pane"></div></div>
     <div class="draft_badge"></div>
     <div class="text_and_title">
