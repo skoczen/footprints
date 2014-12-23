@@ -507,6 +507,11 @@ a.all_posts:hover {
         -moz-hyphens: manual;  
         hyphens: manual;
     }
+    .post .text_and_title input .post .text_and_title textarea {
+        -webkit-hyphens: manual;  
+        -moz-hyphens: manual;  
+        hyphens: manual;
+    }
     .post .text_and_title blockquote, .post.narrow .text_and_title blockquote {
         text-align: left;
         margin: 0 0 10px 0;
