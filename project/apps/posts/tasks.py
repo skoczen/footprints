@@ -160,9 +160,9 @@ def sync_posts(author_id):
     from posts.models import Author, Post
     from posts.social import twitter_auth, authorized_tweepy_api, facebook_auth, authorized_facebook_api
     author = Author.objects.get(pk=author_id)
-    if not cache.get(author.sync_cache_key) or not cache.get(author.sync_start_time_cache_key, False) or cache.get(author.sync_start_time_cache_key)+MAX_SYNC_TIMEOUT < datetime.datetime.now():
-        cache.set(author.sync_cache_key, True)
+    if cache.get(author.sync_cache_key) is None or cache.get(author.sync_start_time_cache_key) is None or cache.get(author.sync_start_time_cache_key)+MAX_SYNC_TIMEOUT < datetime.datetime.now():
         try:
+            cache.set(author.sync_cache_key, True)
             cache.set(author.sync_start_time_cache_key, datetime.datetime.now())
             cache.set(author.sync_total_key, "~%s" % cache.get(author.sync_total_key, "0"))
             cache.set(author.sync_current_key, 0)
