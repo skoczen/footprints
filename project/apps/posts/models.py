@@ -182,6 +182,7 @@ class AbstractPost(BaseModel):
     dayone_last_modified = models.DateTimeField(blank=True, null=True, editable=False)
     dayone_last_rev = models.CharField(max_length=255, blank=True, null=True, editable=False)
     dayone_image = models.ImageField(verbose_name="Hero Image", upload_to="dayone_images", blank=True, null=True)
+    dayone_image_url = models.TextField(blank=True, null=True)
     dayone_image_blog_size_url = models.TextField(blank=True, null=True)
     dayone_image_thumb_size_url = models.TextField(blank=True, null=True)
 
@@ -348,6 +349,7 @@ class Post(AbstractPost):
                 if not self.permalink_path or old_me.is_draft:
                     self.permalink_path = reverse('posts:post', args=(self.slug,))
             if old_me.dayone_image != self.dayone_image:
+                self.dayone_image_url = self.image.url.split("?")[0]
                 self.dayone_image_thumb_size_url = get_thumbnail(self.dayone_image, '100x100', crop="center", quality=75).url.split("?")[0]
                 self.dayone_image_blog_size_url = get_thumbnail(self.dayone_image, '896', quality=98).url.split("?")[0]
 
@@ -441,6 +443,7 @@ class PostRevision(AbstractPost):
 class PostImage(BaseModel):
     post = models.ForeignKey(Post)
     image = models.ImageField(upload_to="post_images", blank=True, null=True)
+    image_url = models.TextField(blank=True, null=True)
     blog_size_url = models.TextField(blank=True, null=True)
     thumb_size_url = models.TextField(blank=True, null=True)
 
@@ -468,6 +471,7 @@ class PostImage(BaseModel):
         super(PostImage, self).save(*args, **kwargs)
         
         if resave:
+            self.image_url = self.image.url.split("?")[0]
             self.thumb_size_url = get_thumbnail(self.image, '100x100', crop="center", quality=75).url.split("?")[0]
             self.blog_size_url = get_thumbnail(self.image, '896', quality=98).url.split("?")[0]
             self.save()
