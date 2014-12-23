@@ -433,3 +433,17 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 .post .text_and_title {
   min-height: 400px;
 }
+.uploaded_thumb {
+  height: 100px;
+}
+.uploaded_thumb img {
+  float: left;
+  margin: 0 20px 0 0;
+}
+.uploaded_thumb textarea {
+  float: right;
+  width: 400px;
+  height: 20px;
+  margin-right: 20px;
+  font-family: courier, fixed;
+}

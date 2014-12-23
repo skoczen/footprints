@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class PostForm(forms.ModelForm):
     title = forms.CharField(required=False, widget=forms.HiddenInput())
     body = forms.CharField(required=False, widget=forms.HiddenInput())
-    is_draft = forms.BooleanField(required=False, widget=forms.HiddenInput())
+    is_draft = forms.BooleanField(required=False)
     
     class Meta:
         model = Post
@@ -14,6 +14,7 @@ class PostForm(forms.ModelForm):
             "title",
             "body",
             # "slug",
+            # "published",
             "written_on",
             "is_draft",
             # "display_type",

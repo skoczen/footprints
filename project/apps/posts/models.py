@@ -441,10 +441,36 @@ class PostRevision(AbstractPost):
 class PostImage(BaseModel):
     post = models.ForeignKey(Post)
     image = models.ImageField(upload_to="post_images", blank=True, null=True)
+    blog_size_url = models.TextField(blank=True, null=True)
+    thumb_size_url = models.TextField(blank=True, null=True)
 
     @property
     def full_permalink(self):
         return self.image.url
+
+    @property
+    def blog_size_permalink(self):
+        return self.blog_size_url
+
+    @property
+    def thumb_size_permalink(self):
+        return self.thumb_size_url
+
+    def save(self, *args, **kwargs):
+        resave = False
+        if self.pk:
+            old_me = PostImage.objects.get(pk=self.pk)
+            if old_me.image != self.image:
+                resave = True
+        else:
+            resave = True
+
+        super(PostImage, self).save(*args, **kwargs)
+        
+        if resave:
+            self.thumb_size_url = get_thumbnail(self.image, '100x100', crop="center", quality=75).url.split("?")[0]
+            self.blog_size_url = get_thumbnail(self.image, '896', quality=98).url.split("?")[0]
+            self.save()
 
 class Fantastic(BaseModel):
     post = models.ForeignKey(Post)

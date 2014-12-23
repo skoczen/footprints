@@ -1,4 +1,4 @@
-<div class="post post_{{post.pk}} {% if post.is_draft %}draft{% endif %} {% if post.narrow %}narrow{% endif %}">
+<div class="post post_{{post.pk}} {% if post.is_draft %}draft{% endif %} {% if post.narrow %}narrow{% endif %} type_{{ post.post_type }}">
 {% if post.is_photo_with_caption %}
     {% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{MEDIA_URL}}{{post.dayone_image}}{% endif %}" target="_blank"><div class="post_image full_bleed"><img src="{{post.dayone_image_blog_size_url}}"/></a></div>{% endif %}
 {% if post.title or post.body %}

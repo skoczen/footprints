@@ -64,8 +64,8 @@ $(function(){
         $(".post_form").ajaxForm({
             dataType: 'json',
             beforeSerialize: function() {
-                $("#id_title").val(Footprints.post.editor.editor_title.codemirror.getValue());
-                $("#id_body").val(Footprints.post.editor.editor_body.codemirror.getValue());
+                $("#id_title").val(Footprints.post.editor.editor_title.textareamirror.getValue());
+                $("#id_body").val(Footprints.post.editor.editor_body.textareamirror.getValue());
             },
             success: function(json) {
                 // Footprints.post.editor.cancel_editing();
@@ -98,7 +98,7 @@ $(function(){
             init: function() {
                 this.on("success", function(file, resp) { 
                     var img = $("img", file.previewElement)
-                    $(".all_images").append("<div><img src='"+img.attr("src")+"' class='list_thumb'><code>"+resp.url+"</code></div>")
+                    $(".all_images").append("<div class='uploaded_thumb'><img src='"+img.attr("src")+"' class='list_thumb'><br/>Full: <textarea>"+resp.url+"</textarea><br/>Blog: <textarea>"+resp.blog_size_permalink+"</textarea><br/>Thumb: <textarea>"+resp.thumb_size_permalink+"</textarea></div>")
                     console.log(file);
                     console.log(resp);
                 });

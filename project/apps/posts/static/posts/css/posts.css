@@ -83,54 +83,6 @@ body {
 .post p {
     margin: 0;
 }
-@media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait) {
-    body {
-        /*background: #222;*/
-    }
-    .post {
-        width: 762px;
-    }
-    .post .text_and_title {
-        padding: 40px 16px 20px 26px;
-    }
-    .post.narrow .text_and_title {
-        padding: 40px 40px 20px 60px;
-    }
-    .post.narrow {
-        width: 720px;
-    }
-    .post .body {
-        /*font-size: 14px;*/
-    }
-    .post_image.full_bleed {
-        overflow: hidden;
-        height: 400px;
-    }
-}
-@media all and (max-width: 900px) {
-    body {
-        /*background: #222;*/
-    }
-    .post {
-        width: 100%;
-    }
-    .post .text_and_title {
-        padding: 40px 16px 20px 26px;
-    }
-    .post.narrow .text_and_title {
-        padding: 40px 40px 20px 60px;
-    }
-    .post.narrow {
-        width: 100%;
-    }
-    .post .body {
-        /*font-size: 14px;*/
-    }
-    .post_image.full_bleed {
-        overflow: auto;
-        height: auto;
-    }
-}
 
 #edit_pane_area {
     position: absolute;
@@ -312,6 +264,12 @@ body {
     width: 600px;
     display: none;
 }
+.post_meta label {
+    white-space: nowrap;
+}
+.post_meta th {
+    vertical-align: top;
+}
 .options_toggle {
     display: none;
     position: absolute;
@@ -449,4 +407,92 @@ a.all_posts:hover {
     #footer {
         display: none;
     }
+}
+
+@media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait) {
+    body {
+        /*background: #222;*/
+    }
+    .post {
+        width: 762px;
+    }
+    .post .text_and_title {
+        padding: 40px 16px 20px 26px;
+    }
+    .post.narrow .text_and_title {
+        padding: 40px 40px 20px 60px;
+    }
+    .post.narrow {
+        width: 720px;
+    }
+    .post .body {
+        /*font-size: 14px;*/
+    }
+    .post_image.full_bleed {
+        overflow: hidden;
+        height: 400px;
+    }
+}
+@media all and (max-width: 920px) {
+    body {
+        /*background: #222;*/
+    }
+    h1 {
+        font-size: 30px;
+    }
+    .post {
+        width: 98%;
+        margin: 60px auto 0 auto;
+    }
+    .post .text_and_title {
+        padding: 40px 16px 20px 26px;
+    }
+    .post.narrow .text_and_title {
+        padding: 40px 40px 20px 60px;
+    }
+    .post.narrow {
+        width: 100%;
+    }
+    .post .body {
+        /*font-size: 14px;*/
+    }
+    .post_image.full_bleed {
+        overflow: auto;
+        height: auto;
+    }
+    .kudos {
+        padding: 0;
+        margin: 0 auto;
+    }
+    .num_agree {
+        display: block;
+    }
+}
+@media all and (max-width: 600px) {
+    body {
+        /*background: #FFF;*/
+    }
+    .post {
+        width: 100%;
+        /*box-shadow: none;*/
+        border: 1px solid #DDD;
+        border-width: 0 0 1px 0;
+        /*padding-bottom: 16px;*/
+        margin-bottom: 30px;
+    }
+    .post.type_4 {
+        padding-top: 8px;
+    }
+    .post .text_and_title, .post.narrow .text_and_title {
+        padding: 8px 16px 0px 16px;
+        text-align: justify;
+    }
+    .post .text_and_title h1, .post.narrow .text_and_title h1 {
+        text-align: left;
+    }
+    .post .text_and_title blockquote, .post.narrow .text_and_title blockquote {
+        text-align: left;
+        margin: 0 0 10px 0;
+    }
+
 }

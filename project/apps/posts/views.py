@@ -422,6 +422,7 @@ def my_blog(request, author=None):
     fantastic_form = FantasticForm()
     is_me = False
     is_mine = False
+    on_blog = True
     author = request.user.get_profile()
     if request.user.get_profile() == author:
         is_me = True
@@ -517,15 +518,18 @@ def social_share(request, post_id):
 def image_upload(request, post_id):
     try:
         post = Post.objects.get(pk=post_id)
-        print request.FILES
         image = request.FILES['file']
+        if len(image.name) > 80:
+            image.name = image.name[:80]
+
         post_image = PostImage.objects.create(post=post, image=image)
 
         return {
             'success': True,
-            'url': post_image.full_permalink
+            'url': post_image.full_permalink,
+            'blog_size_permalink': post_image.blog_size_permalink,
+            'thumb_size_permalink': post_image.thumb_size_permalink,
         }
-
     except:
         import traceback; traceback.print_exc();
         return {
