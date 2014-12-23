@@ -348,8 +348,8 @@ class Post(AbstractPost):
                 if not self.permalink_path or old_me.is_draft:
                     self.permalink_path = reverse('posts:post', args=(self.slug,))
             if old_me.dayone_image != self.dayone_image:
-                self.dayone_image_thumb_size_url = get_thumbnail(self.dayone_image, '100x100', crop="center", quality="75").url
-                self.dayone_image_blog_size_url = get_thumbnail(self.dayone_image, '896', quality="98").url
+                self.dayone_image_thumb_size_url = get_thumbnail(self.dayone_image, '100x100', crop="center", quality=75).url
+                self.dayone_image_blog_size_url = get_thumbnail(self.dayone_image, '896', quality=98).url
 
         if not self.social_shares_customized:
             self.twitter_status_text = "%s %s" % (self.title.strip()[:118], self.full_permalink)
