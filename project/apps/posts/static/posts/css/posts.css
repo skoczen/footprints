@@ -104,6 +104,7 @@ body {
     outline: none;
     outline-style: none;
     outline-width: 0;
+    line-height: 1.5em;
 }
 .post .title { 
     /*reallly like*/
@@ -488,10 +489,18 @@ a.all_posts:hover {
         text-align: justify;
         -webkit-hyphens: auto;  
         -moz-hyphens: auto;  
-        hyphens: auto;  
+        hyphens: auto;
     }
-    .post .text_and_title h1, .post.narrow .text_and_title h1 {
+    .post .text_and_title p, .post.narrow .text_and_title p, .post .text_and_title .body, .post.narrow .text_and_title .body {
+        line-height: 1.6em;
+        font-weight: 500;
+    }
+    .post .text_and_title h1.title, .post.narrow .text_and_title h1.title, .post .text_and_title h1.title .editable {
         text-align: left;
+        line-height: 1.1em;
+        -webkit-hyphens: manual;  
+        -moz-hyphens: manual;  
+        hyphens: manual;
     }
     .post .text_and_title blockquote, .post.narrow .text_and_title blockquote {
         text-align: left;
