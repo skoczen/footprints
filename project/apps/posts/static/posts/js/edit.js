@@ -64,8 +64,8 @@ $(function(){
         $(".post_form").ajaxForm({
             dataType: 'json',
             beforeSerialize: function() {
-                $("#id_title").val(Footprints.post.editor.editor_title.textareamirror.getValue());
-                $("#id_body").val(Footprints.post.editor.editor_body.textareamirror.getValue());
+                $("#id_title").val(Footprints.post.editor.editor_title.codemirror.getValue());
+                $("#id_body").val(Footprints.post.editor.editor_body.codemirror.getValue());
             },
             success: function(json) {
                 // Footprints.post.editor.cancel_editing();
