@@ -41,15 +41,18 @@ Actual, me MVP:
     - Handle old links
         - old_link
     - deploy
+    - pre-generate thumbnails
 - bugs:
     - facebook account
-    - pre-generate thumbnails
+
 - actually wire up domain
 - import all old links
 - Import tumblr direct post:
      (screenshot epic)
      - peanut
+     - guys
 - test it out!
+- social share checks facebook API key.
 
 
 V2:

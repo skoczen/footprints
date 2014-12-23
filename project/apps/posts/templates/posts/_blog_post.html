@@ -1,6 +1,6 @@
 <div class="post post_{{post.pk}} {% if post.is_draft %}draft{% endif %} {% if post.narrow %}narrow{% endif %}">
 {% if post.is_photo_with_caption %}
-    {% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{MEDIA_URL}}{{post.dayone_image}}{% endif %}" target="_blank"><div class="post_image full_bleed"><img src="{{MEDIA_URL}}{{post.dayone_image}}"/></a></div>{% endif %}
+    {% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{MEDIA_URL}}{{post.dayone_image}}{% endif %}" target="_blank"><div class="post_image full_bleed"><img src="{{post.dayone_image_blog_size_url}}"/></a></div>{% endif %}
 {% if post.title or post.body %}
     <div class="text_and_title">
         <h1 class="title"><a href="{% url 'posts:post' post.slug %}"><div class="editable" id="post_title">{{post.title|safe}}</div></a></h1>
@@ -9,12 +9,12 @@
 {% endif %}
 {% else %}
 {% if post.is_big_quote %}
-{% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{MEDIA_URL}}{{post.dayone_image}}{% endif %}" target="_blank"><div class="post_image full_bleed"><img src="{{MEDIA_URL}}{{post.dayone_image}}"/></a></div>{% endif %}
+{% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{MEDIA_URL}}{{post.dayone_image}}{% endif %}" target="_blank"><div class="post_image full_bleed"><img src="{{post.dayone_image_blog_size_url}}"/></a></div>{% endif %}
 <div class="text_and_title">
     <h1 class="title"><a href="{% url 'posts:post' post.slug %}">{{post.title|safe}} {{post.body_html|safe}}</a></h1>
 {% else %}
 {% if post.is_article_single_image %}
-    {% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{MEDIA_URL}}{{post.dayone_image}}{% endif %}" target="_blank"><div class="post_image full_bleed"><img src="{{MEDIA_URL}}{{post.dayone_image}}"/></a></div>{% endif %}
+    {% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{MEDIA_URL}}{{post.dayone_image}}{% endif %}" target="_blank"><div class="post_image full_bleed"><img src="{{post.dayone_image_blog_size_url}}"/></a></div>{% endif %}
     <div class="draft_badge"></div>
     <div class="text_and_title">
         
@@ -23,7 +23,7 @@
 
 {% else %}
 {% if post.is_article_multiple_images %}
-    {% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{MEDIA_URL}}{{post.dayone_image}}{% endif %}" target="_blank"><div class="post_image full_bleed"><img src="{{MEDIA_URL}}{{post.dayone_image}}"/></a></div>{% endif %}
+    {% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{MEDIA_URL}}{{post.dayone_image}}{% endif %}" target="_blank"><div class="post_image full_bleed"><img src="{{post.dayone_image_blog_size_url}}"/></a></div>{% endif %}
     <div class="draft_badge"></div>
     <div class="text_and_title">
         <h1 class="title"><a href="{% url 'posts:post' post.slug %}"><div class="editable" id="post_title">{{post.title|safe}}</div></a></h1>
@@ -31,7 +31,7 @@
 
 {% else %}
 {% if post.is_body_with_no_title %}
-    {% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{MEDIA_URL}}{{post.dayone_image}}{% endif %}" target="_blank"><div class="post_image full_bleed"><img src="{{MEDIA_URL}}{{post.dayone_image}}"/></a></div>{% endif %}
+    {% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{MEDIA_URL}}{{post.dayone_image}}{% endif %}" target="_blank"><div class="post_image full_bleed"><img src="{{post.dayone_image_blog_size_url}}"/></a></div>{% endif %}
     <div class="draft_badge"></div>
     <div class="text_and_title">
         <div class="body"><div class="editable" id="post_body">{{post.title|safe}}{{post.body_html|safe}}</div></div>

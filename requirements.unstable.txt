@@ -36,3 +36,4 @@ versiontools
 
 # Dev only
 django-debug-toolbar
+ipython

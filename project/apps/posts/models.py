@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
+from sorl.thumbnail import get_thumbnail
 from utils.slughifi import unique_slug, slughifi
 from main_site.models import BaseModel
 
@@ -176,11 +177,14 @@ class AbstractPost(BaseModel):
     allow_comments = models.BooleanField(default=True)
 
     dayone_post = models.BooleanField(default=False, editable=False)
-    dayone_id = models.CharField(max_length=255, blank=True, null=True, editable=False)
+    dayone_id = models.CharField(max_length=255, blank=True, null=True, editable=False, unique=True)
     dayone_posted = models.DateTimeField(blank=True, null=True, editable=False)
     dayone_last_modified = models.DateTimeField(blank=True, null=True, editable=False)
     dayone_last_rev = models.CharField(max_length=255, blank=True, null=True, editable=False)
     dayone_image = models.ImageField(verbose_name="Hero Image", upload_to="dayone_images", blank=True, null=True)
+    dayone_image_blog_size_url = models.TextField(blank=True, null=True)
+    dayone_image_thumb_size_url = models.TextField(blank=True, null=True)
+
 
     location_area = models.CharField(max_length=255, blank=True, null=True,)
     location_country = models.CharField(max_length=255, blank=True, null=True,)
@@ -343,6 +347,9 @@ class Post(AbstractPost):
             if not self.is_draft:
                 if not self.permalink_path or old_me.is_draft:
                     self.permalink_path = reverse('posts:post', args=(self.slug,))
+            if old_me.dayone_image != self.dayone_image:
+                self.dayone_image_thumb_size_url = get_thumbnail(self.dayone_image, '100x100', crop="center", quality="75").url
+                self.dayone_image_blog_size_url = get_thumbnail(self.dayone_image, '896', quality="98").url
 
         if not self.social_shares_customized:
             self.twitter_status_text = "%s %s" % (self.title.strip()[:118], self.full_permalink)

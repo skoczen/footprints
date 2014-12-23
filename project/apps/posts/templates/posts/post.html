@@ -8,7 +8,7 @@
 {% block schema_author %}{{post.author.name}}{% endblock %}
 {% block og_title %}{{post.title}}{% endblock %}
 {% if post.dayone_image %}
-{% block og_image %}{{MEDIA_URL}}{{post.dayone_image}}{% endblock %}
+{% block og_image %}{{post.dayone_image_blog_size_url}}{% endblock %}
 {% endif %}
 
 {% block og_url %}{% url "posts:post" post.slug %}{% endblock %}
@@ -56,3 +56,7 @@
 {% include "posts/_blog_post.html" %}
 
 {% endblock %}
+{% if is_mine %}
+{% block blog_header %}{% endblock %}
+{% block blog_footer %}{% endblock %}
+{% endif %}

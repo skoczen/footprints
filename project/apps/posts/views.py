@@ -733,7 +733,9 @@ def facebook_auth_finish(request):
         author.facebook_expire_date = datetime.datetime.now() + datetime.timedelta(seconds=int(response["expires"][0]))
         api = authorized_facebook_api(author)
         me = api.get("me")
+        print me
         author.facebook_account_link = me["link"]
+        author.facebook_account_name = me["name"]
         pic = api.get("me/picture?redirect=0&height=50&type=normal&width=50")
         author.facebook_profile_picture_url = pic["data"]["url"]
         author.save()
