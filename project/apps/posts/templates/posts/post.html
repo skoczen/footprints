@@ -56,7 +56,6 @@
 {% include "posts/_blog_post.html" %}
 
 {% endblock %}
-{% if is_mine %}
-{% block blog_header %}{% endblock %}
-{% block blog_footer %}{% endblock %}
-{% endif %}
+
+{% block blog_header %}{% if not is_mine %}{{block.super}}{% endif %}{% endblock %}
+{% block blog_footer %}{% if not is_mine %}{{block.super}}{% endif %}{% endblock %}
