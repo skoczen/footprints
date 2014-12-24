@@ -1,6 +1,7 @@
 import datetime
 import re
-import mistune
+import markdown
+from pyembed.markdown import PyEmbedMarkdown
 
 from django.db import models
 from django.conf import settings
@@ -228,8 +229,8 @@ class AbstractPost(BaseModel):
         return self.title
 
     def save(self, *args, **kwargs):
-        self.title_html = mistune.markdown(self.title)
-        self.body_html = mistune.markdown(self.body)
+        self.title_html = markdown.markdown(self.title, extensions=[PyEmbedMarkdown()])
+        self.body_html = markdown.markdown(self.body, extensions=[PyEmbedMarkdown()])
 
         self.num_images = self.body_html.count("<img")
         if not self.description or self.description == "Body" or self.description == "by %s" % self.author.name:

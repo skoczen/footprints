@@ -126,7 +126,7 @@ def generate_backup_zip(author_id):
     shutil.rmtree(temp_folder_path)
 
 
-@periodic_task(run_every=datetime.timedelta(seconds=20))
+@periodic_task(run_every=datetime.timedelta(seconds=120))
 def periodic_sync():
     from posts.models import Author
     for a in Author.objects.all():

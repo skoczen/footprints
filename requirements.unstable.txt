@@ -22,7 +22,8 @@ dropbox
 fabric
 facepy
 gunicorn
-mistune
+markdown
+pyembed-markdown
 pillow
 psycopg2
 requests
