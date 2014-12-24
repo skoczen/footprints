@@ -229,8 +229,8 @@ class AbstractPost(BaseModel):
         return self.title
 
     def save(self, *args, **kwargs):
-        self.title_html = markdown.markdown(self.title, extensions=[PyEmbedMarkdown()])
-        self.body_html = markdown.markdown(self.body, extensions=[PyEmbedMarkdown()])
+        self.title_html = markdown.markdown(self.title, extensions=[PyEmbedMarkdown()]).replace("http://www.youtube.com", "https://www.youtube.com")
+        self.body_html = markdown.markdown(self.body, extensions=[PyEmbedMarkdown()]).replace("http://www.youtube.com", "https://www.youtube.com")
 
         self.num_images = self.body_html.count("<img")
         if not self.description or self.description == "Body" or self.description == "by %s" % self.author.name:
@@ -457,7 +457,7 @@ class PostImage(BaseModel):
 
     @property
     def full_permalink(self):
-        return self.image.url
+        return self.image_url
 
     @property
     def blog_size_permalink(self):

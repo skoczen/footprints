@@ -70,6 +70,8 @@ Actual, me MVP:
 
 
 V2:
+    - on any article save, auto-create the redirect (get_or_create old url)
+    - add reads on detail page, at least.
     - auto-wire up domain, instructions
     - social share checks facebook API key.
     - pay to use
