@@ -172,6 +172,7 @@ def blog(request):
 @render_to("posts/post.html")
 def post(request, title=None):
     author = None
+    fantastic_form = FantasticForm()
     try:
         author = get_author_from_domain(request)
     except:
@@ -207,7 +208,6 @@ def post(request, title=None):
     if is_mine:
         form = PostForm(instance=post)
     else:
-        fantastic_form = FantasticForm()
         read_form = ReadForm()
 
         read = None
