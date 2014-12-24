@@ -179,7 +179,11 @@
                                         {{post.title|truncatechars:64}}
                                     </div>
                                     <div class="thumb_body">
+                                        {% if post.description %}
+                                        {{post.description|truncatechars:165}}
+                                        {% else %}
                                         {{post.body|truncatechars:165}}
+                                        {% endif %}
                                     </div>
                                     <div class="domain">
                                         {{post.author.blog_domain}}

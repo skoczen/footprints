@@ -45,16 +45,25 @@ Actual, me MVP:
     - facebook account
     - unpublish
     - bug fixes and style tweaks.
-
-- import all old links
-- Import tumblr direct post:
-     (screenshot epic)
-     - peanut
-     - guys
+    - import all old links
+    - Import tumblr direct post:
+         (screenshot epic)
+         - peanut
+         - guys
+    - publish/unpublish all
+- all forwards done
+- link videos:
+    apartment tours
+    beach handball goal
+- all deletes done
+- post guys at the beach.
+- mark all published as blog ready
 - test it out!
     - mobile
     - speed
     - meta tags
+- move DNS!
+- Announce it!! :)
 
 
 V2:

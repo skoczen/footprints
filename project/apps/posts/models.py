@@ -232,8 +232,8 @@ class AbstractPost(BaseModel):
         self.body_html = mistune.markdown(self.body)
 
         self.num_images = self.body_html.count("<img")
-        if not self.description:
-            if self.body:
+        if not self.description or self.description == "Body" or self.description == "by %s" % self.author.name:
+            if self.body and self.body != "Body":
                 self.description = self.body[:160]
             else:
                 self.description = "by %s" % self.author.name

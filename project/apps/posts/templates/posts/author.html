@@ -55,7 +55,7 @@
                 <span class="image_placeholder"></span>
                 {% endif %}
                 <div class="title">
-                    {{post.title|default:"No title"|safe}}
+                    {{post.title|default:""|safe}}
                     <div class="body">
                         {{post.body|truncatewords_html:50|safe}}
                     </div>
