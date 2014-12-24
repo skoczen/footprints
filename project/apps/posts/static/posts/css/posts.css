@@ -80,6 +80,9 @@ body {
 .post .text_and_title {
     padding: 40px 80px 20px 80px;
 }
+.post .text_and_title img {
+    max-width: 100%;
+}
 .post p {
     margin: 0;
 }

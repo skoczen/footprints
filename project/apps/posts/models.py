@@ -359,7 +359,7 @@ class Post(AbstractPost):
             if old_me.dayone_image != self.dayone_image:
                 self.dayone_image_url = self.dayone_image.url.split("?")[0]
                 self.dayone_image_thumb_size_url = get_thumbnail(self.dayone_image, '100x100', crop="center", quality=75).url.split("?")[0]
-                self.dayone_image_blog_size_url = get_thumbnail(self.dayone_image, '896', quality=98).url.split("?")[0]
+                self.dayone_image_blog_size_url = get_thumbnail(self.dayone_image, '1792', quality=90).url.split("?")[0]
 
         if not self.social_shares_customized:
             self.twitter_status_text = "%s %s" % (self.title.strip()[:118], self.full_permalink)
@@ -481,7 +481,7 @@ class PostImage(BaseModel):
         if resave:
             self.image_url = self.image.url.split("?")[0]
             self.thumb_size_url = get_thumbnail(self.image, '100x100', crop="center", quality=75).url.split("?")[0]
-            self.blog_size_url = get_thumbnail(self.image, '896', quality=98).url.split("?")[0]
+            self.blog_size_url = get_thumbnail(self.image, '1792', quality=90).url.split("?")[0]
             self.save()
 
 class Fantastic(BaseModel):
