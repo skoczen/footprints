@@ -48,6 +48,8 @@ Actual, me MVP:
 
 - import all old links
 - Import tumblr direct post:
+     - http://blog.inkandfeet.com/post/102405440709/a-sign-part-ii
+     
      (screenshot epic)
      - peanut
      - guys

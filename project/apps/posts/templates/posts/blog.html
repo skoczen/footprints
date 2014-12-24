@@ -24,7 +24,7 @@
     Footprints.urls = Footprints.urls || {};
     Footprints.state = Footprints.state || {};
     Footprints.urls.load_next_posts = "{% url 'posts:next_posts' author.slug %}";
-    Footprints.state.last_timestamp = {{last_timestamp}};
+    {% if last_timestamp %}Footprints.state.last_timestamp = {{last_timestamp}};{% endif %}
 </script>
 {% compress js %}
 <script src="{{STATIC_URL}}base/js/ajaxForm.js"></script>

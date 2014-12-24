@@ -68,20 +68,20 @@ def generate_backup_zip(author_id):
     revisions_folder = os.path.join(backup_folder_path, "Revisions")
     os.mkdir(revisions_folder)
     for p in author.postrevision_set.all():
-        revision_folder = os.path.join(revisions_folder, p.post.title)
+        revision_folder = os.path.join(revisions_folder, p.post.slug)
 
         if not os.path.exists(revision_folder):
             os.mkdir(revision_folder)
 
         revision_filename = os.path.join(
             revision_folder,
-            "%s-%s.html" % (p.title, p.revised_at.strftime("%Y-%m-%d.%H.%M.%s"))
+            "%s-%s.html" % (p.post.slug, p.revised_at.strftime("%Y-%m-%d.%H.%M.%s"))
         )
         counter = 1
         while os.path.exists(revision_filename):
             revision_filename = os.path.join(
                 revision_folder,
-                "%s-%s-%s.html" % (p.title, p.revised_at.strftime("%Y-%m-%d.%H.%M.%s"), counter)
+                "%s-%s-%s.html" % (p.post.slug, p.revised_at.strftime("%Y-%m-%d.%H.%M.%s"), counter)
             )
             counter += 1
 

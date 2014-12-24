@@ -71,8 +71,6 @@ $(function(){
         // });
         // Footprints.post.editor.editing_node.removeInstance("edit_pane");
         // Footprints.post.editor.editing_node = null;
-        console.log(Footprints.post.editor.editor_title.codemirror.getValue());
-        console.log(Footprints.post.editor.editor_body.codemirror.getValue());
         // $("")
     };
     Footprints.post.toggle_fantastic = function() {

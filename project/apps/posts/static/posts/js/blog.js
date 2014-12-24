@@ -102,8 +102,6 @@ $(function(){
         return Footprints.post.read_tracker.calculate_from_lines_and_chars(lines, chars);
     };
     Footprints.post.actions.load_next_posts = function() {
-        console.log("Footprints.post.actions.load_next_posts")
-        console.log(Footprints.urls.load_next_posts)
         $.ajax(Footprints.urls.load_next_posts, {
             "method": "GET",
             "data": {
@@ -113,7 +111,6 @@ $(function(){
         })
     }
     Footprints.post.handlers.more_posts_loaded = function(resp) {
-        console.log(resp)
         if (resp.success) {
             $(".posts").append(resp.html);
             if (resp.last_timestamp !== false) {
@@ -129,7 +126,6 @@ $(function(){
         }
     }
     Footprints.post.handlers.fantastic_form_callback = function(json) {
-        console.log(json)
         if (json.num_people > 1) {
             $(".post_" + json.post_id + " .fantastic_button .num_agree .number").html(json.num_people);
             $(".post_" + json.post_id + " .fantastic_button .num_agree").addClass("visible");
@@ -143,7 +139,6 @@ $(function(){
             var ele = $(this);
             ele.toggleClass("clicked");
             form = ele.parents("form");
-            console.log(form)
             if (ele.hasClass("clicked")) {
                 $("input[name=on]", form).val("True");
             } else {

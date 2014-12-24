@@ -47,7 +47,7 @@
         <div class="kudos">
         <form class="fantastic_form " action="{% url "posts:this_was_fantastic" post.pk %}" method="POST">
             {% csrf_token %}
-
+            {{fantastic_form.as_p}}
             <button type="button" href="#" class="fantastic_button button {% if fantastic %}clicked{% endif %}"><span class="unclicked_star"><icon class="fa fa-heart-o"></icon></span><span class="clicked_star"><icon class="fa fa-heart"></icon></span><span class="fantastic_text">I love this.</span> <span class="num_agree"><span class="number">{{post.num_fantastics}}</span> people agree!</span> </button>
         </form>
         </div>

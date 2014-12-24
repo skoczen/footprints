@@ -155,6 +155,7 @@ def get_author_from_domain(request):
 @render_to("posts/blog.html")
 def blog(request):
     try:
+        fantastic_form = FantasticForm()
         on_blog = True
         author = get_author_from_domain(request)
         posts = Post.objects.filter(author=author, is_draft=False).order_by("-written_on", "title")
@@ -302,7 +303,6 @@ def save_revision(request, author=None, title=None):
         print form
     
     ret = {"success": success, "new_url": new_url}
-    print ret
     return ret
 
 
@@ -352,6 +352,7 @@ def this_was_fantastic(request, post_id):
         fantastic.on = fantastic_form.cleaned_data["on"]
         fantastic.save()
 
+        post = Post.objects.get(pk=post_id)
         return {"success": True, "num_people": post.num_fantastics, "post_id": post.pk}
 
     return {"success": False}
