@@ -87,9 +87,9 @@
         <div class='uploaded_thumb'>
             <img src='{{i.thumb_size_permalink}}' class='list_thumb'>
             <div class="">
-                <br/>Full: <textarea>{{ i.full_permalink }}</textarea>
-                <br/>Blog: <textarea>{{ i.blog_size_url }}</textarea>
-                <br/>Thumb: <textarea>{{ i.thumb_size_url }}</textarea>
+                <br/>Full: <textarea>![ImageCaption]({{ i.full_permalink }})</textarea>
+                <br/>Blog: <textarea>![ImageCaption]({{ i.blog_size_url }})</textarea>
+                <br/>Thumb: <textarea>![ImageCaption]({{ i.thumb_size_url }})</textarea>
             </div>
         </div>
     {% endfor %}

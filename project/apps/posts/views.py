@@ -527,9 +527,9 @@ def image_upload(request, post_id):
 
         return {
             'success': True,
-            'url': post_image.full_permalink,
-            'blog_size_permalink': post_image.blog_size_permalink,
-            'thumb_size_permalink': post_image.thumb_size_permalink,
+            'url': "![ImageCaption](%s)" % post_image.full_permalink,
+            'blog_size_permalink': "![ImageCaption](%s)" % post_image.blog_size_permalink,
+            'thumb_size_permalink': "![ImageCaption](%s)" % post_image.thumb_size_permalink,
         }
     except:
         import traceback; traceback.print_exc();
