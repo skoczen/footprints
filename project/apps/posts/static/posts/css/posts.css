@@ -474,16 +474,21 @@ a.all_posts:hover {
         display: block;
     }
 }
+.post .text_and_title input .post .text_and_title textarea {
+    -webkit-hyphens: manual;  
+    -moz-hyphens: manual;  
+    hyphens: manual;
+}
 @media all and (max-width: 600px) {
     body {
-        /*background: #FFF;*/
+        background: #FFF;
     }
     .post {
         width: 100%;
-        /*box-shadow: none;*/
+        box-shadow: none;
         border: 1px solid #DDD;
         border-width: 0 0 1px 0;
-        /*padding-bottom: 16px;*/
+        padding-bottom: 16px;
         margin-bottom: 30px;
     }
     .post.type_4 {
@@ -497,8 +502,9 @@ a.all_posts:hover {
         hyphens: auto;
     }
     .post .text_and_title p, .post.narrow .text_and_title p, .post .text_and_title .body, .post.narrow .text_and_title .body {
-        line-height: 1.6em;
-        font-weight: 500;
+        /*font-size: 20px;*/
+        line-height: 1.45em;
+        font-weight: 400;
     }
     .post .text_and_title h1.title, .post.narrow .text_and_title h1.title, .post .text_and_title h1.title .editable {
         text-align: left;

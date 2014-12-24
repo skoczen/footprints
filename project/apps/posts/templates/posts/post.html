@@ -1,10 +1,10 @@
 {% extends "posts/base.html" %}{% load compress %}
 
 {% block title %}{{post.title}}{% endblock %}
-{% block description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
+{% block description %}{{post.description|default:""}}{% endblock %}
 {% block author %}{{post.author.name}}{% endblock %}
 {% block schema_name %}{{post.title}}{% endblock %}
-{% block schema_description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
+{% block schema_description %}{{post.description|default:""}}{% endblock %}
 {% block schema_author %}{{post.author.name}}{% endblock %}
 {% block og_title %}{{post.title}}{% endblock %}
 {% if post.dayone_image %}
@@ -12,9 +12,10 @@
 {% endif %}
 
 {% block og_url %}{% url "posts:post" post.slug %}{% endblock %}
-{% block og_description %}'{{post.title}}', a post by {{post.author.name}}.  Published on Footprints.{% endblock %}
-{% block og_publish_time %}{{post.published_at|date:"c"}}{% endblock %}
-{% block og_update_time %}{{post.sort_datetime|date:"c"}}{% endblock %}
+{% block og_description %}{{post.description|default:""}}{% endblock %}
+{% block og_publish_time %}{{post.written_on|date:"c"}}{% endblock %}
+{% block og_update_time %}{{post.updated_at|date:"c"}}{% endblock %}
+{% block og_site_name %}{{post.author.blog_name}}{% endblock %}
 
 {% block css %}{{block.super}}
 {% compress css %}
@@ -46,10 +47,10 @@
 {% else %}
 <a href="{% url 'posts:home'  %}" class="all_posts">
 {% endif %}
-    <span class="posts_icon">
-        <i class="fa fa-chevron-circle-left"></i>
-    </span>
-    <span class="caption">All Posts</span>
+    {# <span class="posts_icon"> #}
+        {# <i class="fa fa-chevron-circle-left"></i> #}
+    {# </span> #}
+    {# <span class="caption">All Posts</span> #}
 </a>
 
 

@@ -44,6 +44,7 @@ Actual, me MVP:
     - pre-generate thumbnails
     - facebook account
     - unpublish
+    - bug fixes and style tweaks.
 
 - import all old links
 - Import tumblr direct post:
@@ -51,6 +52,9 @@ Actual, me MVP:
      - peanut
      - guys
 - test it out!
+    - mobile
+    - speed
+    - meta tags
 
 
 V2:

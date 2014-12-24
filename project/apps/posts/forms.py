@@ -14,7 +14,7 @@ class PostForm(forms.ModelForm):
             "title",
             "body",
             # "slug",
-            # "published",
+            "description",
             "written_on",
             "is_draft",
             # "display_type",

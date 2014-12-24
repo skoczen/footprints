@@ -169,6 +169,7 @@ class AbstractPost(BaseModel):
     body = models.TextField(blank=True, null=True, default="Body")
     title_html = models.TextField(blank=True, null=True, editable=False)
     body_html = models.TextField(blank=True, null=True, editable=False)
+    description = models.TextField(blank=True, null=True)
     post_type = models.IntegerField(choices=POST_TYPES)
     num_images = models.IntegerField(default=0)
     permalink_path = models.CharField(max_length=500, blank=True, null=True, editable=False)
@@ -177,7 +178,6 @@ class AbstractPost(BaseModel):
     allow_comments = models.BooleanField(default=True)
 
     dayone_post = models.BooleanField(default=False, editable=False)
-    dayone_id = models.CharField(max_length=255, blank=True, null=True, editable=False, unique=True)
     dayone_posted = models.DateTimeField(blank=True, null=True, editable=False)
     dayone_last_modified = models.DateTimeField(blank=True, null=True, editable=False)
     dayone_last_rev = models.CharField(max_length=255, blank=True, null=True, editable=False)
@@ -232,6 +232,11 @@ class AbstractPost(BaseModel):
         self.body_html = mistune.markdown(self.body)
 
         self.num_images = self.body_html.count("<img")
+        if not self.description:
+            if self.body:
+                self.description = self.body[:160]
+            else:
+                self.description = "by %s" % self.author.name
         if self.dayone_image:
             self.num_images += 1
 
@@ -308,6 +313,8 @@ class Post(AbstractPost):
     published_at = models.DateTimeField(blank=True, null=True, editable=False)
     written_on = models.DateTimeField(blank=True, null=True, default=datetime.datetime.now())
     slug = models.CharField(max_length=800, blank=True, verbose_name="url")
+
+    dayone_id = models.CharField(max_length=255, blank=True, null=True, editable=False, unique=True)
 
     def save(self, *args, **kwargs):
         if not self.published_at and not self.is_draft:
