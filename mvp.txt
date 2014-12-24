@@ -51,20 +51,19 @@ Actual, me MVP:
          - peanut
          - guys
     - publish/unpublish all
-- all forwards done
-- link videos:
-    apartment tours
-    beach handball goal
-    hermit crabs in video
-    guys and the hermit crab
-
-- all deletes done
-- post guys at the beach.
-- mark all published as blog ready
-- test it out!
-    - mobile
-    - speed
-    - meta tags
+    - all forwards done
+    - link videos:
+        apartment tours
+        beach handball goal
+        hermit crabs in video
+        guys and the hermit crab
+        - all deletes done
+    - post guys at the beach.
+    - mark all published as blog ready
+    - test it out!
+        - mobile
+        - speed
+        - meta tags
 - move DNS!
 - Announce it!! :)
 
