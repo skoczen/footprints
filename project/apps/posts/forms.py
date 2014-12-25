@@ -16,7 +16,9 @@ class PostForm(forms.ModelForm):
             # "slug",
             "description",
             "written_on",
+            "allow_private_viewing",
             "is_draft",
+
             # "display_type",
             "dayone_image",
         )

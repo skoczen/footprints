@@ -224,6 +224,7 @@ class AbstractPost(BaseModel):
     social_shares_customized = models.BooleanField(default=False)
 
     email_publish_intent = models.BooleanField(default=False)
+    allow_private_viewing = models.BooleanField(default=False)
 
     def __unicode__(self, *args, **kwargs):
         return self.title

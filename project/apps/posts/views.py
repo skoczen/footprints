@@ -203,7 +203,7 @@ def post(request, title=None):
             request.session["uuid"] = uuid.uuid1()
 
 
-    if not is_mine and post.is_draft:
+    if not is_mine and post.is_draft and not post.allow_private_viewing:
         raise Http404("Post not found. Maybe it never was, maybe it's a draft and you're not logged in!")
 
     if is_mine:
