@@ -14,10 +14,11 @@ from django.core.urlresolvers import reverse
 from django.core.cache import cache
 from django.db.models import Count
 from django.db.models import Max, Min
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import feedgenerator
 from annoying.decorators import render_to, ajax_request
 from posts.models import Backup, Fantastic, Post, Author, PostRevision, Read, PostImage, Redirect
 from posts.forms import AccountForm, FantasticForm, PostForm, ReadForm, SocialShareForm, BlogForm, BlogUserForm
@@ -492,6 +493,7 @@ def social_share(request, post_id):
                             message=post.facebook_status_text,
                             link=post.full_permalink,
                         )
+                        print resp
                         post.facebook_status_id = resp["id"]
                         # print post.facebook_status_id
                         # resp = facebook_api.get(
@@ -757,3 +759,28 @@ def facebook_auth_finish(request):
         return HttpResponseRedirect(redirect_url)
     return HttpResponseRedirect(reverse("posts:my_account"))
 
+
+def rss(request):
+    author = get_author_from_domain(request)
+    posts = Post.objects.filter(author=author, is_draft=False, email_publish_intent=True).order_by("-written_on", "title")
+    
+    f = feedgenerator.Rss201rev2Feed(
+        title=author.blog_name,
+        link=author.full_blog_domain,
+        description="",
+        language=u"en",
+        author_name=author.name,
+        feed_url= "%s/rss" % author.full_blog_domain
+    )
+    for p in posts:
+        html = ""
+        if p.dayone_image_blog_size_url:
+            html += "<img src='%s'/>" % p.dayone_image_blog_size_url
+        html += p.body_html
+        f.add_item(
+            title=p.title_html,
+            link=p.full_permalink,
+            pubdate=p.written_on,
+            description=html,
+        )
+    return HttpResponse(f.writeString('UTF-8'))

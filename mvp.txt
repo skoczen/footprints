@@ -69,6 +69,9 @@ Actual, me MVP:
 
 Next:
     - Better newsletter
+    - Fixed rss
+    - Fixed facebook
+    - Blog description field
 
 V2:
     - on any article save, auto-create the redirect (get_or_create old url)
