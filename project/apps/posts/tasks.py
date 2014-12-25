@@ -305,10 +305,10 @@ def sync_posts(author_id):
                 # Facebook
                 if p.facebook_published:
                     try:
-                        resp = facebook_api.get(
-                            path="/%s" % p.facebook_status_id.split("_")[1]
-                        )
                         try:
+                            resp = facebook_api.get(
+                                path="/%s" % p.facebook_status_id.split("_")[1]
+                            )
                             resp = facebook_api.get(
                                 path="/%s/likes/?summary=true" % p.facebook_status_id.split("_")[1]
                             )
@@ -337,12 +337,13 @@ def sync_posts(author_id):
                         # p.facebook_shares = 0
                         # p.facebook_comments = 0
                     except:
-                        p.facebook_published = False
-                        p.facebook_status_id = None
-                        p.facebook_likes = 0
-                        p.facebook_shares = 0
-                        p.facebook_comments = 0
-                        do_save = True
+                        # p.facebook_published = False
+                        # p.facebook_status_id = None
+                        # p.facebook_likes = 0
+                        # p.facebook_shares = 0
+                        # p.facebook_comments = 0
+                        # do_save = True
+                        pass
 
                         
                         pass
