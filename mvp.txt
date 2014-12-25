@@ -65,11 +65,12 @@ Actual, me MVP:
         - speed
         - meta tags
     - move DNS!
-- Announce it!! :)
+    - Announce it!! :)
+
 
 Next:
-    - Better newsletter
     - Fixed rss
+    - Better newsletter
     - Fixed facebook
     - Blog description field
 

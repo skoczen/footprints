@@ -777,8 +777,11 @@ def rss(request):
         if p.dayone_image_blog_size_url:
             html += "<img src='%s'/>" % p.dayone_image_blog_size_url
         html += p.body_html
+        title = p.title_html
+        if title[:3] == "<p>" and title[-4:] == "</p>":
+            title = title[3:-4]
         f.add_item(
-            title=p.title_html,
+            title=title,
             link=p.full_permalink,
             pubdate=p.written_on,
             description=html,

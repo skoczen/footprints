@@ -230,6 +230,8 @@ class AbstractPost(BaseModel):
 
     def save(self, *args, **kwargs):
         self.title_html = markdown.markdown(self.title, extensions=[PyEmbedMarkdown()]).replace("http://www.youtube.com", "https://www.youtube.com")
+        if self.title_html[:3] == "<p>" and self.title_html[-4:] == "</p>":
+            self.title_html = self.title_html[3:-4]
         self.body_html = markdown.markdown(self.body, extensions=[PyEmbedMarkdown()]).replace("http://www.youtube.com", "https://www.youtube.com")
 
         self.num_images = self.body_html.count("<img")
