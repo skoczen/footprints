@@ -69,6 +69,8 @@ Actual, me MVP:
 
 
 Next:
+    - Twitter: Lose 23 chars for the image.
+    - Support GA.
     - Fixed rss
     - Better newsletter
     - Fixed facebook

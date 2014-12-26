@@ -7,6 +7,7 @@ from envs.common import *
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 BASE_URL = "https://www.footprintsapp.com"
+PREPEND_WWW = True
 
 EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
 MAILGUN_ACCESS_KEY = os.environ['MAILGUN_API_KEY']
