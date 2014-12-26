@@ -726,7 +726,7 @@ def facebook_auth_start(request):
         request.session["facebook_auth_redirect_to"] = request.GET["redirect_to"]
 
     auth = facebook_auth()
-    authorization_url = auth.authorize_url('publish_actions,emai,read_stream')
+    authorization_url = auth.authorize_url('publish_actions,email,user_status')
     return HttpResponseRedirect(authorization_url)
 
 @login_required
