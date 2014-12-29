@@ -57,7 +57,7 @@ h1 .help {
 p {
     font-size: 16px;
 }
-ul {
+ul, ol {
     margin-left: 2em;
 }
 code {

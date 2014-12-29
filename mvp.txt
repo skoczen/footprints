@@ -70,13 +70,13 @@ Actual, me MVP:
 
 Next:
         - Fixed facebook
+    - Better newsletter
+    - Fixed rss
     - Twitter: Lose 23 chars for the image.
     - Proper GA support.
-    - Fixed rss
-    - Better newsletter
     - Blog description field
     - robots.txt
-
+    - better signup orm
 V2:
     - on any article save, auto-create the redirect (get_or_create old url)
     - add reads on detail page, at least.

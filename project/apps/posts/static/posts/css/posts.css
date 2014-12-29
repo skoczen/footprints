@@ -127,7 +127,7 @@ body {
 }
 .post .title a, .post .title a:hover, .post .title a:visited, .post .title a:active { 
     color: #333;
-    text-decoration: none;
+    text-decoration: none !important;
 }
 .post .body {
     /*all-rounder*/
