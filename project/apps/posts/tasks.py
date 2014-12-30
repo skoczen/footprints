@@ -251,6 +251,9 @@ def sync_posts(author_id):
                             "weather_wind_speed_kph": get_from_plist_if_exists("Weather.Wind Speed KPH", plist),
                         }
                         if exists:
+                            if not p.is_draft:
+                                kwargs["is_draft"] = False
+
                             for (key, value) in kwargs.items():
                                 setattr(p, key, value)
                             if image:

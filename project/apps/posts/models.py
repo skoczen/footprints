@@ -339,6 +339,7 @@ class Post(AbstractPost):
 
 
         make_revision = False
+        update_thumbs = False
         if not self.pk:
             make_revision = True
             if not self.title:
@@ -361,8 +362,7 @@ class Post(AbstractPost):
                     self.permalink_path = reverse('posts:post', args=(self.slug,))
             if old_me.dayone_image != self.dayone_image:
                 self.dayone_image_url = self.dayone_image.url.split("?")[0]
-                self.dayone_image_thumb_size_url = get_thumbnail(self.dayone_image, '100x100', crop="center", quality=75).url.split("?")[0]
-                self.dayone_image_blog_size_url = get_thumbnail(self.dayone_image, '1792', quality=90).url.split("?")[0]
+                update_thumbs = True
 
         if not self.social_shares_customized:
             self.twitter_status_text = "%s %s" % (self.title.strip()[:118], self.full_permalink)
@@ -391,6 +391,11 @@ class Post(AbstractPost):
                     post_dict[k] = v
             post_dict["post"] = self
             PostRevision.objects.create(**post_dict)
+
+        if update_thumbs:
+            self.dayone_image_thumb_size_url = get_thumbnail(self.dayone_image, '100x100', crop="center", quality=75).url.split("?")[0]
+            self.dayone_image_blog_size_url = get_thumbnail(self.dayone_image, '1792', quality=90).url.split("?")[0]
+            self.save()
 
     @property
     def date(self):

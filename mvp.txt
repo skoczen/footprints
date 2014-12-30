@@ -77,6 +77,7 @@ Next:
     - Blog description field
     - robots.txt
     - better signup orm
+    - writer. programmer. nomad.
 V2:
     - on any article save, auto-create the redirect (get_or_create old url)
     - add reads on detail page, at least.
