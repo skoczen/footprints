@@ -777,8 +777,8 @@ def rss(request):
         if p.dayone_image_blog_size_url:
             html += "<img src='%s'/>" % p.dayone_image_blog_size_url
         # html += p.body_html
-        if p.description:
-            html += p.description
+        if p.description and p.description != "by %s" % p.author.name:
+            html += "<p>%s</p>" % p.description
         else:
             html += p.html
         title = p.title_html
