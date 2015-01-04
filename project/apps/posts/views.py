@@ -780,7 +780,7 @@ def rss(request):
         if p.description and p.description != "by %s" % p.author.name:
             html += "<p>%s</p>" % p.description
         else:
-            html += p.html
+            html += p.body_html
         title = p.title_html
         if title[:3] == "<p>" and title[-4:] == "</p>":
             title = title[3:-4]
