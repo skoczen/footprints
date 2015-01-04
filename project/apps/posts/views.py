@@ -762,7 +762,7 @@ def facebook_auth_finish(request):
 
 def rss(request):
     author = get_author_from_domain(request)
-    posts = Post.objects.filter(author=author, is_draft=False, email_publish_intent=True).order_by("-written_on", "title")
+    posts = Post.objects.filter(author=author, is_draft=False, email_publish_intent=True).order_by("written_on", "title")
     
     f = feedgenerator.Rss201rev2Feed(
         title=author.blog_name,
@@ -776,7 +776,11 @@ def rss(request):
         html = ""
         if p.dayone_image_blog_size_url:
             html += "<img src='%s'/>" % p.dayone_image_blog_size_url
-        html += p.body_html
+        # html += p.body_html
+        if p.description:
+            html += p.description
+        else:
+            html += p.html
         title = p.title_html
         if title[:3] == "<p>" and title[-4:] == "</p>":
             title = title[3:-4]
