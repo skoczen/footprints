@@ -775,7 +775,7 @@ def rss(request):
     for p in posts:
         html = ""
         if p.dayone_image_blog_size_url:
-            html += "<img src='%s' style='max-width: 100%;' />" % p.dayone_image_blog_size_url
+            html += "<img src='%s' style='max-width: 100%%;' />" % p.dayone_image_blog_size_url
         # html += p.body_html
         if p.description and p.description != "by %s" % p.author.name:
             html += "<p>%s</p>" % p.description
