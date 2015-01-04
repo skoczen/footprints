@@ -72,6 +72,7 @@ Next:
         - Fixed facebook
     - Better newsletter
     - Fixed rss
+    - Split out CSS
     - Twitter: Lose 23 chars for the image.
     - Proper GA support.
     - Blog description field
