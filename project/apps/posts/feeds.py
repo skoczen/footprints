@@ -25,7 +25,7 @@ class LatestEntriesFeed(Feed):
         return "Ink and Foots?"
 
     def items(self):
-        return Post.objects.filter(email_publish_intent=True, is_draft=False, written_on__gt=datetime.date.today()-datetime.timedelta(days=30)).order_by('written_on')
+        return Post.objects.filter(email_publish_intent=True, is_draft=False, written_on__gt=datetime.date.today()-datetime.timedelta(days=7)).order_by('-written_on')
 
     def item_title(self, item):
         return item.title_html
