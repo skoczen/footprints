@@ -25,7 +25,7 @@ class LatestEntriesFeed(Feed):
         return "Ink and Foots?"
 
     def items(self):
-        return Post.objects.filter(email_publish_intent=True, is_draft=False, written_on__gt=datetime.date.today()-datetime.timedelta(days=7)).order_by('-written_on')
+        return Post.objects.filter(email_publish_intent=True, is_draft=False, written_on__gt=datetime.date.today()-datetime.timedelta(days=7)).order_by('written_on')
 
     def item_title(self, item):
         return item.title_html
@@ -34,7 +34,8 @@ class LatestEntriesFeed(Feed):
         html = ""
         if item.dayone_image:
             html += "<img src='%s'/>" % item.dayone_image.url
-        html += item.body_html
+        # html += item.body_html
+        html += item.description
         return html
 
     # item_link is only needed if NewsItem has no get_absolute_url method.
