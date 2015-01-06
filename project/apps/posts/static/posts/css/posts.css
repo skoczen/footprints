@@ -33,7 +33,7 @@ body {
 .print.author {
     display: none;
 }
-.post {
+.post, .related_posts {
     display: block;
     position: relative;
     width: 64em;
@@ -367,7 +367,57 @@ a.all_posts:hover .caption {
 a.all_posts:hover {
     text-decoration: none;
 }
+.related_posts {
+    background-color: transparent;
+    border-bottom-color: transparent;
+    border-right-color: transparent;
+    box-shadow: none;
+    overflow: auto;
+}
+a.related_post {
+    display: block;
+    position: relative;
+    width: 28%;
+    margin: 0 5em 40px 0;
+    float: left;
+    width: 18em;
+    min-height: 18em;
 
+    background-color: #FFF;
+    border-bottom-color: rgba(255,255,255,0.97);
+    border-right-color: rgba(255,255,255,0.97);
+    box-shadow: 1px 2px 2px rgba(0,0,0,0.3);
+    text-decoration: none;
+}
+a.related_post:hover .post_title {
+    color: #333;
+}
+a.related_post.last {
+    margin-right: 0;
+}
+a.related_post .post_title {
+    /*position: absolute;*/
+    font-family: 'Cardo', serif;
+    letter-spacing: -1px;
+    color: #454545;
+    z-index: 100;
+    
+    margin: 16px;
+}
+a.related_post .post_title {
+    font-size: 2.4em;
+    line-height: 1.1em;
+}
+
+a.related_post.has_image .post_title {
+    font-size: 1.2em;
+}
+a.related_post img {
+    /*position: absolute;*/
+    width: 100%;
+    height: auto;
+    z-index: 1;
+}
 @page  
 { 
     size: auto;   /* auto is the initial value */ 

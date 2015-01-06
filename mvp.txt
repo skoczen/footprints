@@ -70,8 +70,9 @@ Actual, me MVP:
 
 Next:
         - Fixed facebook
-    - Better newsletter
-    - Fixed rss
+        - Better newsletter
+        - Fixed rss
+    - add to fb count shares: https://developers.facebook.com/tools/explorer/145634995501895/?method=GET&path=http%3A%2F%2Fblog.inkandfeet.com%2FHow-To-Get-To-The-Life-You-Want-Without-Being-A-Superhero&version=v2.2
     - Split out CSS
     - Twitter: Lose 23 chars for the image.
     - Proper GA support.

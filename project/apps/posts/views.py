@@ -152,6 +152,15 @@ def get_author_from_domain(request):
     domain = Author.objects.get(blog_domain__iexact=domain)
     return domain
 
+def get_related_posts(post):
+    try:
+        top = Post.objects.filter(author=post.author, is_draft=False).exclude(pk=post.pk).annotate(fantastics=Count('fantastic')).order_by('fantastics')[:2]
+        random = Post.objects.filter(author=post.author, is_draft=False).exclude(pk__in=[top[0].pk, top[1].pk, post.pk]).order_by("?")[0]
+        return [top[0], random, top[1],]
+    except:
+        import traceback; traceback.print_exc();
+
+    return []
 
 @render_to("posts/blog.html")
 def blog(request):
@@ -196,6 +205,8 @@ def post(request, title=None):
         return HttpResponseRedirect(reverse("posts:home"))
     
     post = Post.objects.get(slug__iexact=title, author=author)
+    related_posts = get_related_posts(post)
+    print related_posts
     is_mine = post.author.user == request.user
 
     if not request.user.is_authenticated():
@@ -204,7 +215,7 @@ def post(request, title=None):
 
 
     if not is_mine and post.is_draft and not post.allow_private_viewing:
-        raise Http404("Post not found. Maybe it never was, maybe it's a draft and you're not logged in!")
+        raise Http404("Post not found. Maybe it never existed, or maybe it's a draft and you're not logged in!")
 
     if is_mine:
         form = PostForm(instance=post)
