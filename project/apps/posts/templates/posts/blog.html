@@ -7,7 +7,7 @@
 {% block schema_description %}A blog by {{author.name}}. Published on Footprints.{% endblock %}
 {% block schema_author %}{{author.name}}{% endblock %}
 {% block og_title %}{{author.blog_name}}{% endblock %}
-{% block og_url %}{% url "posts:blog" author.slug %}{% endblock %}
+{% block og_url %}{{author.full_blog_domain}}{% endblock %}
 {% block og_description %}A blog by {{author.name}}. Published on Footprints.{% endblock %}
 {% block og_publish_time %}{{post.published_at|date:"c"}}{% endblock %}
 {% block og_update_time %}{{post.sort_datetime|date:"c"}}{% endblock %}
