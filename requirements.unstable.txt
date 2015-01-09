@@ -22,6 +22,7 @@ dropbox
 fabric
 facepy
 gunicorn
+newrelic
 markdown
 pyembed-markdown
 pillow
