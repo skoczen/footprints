@@ -333,6 +333,8 @@ def sync_posts(author_id):
                             print resp
                             if "summary" in resp:
                                 p.facebook_shares = resp["summary"]["total_count"]
+                            else:
+                                p.facebook_shares = 0
 
                             try:
                                 resp = facebook_api.get(
