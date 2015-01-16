@@ -94,7 +94,7 @@ $(function(){
     Footprints.post.read_tracker.time_estimate = function() {
         var chars = $(".post .body").text().length;
         try {
-            var lines = $(".post .body").text().match(/\n/g).length;    
+            var lines = $(".post .body").text().match(/\n/g).length; 
         } catch (err) {
             var lines = 0;
         }
@@ -146,13 +146,21 @@ $(function(){
             }
             form.submit();
         });
+        if ($(".read_form").length > 0) {
+            $(".read_form").ajaxForm({
+                success: function(json) {
+                    $(".num_reads .num").html(json.num_reads);
+                }
+            });
+            $(window).scroll(Footprints.post.read_tracker.check_scroll);
+            Footprints.post.read_tracker.check_scroll();
+            setTimeout(Footprints.post.read_tracker.enough_time_callback, Footprints.post.read_tracker.time_estimate());
+        }
         if ($(".fantastic_form").length > 0) {
             $(".fantastic_form").ajaxForm({
                 success: Footprints.post.handlers.fantastic_form_callback
             });
         }
-        $(window).scroll(Footprints.post.read_tracker.check_scroll);
-        Footprints.post.read_tracker.check_scroll();
     };
     Footprints.post.actions.init();
 

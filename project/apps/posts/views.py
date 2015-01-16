@@ -1,6 +1,7 @@
 import datetime
 import json
 import re
+import random
 import uuid
 
 from dropbox.client import DropboxOAuth2Flow, DropboxClient
@@ -152,6 +153,21 @@ def get_author_from_domain(request):
     domain = Author.objects.get(blog_domain__iexact=domain)
     return domain
 
+def get_related_posts(post):
+    try:
+        top = Post.objects.filter(author=post.author, is_draft=False).exclude(pk=post.pk).annotate(fantastics=Count('fantastic')).order_by('fantastics')[:6]
+        random_selection = Post.objects.filter(author=post.author, is_draft=False).exclude(pk__in=[post.pk]+[t.pk for t in top]).order_by("?")[:4]
+        options = []
+        for t in top:
+            options.append(t)
+        for r in random_selection:
+            options.append(r)
+
+        return random.sample(options, 3)
+    except:
+        import traceback; traceback.print_exc();
+
+    return []
 
 @render_to("posts/blog.html")
 def blog(request):
@@ -187,15 +203,17 @@ def post(request, title=None):
         return HttpResponseRedirect(reverse("posts:home"))
 
     if Post.objects.filter(slug__iexact=title, author=author).count() == 0:
-        print request.path
+        # print request.path
         for r in Redirect.objects.filter(author=author):
             if re.match("%s" % r.old_url, request.path) or re.match(r"%s" % r.old_url, request.path, flags=re.IGNORECASE):
-                print "matched: %s" % r.new_url
+                # print "matched: %s" % r.new_url
                 return HttpResponseRedirect(r.new_url)
 
         return HttpResponseRedirect(reverse("posts:home"))
     
     post = Post.objects.get(slug__iexact=title, author=author)
+    related_posts = get_related_posts(post)
+    # print related_posts
     is_mine = post.author.user == request.user
 
     if not request.user.is_authenticated():
@@ -204,7 +222,7 @@ def post(request, title=None):
 
 
     if not is_mine and post.is_draft and not post.allow_private_viewing:
-        raise Http404("Post not found. Maybe it never was, maybe it's a draft and you're not logged in!")
+        raise Http404("Post not found. Maybe it never existed, or maybe it's a draft and you're not logged in!")
 
     if is_mine:
         form = PostForm(instance=post)
