@@ -377,11 +377,13 @@ a.all_posts:hover {
 a.related_post {
     display: block;
     position: relative;
-    width: 28%;
+    /*width: 28%;*/
     margin: 0 5em 40px 0;
-    float: left;
+    /*float: left;*/
     width: 18em;
     min-height: 18em;
+    height: 18em;
+
 
     background-color: #FFF;
     border-bottom-color: rgba(255,255,255,0.97);
@@ -396,21 +398,29 @@ a.related_post.last {
     margin-right: 0;
 }
 a.related_post .post_title {
-    /*position: absolute;*/
+    position: absolute;
     font-family: 'Cardo', serif;
     letter-spacing: -1px;
     color: #454545;
     z-index: 100;
-    
+    text-overflow: ellipsis;
+    overflow: hidden;
     margin: 16px;
+    height: 225px;
 }
 a.related_post .post_title {
-    font-size: 2.4em;
+    font-size: 2.0em;
     line-height: 1.1em;
+    text-overflow: ellipsis;
+    text-align: justify;
 }
 
 a.related_post.has_image .post_title {
     font-size: 1.2em;
+    line-height: 1.2em;
+    height: 1.2em;
+    text-overflow: ellipsis;
+    text-align: left;
 }
 a.related_post img {
     /*position: absolute;*/
