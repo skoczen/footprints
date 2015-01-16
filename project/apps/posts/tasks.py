@@ -331,6 +331,19 @@ def sync_posts(author_id):
                             if "summary" in resp:
                                 p.facebook_shares = resp["summary"]["total_count"]
 
+                            try:
+                                resp = facebook_api.get(
+                                    path="/%s" % p.full_permalink
+                                )
+                                print resp
+                                if "share" in resp:
+                                    if not p.facebook_shares:
+                                        p.facebook_shares = 0
+                                    p.facebook_shares = p.facebook_shares + resp["share"]["share_count"]
+                                print p.facebook_shares
+                            except:
+                                import traceback; traceback.print_exc();
+
                             do_save = True
                         except:
                             import traceback; traceback.print_exc();

@@ -64,7 +64,7 @@
     <div class="col-md-4">
     <a href="{{p.permalink}}" class="related_post {% if forloop.last %}last{% endif %} {% if p.dayone_image_blog_size_url %}has_image{% endif %}">
         {% if p.dayone_image_blog_size_url %}
-        {% thumbnail p.dayone_image "504x400" crop="center" as im %}
+        {% thumbnail p.dayone_image "504x384" crop="center" as im %}
                 <img src="{{ im.url }}" />
             {% endthumbnail %}
             {# <img src="{{p.image}}"/> #}
