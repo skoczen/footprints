@@ -47,6 +47,9 @@ $(function(){
             missing_link = false;
         }
         var num_remaining = 140-content.length;
+        if ($("#id_twitter_include_image:checked").length === 1) {
+            num_remaining = num_remaining - 32;
+        }
         $(".twitter .num_characters_remaining .number").html(num_remaining);
         $(".twitter .num_characters_remaining").toggleClass("over", num_remaining < 0)
         if (num_remaining < 0 && $("#id_twitter_publish_intent:checked").length == 1) {
@@ -71,6 +74,7 @@ $(function(){
     Footprints.share.actions.post_photo_twitter_changed = function() {
         var is_checked = $("#id_twitter_include_image:checked").length == 0;
         $(".twitter_fields .post_thumb").toggleClass("hidden", is_checked);
+        Footprints.share.handlers.input_changed();
     }
     Footprints.share.actions.publish_now_changed = function() {
         var is_checked = $("#id_publish_now:checked").length > 0;

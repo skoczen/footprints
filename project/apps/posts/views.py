@@ -169,6 +169,22 @@ def get_related_posts(post):
 
     return []
 
+def get_related_posts(post):
+    try:
+        top = Post.objects.filter(author=post.author, is_draft=False).exclude(pk=post.pk).annotate(fantastics=Count('fantastic')).order_by('-fantastics')[:6]
+        random_selection = Post.objects.filter(author=post.author, is_draft=False).exclude(pk__in=[post.pk]+[t.pk for t in top]).order_by("?")[:2]
+        options = []
+        for t in top:
+            options.append(t)
+        for r in random_selection:
+            options.append(r)
+
+        return random.sample(options, 3)
+    except:
+        import traceback; traceback.print_exc();
+
+    return []
+
 @render_to("posts/blog.html")
 def blog(request):
     try:
