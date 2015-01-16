@@ -316,18 +316,21 @@ def sync_posts(author_id):
                             resp = facebook_api.get(
                                 path="/%s/likes/?summary=true" % p.facebook_status_id
                             )
+                            print resp
                             if "summary" in resp:
                                 p.facebook_likes = resp["summary"]["total_count"]
 
                             resp = facebook_api.get(
                                 path="/%s/comments/?summary=true" % p.facebook_status_id
                             )
+                            print resp
                             if "summary" in resp:
                                 p.facebook_comments = resp["summary"]["total_count"]
 
                             resp = facebook_api.get(
                                 path="/%s/sharedposts/?summary=true" % p.facebook_status_id
                             )
+                            print resp
                             if "summary" in resp:
                                 p.facebook_shares = resp["summary"]["total_count"]
 
