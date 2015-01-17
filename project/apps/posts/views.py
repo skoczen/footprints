@@ -797,7 +797,7 @@ def facebook_auth_finish(request):
 
 def rss(request):
     author = get_author_from_domain(request)
-    posts = Post.objects.filter(author=author, is_draft=False, email_publish_intent=True).order_by("written_on", "title")
+    posts = Post.objects.filter(author=author, is_draft=False, email_publish_intent=True, written_on__gte=datetime.datetime.now()-datetime.timedelta(days=30)).order_by("written_on", "title")
     
     f = feedgenerator.Rss201rev2Feed(
         title=author.blog_name,

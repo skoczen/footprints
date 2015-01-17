@@ -3,6 +3,7 @@ import datetime
 import hashlib
 import os
 import plistlib
+import pytz
 import shutil
 from StringIO import StringIO
 import tempfile
@@ -151,9 +152,9 @@ def get_matching_image_meta_if_exists(dayone_id, image_list):
     return None
 
 def datetime_from_utc_to_local(utc_datetime):
-    now_timestamp = time.time()
-    offset = datetime.datetime.fromtimestamp(now_timestamp) - datetime.datetime.utcfromtimestamp(now_timestamp)
-    return utc_datetime + datetime.timedelta(hours=7)
+    # now_timestamp = time.time()
+    # offset = datetime.datetime.fromtimestamp(now_timestamp) - datetime.datetime.utcfromtimestamp(now_timestamp)
+    return pytz.timezone("Asia/Bangkok").localize(utc_datetime)
 
 @task
 def sync_posts(author_id):
