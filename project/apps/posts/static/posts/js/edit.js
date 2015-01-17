@@ -30,19 +30,33 @@ $(function(){
         return false;
     };
     Footprints.post.editor.add_editors = function() {
-        Footprints.post.editor.editor_body = new Editor({
-            element: $('#edit_body')[0],
-            "status": false,
-            "autofocus": false,
-        });
-        Footprints.post.editor.editor_title = new Editor({
-            "element": "#edit_title",
-            "toolbar": false,
-            "status": false,
-            "autofocus": false
-        });
-        Footprints.post.editor.editor_body.render();
-        Footprints.post.editor.editor_title.render();
+
+        Footprints.post.editor.editor_title = new Pen('#edit_title');
+        // console.log(Footprints.post.editor.editor_body)
+        // new Editor({
+        //     element: $('#edit_body')[0],
+        //     "status": false,
+        //     "autofocus": false,
+        // });
+        Footprints.post.editor.editor_body = new Pen({
+          editor: $("#edit_body")[0],
+          class: 'pen',
+          debug: false,
+          textarea: '<textarea name="content"></textarea>',
+          list: [
+            'blockquote', 'h2', 'h3', 'p', 'insertorderedlist', 'insertunorderedlist',
+            'indent', 'outdent', 'bold', 'italic', 'underline', 'createlink'
+          ],
+          stay: true
+        })
+        // new Editor({
+        //     "element": "#edit_title",
+        //     "toolbar": false,
+        //     "status": false,
+        //     "autofocus": false
+        // });
+        // Footprints.post.editor.editor_body.render();
+        // Footprints.post.editor.editor_title.render();
         $("body").click();
     };
     Footprints.post.editor.cancel_editing = function() {

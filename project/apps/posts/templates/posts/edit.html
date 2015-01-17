@@ -19,7 +19,7 @@
 {% block css %}{{block.super}}
 {% compress css %}
 <link rel="stylesheet" href="{{STATIC_URL}}posts/css/posts.css">
-<link rel="stylesheet" href="{{STATIC_URL}}posts/lib/css/editor.css">
+<link rel="stylesheet" href="{{STATIC_URL}}posts/lib/pen/pen.css">
 <link rel="stylesheet" href="{{STATIC_URL}}posts/lib/dropzone/css/dropzone.css">
 {% endcompress %}
 {% endblock %}
@@ -28,8 +28,8 @@
 {% compress js %}
 <script src="{{STATIC_URL}}base/js/ajaxForm.js"></script>
 <!-- <script src="{{STATIC_URL}}posts/js/nicEdit.js"></script> -->
-<script src="{{STATIC_URL}}posts/lib/js/editor.js"></script>
-<script src="{{STATIC_URL}}posts/lib/js/marked.js"></script>
+<script src="{{STATIC_URL}}posts/lib/pen/pen.js"></script>
+<script src="{{STATIC_URL}}posts/lib/pen/markdown.js"></script>
 <script src="{{STATIC_URL}}posts/lib/dropzone/dropzone.js"></script>
 <script src="{{STATIC_URL}}posts/js/edit.js"></script>
 {% endcompress %}
@@ -67,8 +67,8 @@
     <div id="edit_pane_area"><div id="edit_pane"></div></div>
     <div class="draft_badge"></div>
     <div class="text_and_title">
-        <textarea class="edit_holder" id="edit_title">{{post.title}}</textarea>
-        <textarea class="edit_holder" id="edit_body">{{post.body}}</textarea>
+        <h1 class="title" id="edit_title">{{post.title}}</h1>
+        <div class="body" id="edit_body">{{post.body_html|safe}}</div>
     </div>
 </div>
 
