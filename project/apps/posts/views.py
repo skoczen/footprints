@@ -1,5 +1,6 @@
 import datetime
 import json
+import pytz
 import re
 import random
 import uuid
@@ -818,10 +819,15 @@ def rss(request):
         title = p.title_html
         if title[:3] == "<p>" and title[-4:] == "</p>":
             title = title[3:-4]
+        pubdate = None
+        if p.written_on:
+            pst = pytz.timezone('America/Vancouver')
+            pubdate = pst.normalize(p.written_on.astimezone(pst))
+        
         f.add_item(
             title=title,
             link=p.full_permalink,
-            pubdate=p.written_on,
+            pubdate=pubdate,
             description=html,
         )
     return HttpResponse(f.writeString('UTF-8'))

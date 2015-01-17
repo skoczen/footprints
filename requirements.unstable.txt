@@ -27,6 +27,7 @@ markdown
 pyembed-markdown
 pillow
 psycopg2
+pytz
 requests
 requests-oauth2
 titlecase

@@ -49,8 +49,11 @@ ALLOWED_HOSTS = [
 
 # TIME_ZONE = 'America/Vancouver'
 TIME_ZONE = 'Asia/Bangkok'
-
 LANGUAGE_CODE = 'en-us'
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
+
 
 SITE_ID = 1
 LOGIN_URL = '/accounts/login/'
