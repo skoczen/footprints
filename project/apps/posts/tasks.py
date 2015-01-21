@@ -298,11 +298,11 @@ def sync_posts(author_id):
                         p.twitter_favorites = status.favorite_count
                         do_save = True
                     except:
-                        p.twitter_published = False
-                        p.twitter_status_id = None
-                        p.twitter_retweets = 0
-                        p.twitter_favorites = 0
-                        do_save = True
+                        # p.twitter_published = False
+                        # p.twitter_status_id = None
+                        # p.twitter_retweets = 0
+                        # p.twitter_favorites = 0
+                        # do_save = True
                         import traceback; traceback.print_exc();
                         pass
 
