@@ -48,7 +48,7 @@
             
 
         <div class="post row {% if not post.is_draft %}published{% endif %}">
-            <a href="{% url "posts:post" post.slug %}" class="col-xs-8 thumb_col post_body">
+            <a href="{% url "posts:post" post.slug %}" class="col-xs-7 thumb_col post_body">
                 {% if post.dayone_image %}
                 <img src="{{post.dayone_image_thumb_size_url}}" class="list_thumb" />
                 {% else %}
@@ -78,6 +78,12 @@
                     <i class="fa fa-twitter bg_icon"></i>
                     <div class="number">{% if post.num_twitter_activity > 0 %}{{post.num_twitter_activity}}{% endif %}</div>
                 {% endif %}
+            </a>
+            <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 read_col stats_col {% if not post.is_draft %}published{% else %}unpublished{% endif %}">
+                    {% if not post.is_draft %}
+                        <i class="fa fa-eye bg_icon"></i>
+                        <div class="number">{% if post.num_reads > 0 %}{{post.num_reads}}{% endif %}</div>
+                    {% endif %}
             </a>
             <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 love_col stats_col {% if not post.is_draft %}published{% else %}unpublished{% endif %}">
                     {% if not post.is_draft %}

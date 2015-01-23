@@ -130,6 +130,9 @@ h5 {
     /*color: #FFF;*/
 }
 
+.read_col.published {
+    color: #888;
+}
 .published .facebook_col {
     /*background-color: #CAD2EA;*/
 }
