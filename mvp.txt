@@ -74,6 +74,7 @@ Next:
         - Fixed rss
         - Twitter: Lose 23 chars for the image.
         - add to fb count shares: https://developers.facebook.com/tools/explorer/145634995501895/?method=GET&path=http%3A%2F%2Fblog.inkandfeet.com%2FHow-To-Get-To-The-Life-You-Want-Without-Being-A-Superhero&version=v2.2
+    - twitter file size (3072k) limit
     - cache pages and thumbnail content entirely
     - pre-cache bottom thumbnails
     - Proper GA support.

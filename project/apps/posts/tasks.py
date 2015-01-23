@@ -154,6 +154,8 @@ def get_matching_image_meta_if_exists(dayone_id, image_list):
 def datetime_from_utc_to_local(utc_datetime):
     # now_timestamp = time.time()
     # offset = datetime.datetime.fromtimestamp(now_timestamp) - datetime.datetime.utcfromtimestamp(now_timestamp)
+    print utc_datetime
+    print pytz.timezone("Asia/Bangkok").localize(utc_datetime)
     return pytz.timezone("Asia/Bangkok").localize(utc_datetime)
 
 @task

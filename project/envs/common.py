@@ -48,7 +48,8 @@ ALLOWED_HOSTS = [
 ]
 
 # TIME_ZONE = 'America/Vancouver'
-TIME_ZONE = 'Asia/Bangkok'
+# TIME_ZONE = 'Asia/Bangkok'
+TIME_ZONE = 'UTC'
 LANGUAGE_CODE = 'en-us'
 USE_I18N = True
 USE_L10N = True
