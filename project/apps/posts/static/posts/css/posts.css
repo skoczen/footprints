@@ -86,6 +86,12 @@ body {
 .post p {
     margin: 0;
 }
+.post ol li p:first-child {
+    margin-top: -22px !important;
+}
+.post ol li p:last-child {
+    margin-bottom: -22px !important;
+}
 
 #edit_pane_area {
     position: absolute;
