@@ -98,15 +98,16 @@ $(function(){
     Footprints.post.read_tracker.calculate_from_lines_and_chars = function(lines, chars) {
         // seconds = (chars * .11693548387096774193) - (3.63089330024813895755 * lines);
         // seconds = 1000 * ((lines * 0.15) + (chars * 0.032));
-        seconds = 1000 * ((lines * 0.05) + (chars * 0.022));
+        seconds = 1000 * ((lines * 0.05) + (chars * 0.012));
         return seconds;
     };
     Footprints.post.read_tracker.time_estimate = function() {
+        var lines;
         var chars = $(".post .body").text().length;
         try {
-            var lines = $(".post .body").text().match(/\n/g).length;    
+            lines = $(".post .body").text().match(/\n/g).length;
         } catch (err) {
-            var lines = 0;
+            lines = 0;
         }
         
         return Footprints.post.read_tracker.calculate_from_lines_and_chars(lines, chars);
