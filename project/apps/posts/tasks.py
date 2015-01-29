@@ -311,7 +311,8 @@ def sync_posts(author_id):
                         status = twitter_api.get_status(p.twitter_status_id)
                         p.twitter_retweets = status.retweet_count
                         p.twitter_favorites = status.favorite_count
-                        
+                        if p.twitter_mentions and p.twitter_mentions > 0:
+                            p.twitter_mentions = p.twitter_mentions - 1
                         do_save = True
                     except:
                         # p.twitter_published = False
