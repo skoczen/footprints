@@ -7,6 +7,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.cache import cache
+# from django.core.cache.utils import make_template_fragment_key
 from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
 from sorl.thumbnail import get_thumbnail
@@ -14,6 +15,8 @@ from utils.slughifi import unique_slug, slughifi
 from main_site.models import BaseModel
 
 ENTITY_REGEX = re.compile("&[^\s]*;")
+BODY_HTML_CACHE_KEY = "post_body_%(pk)s"
+TITLE_HTML_CACHE_KEY = "post_title_%(pk)s"
 BIG_QUOTE = 1
 PHOTO_WITH_CAPTION = 2
 ARTICLE_SINGLE_IMAGE = 3
@@ -186,7 +189,7 @@ class AbstractPost(BaseModel):
     dayone_image_url = models.TextField(blank=True, null=True)
     dayone_image_blog_size_url = models.TextField(blank=True, null=True)
     dayone_image_thumb_size_url = models.TextField(blank=True, null=True)
-
+    dayone_image_related_size_url = models.TextField(blank=True, null=True)
 
     location_area = models.CharField(max_length=255, blank=True, null=True,)
     location_country = models.CharField(max_length=255, blank=True, null=True,)
@@ -243,6 +246,9 @@ class AbstractPost(BaseModel):
                 self.description = "by %s" % self.author.name
         if self.dayone_image:
             self.num_images += 1
+
+        # Invalidate any cached template.
+        # cache.delete(make_template_fragment_key('blog_post', [self.pk]))
 
         super(AbstractPost, self).save(*args, **kwargs)
 
@@ -309,7 +315,6 @@ class AbstractPost(BaseModel):
     @property
     def full_permalink(self):
         return "%s%s" % (self.author.full_blog_domain, self.permalink)
-
 
 class Post(AbstractPost):
     started_at = models.DateTimeField(blank=True, null=True, editable=False, auto_now_add=True)
@@ -395,6 +400,7 @@ class Post(AbstractPost):
         if update_thumbs:
             self.dayone_image_thumb_size_url = get_thumbnail(self.dayone_image, '100x100', crop="center", quality=75).url.split("?")[0]
             self.dayone_image_blog_size_url = get_thumbnail(self.dayone_image, '1792', quality=90).url.split("?")[0]
+            self.dayone_image_related_size_url = get_thumbnail(self.dayone_image, '504x384', crop="center", quality=85).url.split("?")[0]
             self.save()
 
     @property

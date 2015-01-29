@@ -74,17 +74,19 @@ Next:
         - Fixed rss
         - Twitter: Lose 23 chars for the image.
         - add to fb count shares: https://developers.facebook.com/tools/explorer/145634995501895/?method=GET&path=http%3A%2F%2Fblog.inkandfeet.com%2FHow-To-Get-To-The-Life-You-Want-Without-Being-A-Superhero&version=v2.2
-    - twitter file size (3072k) limit
+        - pre-cache bottom thumbnails
+    - related posts - don't show ones someone's already read.
+    - twitter file size (3072k) limit (have the site just resize and handle it.)
     - cache pages and thumbnail content entirely
-    - pre-cache bottom thumbnails
     - Proper GA support.
     - Split out CSS
-    - Blog description field
+    - Blog description field moved to social share.
     - robots.txt
     - sitemap
     - better signup orm
     - better editor
     - writer. programmer. nomad.
+
 V2:
     - on any article save, auto-create the redirect (get_or_create old url)
     - add reads on detail page, at least.

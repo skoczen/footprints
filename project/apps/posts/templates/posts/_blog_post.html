@@ -43,7 +43,6 @@
 {% endif %}
         {# <div class="display author">by <a href="{% url "posts:blog" post.author.slug %}">{{post.author.name}}</a></div> #}
         {# <div class="print author">by {{post.author.name}}</div> #}
-        
         <div class="kudos">
         <form class="fantastic_form " action="{% url "posts:this_was_fantastic" post.pk %}" method="POST">
             {% csrf_token %}
@@ -56,5 +55,4 @@
             {{read_form.as_p}}
         </form>
         </div>
-
 </div>
