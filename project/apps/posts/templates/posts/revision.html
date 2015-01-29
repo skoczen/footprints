@@ -1,5 +1,6 @@
-{% extends "base.html" %}{% load compress %}
+{% extends "posts/base.html" %}{% load compress thumbnail %}
 
+{% block author %}{% endblock %}
 {% block title %}Revision: {{post.title}} by {{post.author.name}} on {{post.revised_at|date}}{% endblock %}
 
 {% block css %}{{block.super}}
@@ -8,17 +9,7 @@
 {% endcompress %}
 {% endblock %}
 
+{% block main_content %}
 
-{% block content %}
-<div class="revision_badge">Revision - {{post.revised_at|date}} {{post.revised_at|time}}</div>
-<div class="post revision {% if post.narrow %}narrow{% endif %}">
-    <h1 class="title"><div class="editable" id="post_title">{{post.title|safe}}</div></h1>
-
-    <div class="body"><div class="editable" id="post_body">{{post.body|safe}}</div></div>
-    <div class="author">by {{post.author.name}}</div>
-</div>
-
-<div class="timeline">
-    <div class="copyright">Copyright {{post.author.name}}, all rights reserved.</div>
-</div>
+{% include "posts/_blog_post.html" %}
 {% endblock %}
