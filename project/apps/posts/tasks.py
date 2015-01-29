@@ -2,6 +2,7 @@ import codecs
 import datetime
 import hashlib
 import os
+import requests
 import plistlib
 import pytz
 import shutil
@@ -294,11 +295,23 @@ def sync_posts(author_id):
             for p in author.published_posts:
                 # Twitter
                 do_save = False
+
+                try:
+                    r = requests.get("http://urls.api.twitter.com/1/urls/count.json?url=%s" % p.full_permalink)
+
+                    count = int(r.json()["count"])
+                    if count > 0 or p.twitter_mentions and p.twitter_mentions > 0:
+                        p.twitter_mentions = count
+                        do_save = True
+                except:
+                    import traceback; traceback.print_exc();
+
                 if p.twitter_published:
                     try:
                         status = twitter_api.get_status(p.twitter_status_id)
                         p.twitter_retweets = status.retweet_count
                         p.twitter_favorites = status.favorite_count
+                        
                         do_save = True
                     except:
                         # p.twitter_published = False

@@ -215,6 +215,7 @@ class AbstractPost(BaseModel):
     twitter_status_id = models.CharField(max_length=255, blank=True, null=True, editable=False)
     twitter_retweets = models.IntegerField(blank=True, null=True, default=0)
     twitter_favorites = models.IntegerField(blank=True, null=True, default=0)
+    twitter_mentions = models.IntegerField(blank=True, null=True, default=0)
 
     facebook_publish_intent = models.BooleanField(default=True)
     facebook_published = models.BooleanField(default=False, editable=False)
@@ -300,7 +301,7 @@ class AbstractPost(BaseModel):
 
     @property
     def num_twitter_activity(self):
-        return (self.twitter_favorites or 0) + (self.twitter_retweets or 0)
+        return (self.twitter_favorites or 0) + (self.twitter_retweets or 0) + (self.twitter_mentions or 0)
 
     @property
     def permalink(self):
