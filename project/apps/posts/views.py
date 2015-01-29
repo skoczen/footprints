@@ -157,11 +157,14 @@ def get_author_from_domain(request):
 def get_related_posts(post):
     try:
         top = Post.objects.filter(author=post.author, is_draft=False).exclude(pk=post.pk).annotate(fantastics=Count('fantastic')).order_by('fantastics')[:6]
-        random_selection = Post.objects.filter(author=post.author, is_draft=False).exclude(pk__in=[post.pk]+[t.pk for t in top]).order_by("?")[:4]
+        random_selection = Post.objects.filter(author=post.author, is_draft=False).exclude(pk__in=[post.pk]+[t.pk for t in top]).order_by("?")[:2]
+        recent = Post.objects.filter(author=post.author, is_draft=False).exclude(pk__in=[post.pk]+[t.pk for t in top]+[t.pk for t in random_selection]).order_by("-written_on")[:4]
         options = []
         for t in top:
             options.append(t)
         for r in random_selection:
+            options.append(r)
+        for r in recent:
             options.append(r)
 
         return random.sample(options, 3)
