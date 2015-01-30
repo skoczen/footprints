@@ -1,0 +1,3 @@
+python:
+    command: manage.py test posts
+    watch_glob: "*.py"

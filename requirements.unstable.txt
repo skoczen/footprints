@@ -27,6 +27,7 @@ markdown
 pyembed-markdown
 pillow
 psycopg2
+polytester
 pytz
 requests
 requests-oauth2
