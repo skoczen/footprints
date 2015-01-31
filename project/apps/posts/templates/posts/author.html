@@ -24,6 +24,7 @@
 {% block js %}{{block.super}}
 {% compress js %}
 <script src="{{STATIC_URL}}main_site/js/site.js"></script>
+<script src="{{STATIC_URL}}posts/js/author.js"></script>
 {% endcompress %}
 {% endblock %}
 
@@ -48,7 +49,7 @@
             
 
         <div class="post row {% if not post.is_draft %}published{% endif %}">
-            <a href="{% url "posts:post" post.slug %}" class="col-xs-7 thumb_col post_body">
+            <a href="{% url "posts:post" post.slug %}" class="{% if post.is_draft %}col-xs-11{% else %}col-xs-7{% endif %} thumb_col post_body">
                 {% if post.dayone_image %}
                 <img src="{{post.dayone_image_thumb_size_url}}" class="list_thumb" />
                 {% else %}
@@ -62,35 +63,38 @@
                 </div>
                 <!-- <span class="time">{{post.written_on|time}}</span> -->
             </a>
-            <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 email_col stats_col {% if post.email_published %}published{% else %}unpublished{% endif %}">
-                {% if not post.is_draft %}
-                    <i class="fa fa-envelope-o bg_icon"></i>
-                {% endif %}
+            {% if not post.is_draft %}
+            <div class="col-xs-5">
+                <div class="row">
+                    <a href="{% url 'posts:toggle_featured' post.pk %}" post_id="{{post.pk}}" class="col-xs-2 stats_col toggle_col toggle_featured {% if post.featured %}is_featured on{% endif %}">
+                        <i class="fa fa-bookmark bg_icon"></i>
+                    </a>
+                    <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-2 email_col toggle_col stats_col {% if post.email_published %}published on{% else %}unpublished{% endif %}">
+                        <i class="fa fa-envelope-o bg_icon"></i>
+                    </a>
+                    <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-2 facebook_col stats_col {% if post.facebook_published %}published{% else %}unpublished{% endif %}" title="{{post.facebook_likes}} likes, {{post.facebook_comments}} comments, {{post.facebook_shares}} shares.">
+                            <i class="fa fa-facebook bg_icon"></i>
+                            <div class="number">{% if post.num_facebook_activity > 0 %}{{post.num_facebook_activity}}{% endif %}</div>
+                    </a>
+                    <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-2 twitter_col stats_col {% if post.twitter_published %}published{% else %}unpublished{% endif %}" title="{{post.twitter_favorites}} favorites, {{post.twitter_retweets}} retweets, {{post.twitter_mentions}} organic mentions.">
+                            <i class="fa fa-twitter bg_icon"></i>
+                            <div class="number">{% if post.num_twitter_activity > 0 %}{{post.num_twitter_activity}}{% endif %}</div>
+                    </a>
+                    <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-2 read_col stats_col {% if not post.is_draft %}published{% else %}unpublished{% endif %}">
+                                <i class="fa fa-eye bg_icon"></i>
+                                <div class="number">{% if post.num_reads > 0 %}{{post.num_reads}}{% endif %}</div>
+                    </a>
+                    <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-2 love_col stats_col {% if not post.is_draft %}published{% else %}unpublished{% endif %}">
+                                <i class="fa fa-heart bg_icon"></i>
+                                <div class="number">{% if post.num_fantastics > 0 %}{{post.num_fantastics}}{% endif %}</div>
+                    </a>
+                </div>
+            </div>
+            {% else %}
+            <a href="{% url 'posts:toggle_prospect' post.pk %}" post_id="{{post.pk}}" class="stats_col toggle_col col-xs-1 toggle_prospect {% if post.prospect %}is_prospect on{% endif %}">
+                <i class="fa fa-certificate bg_icon"></i>
             </a>
-            <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 facebook_col stats_col {% if post.facebook_published %}published{% else %}unpublished{% endif %}" title="{{post.facebook_likes}} likes, {{post.facebook_comments}} comments, {{post.facebook_shares}} shares.">
-                    {% if not post.is_draft %}
-                    <i class="fa fa-facebook bg_icon"></i>
-                    <div class="number">{% if post.num_facebook_activity > 0 %}{{post.num_facebook_activity}}{% endif %}</div>
-                    {% endif %}
-            </a>
-            <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 twitter_col stats_col {% if post.twitter_published %}published{% else %}unpublished{% endif %}" title="{{post.twitter_favorites}} favorites, {{post.twitter_retweets}} retweets, {{post.twitter_mentions}} organic mentions.">
-                {% if not post.is_draft %}
-                    <i class="fa fa-twitter bg_icon"></i>
-                    <div class="number">{% if post.num_twitter_activity > 0 %}{{post.num_twitter_activity}}{% endif %}</div>
-                {% endif %}
-            </a>
-            <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 read_col stats_col {% if not post.is_draft %}published{% else %}unpublished{% endif %}">
-                    {% if not post.is_draft %}
-                        <i class="fa fa-eye bg_icon"></i>
-                        <div class="number">{% if post.num_reads > 0 %}{{post.num_reads}}{% endif %}</div>
-                    {% endif %}
-            </a>
-            <a href="{% url 'posts:social_share' post.pk %}" class="col-xs-1 love_col stats_col {% if not post.is_draft %}published{% else %}unpublished{% endif %}">
-                    {% if not post.is_draft %}
-                        <i class="fa fa-heart bg_icon"></i>
-                        <div class="number">{% if post.num_fantastics > 0 %}{{post.num_fantastics}}{% endif %}</div>
-                    {% endif %}
-            </a>
+            {% endif %}
         </div>
         {% empty %}
         <div class="no_posts">No posts yet.  Sync with <a href="{% url 'posts:my_account' %}">DayOne</a>, or <a href="{% url "posts:new" %}">start a new post</a>!</div>

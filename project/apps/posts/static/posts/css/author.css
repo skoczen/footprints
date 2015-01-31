@@ -184,6 +184,17 @@ a.stats_col:hover {
     opacity: 0.1;
 
 }
+.toggle_col.stats_col i.bg_icon {
+    color: #AAA;
+}
+.toggle_col.stats_col.on i.bg_icon {
+    color: #454545;
+}
+.toggle_prospect.stats_col i.bg_icon {    
+    font-size: 32px;
+    bottom: 20px;
+}
+
 .stats_col .number {
     font-size: 20px;
     margin-top: 22px;

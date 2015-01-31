@@ -179,6 +179,8 @@ class AbstractPost(BaseModel):
     permalink_path = models.CharField(max_length=500, blank=True, null=True, editable=False)
 
     is_draft = models.BooleanField(default=True)
+    prospect = models.BooleanField(default=False)
+    featured = models.BooleanField(default=False)
     allow_comments = models.BooleanField(default=True)
 
     dayone_post = models.BooleanField(default=False, editable=False)

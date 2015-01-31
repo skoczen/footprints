@@ -147,6 +147,15 @@ def my_drafts(request, author=None):
     return locals()
 
 
+@render_to("posts/author.html")
+@login_required
+def my_prospects(request, author=None):
+    author = request.user.get_profile()
+    is_me = True
+    posts = Post.objects.filter(is_draft=True, prospect=True, author=author).order_by("-written_on", "title")
+    return locals()
+
+
 def get_author_from_domain(request):
     domain = request.get_host()
     if domain[:4] == "www.":
@@ -373,6 +382,41 @@ def new(request):
     author = Author.objects.get(user=request.user)
     post = Post.objects.create(author=author)
     return HttpResponseRedirect("%s?editing=true" % reverse("posts:edit", args=(post.slug,)))
+
+
+@ajax_request
+def toggle_prospect(request, post_id):
+    try:
+        post = Post.objects.get(pk=post_id, author=request.user.get_profile())
+        post.prospect = not post.prospect
+        post.save()
+        return {
+            "success": True,
+            "prospect": post.prospect,
+            "pk": post.pk,
+        }
+    except:
+        import traceback; traceback.print_exc();
+        pass
+
+    return {"success": False}
+
+@ajax_request
+def toggle_featured(request, post_id):
+    try:
+        post = Post.objects.get(pk=post_id, author=request.user.get_profile())
+        post.featured = not post.featured
+        post.save()
+        return {
+            "success": True,
+            "featured": post.featured,
+            "pk": post.pk,
+        }
+    except:
+        import traceback; traceback.print_exc();
+        pass
+
+    return {"success": False}
 
 
 @ajax_request
