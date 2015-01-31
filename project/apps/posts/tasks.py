@@ -360,9 +360,12 @@ def sync_posts(author_id):
                                 )
 
                                 if "share" in resp:
-                                    if not p.facebook_shares:
-                                        p.facebook_shares = 0
-                                    p.facebook_shares = p.facebook_shares + resp["share"]["share_count"]
+                                    # if not p.facebook_shares:
+                                    #     p.facebook_shares = 0
+                                    if int(resp["share"]["share_count"]) > 1:
+                                        p.facebook_shares = int(resp["share"]["share_count"]) - 1
+                                    else:
+                                        p.facebook_shares = resp["share"]["share_count"]
 
                             except:
                                 import traceback; traceback.print_exc();
