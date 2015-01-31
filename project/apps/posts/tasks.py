@@ -367,6 +367,10 @@ def sync_posts(author_id):
                                     else:
                                         p.facebook_shares = resp["share"]["share_count"]
 
+                                    p.facebook_shares = p.facebook_shares - p.facebook_comments - p.facebook_likes
+                                    if p.facebook_shares < 0:
+                                        p.facebook_shares = 0
+
                             except:
                                 import traceback; traceback.print_exc();
 
