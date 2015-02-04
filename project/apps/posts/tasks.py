@@ -128,12 +128,12 @@ def generate_backup_zip(author_id):
     shutil.rmtree(temp_folder_path)
 
 
-@periodic_task(run_every=datetime.timedelta(seconds=120))
+@periodic_task(run_every=datetime.timedelta(seconds=180))
 def periodic_sync():
     from posts.models import Author
     for a in Author.objects.all():
-        print "%s: %s" % (a, a.dayone_valid)
-        print cache.get(a.sync_start_time_cache_key)
+        # print "%s: %s" % (a, a.dayone_valid)
+        # print cache.get(a.sync_start_time_cache_key)
         sync_posts(a.pk)
 
 
@@ -281,9 +281,8 @@ def sync_posts(author_id):
 
                                 p.save()
                                 image_file.close()
-                        
 
-                        print p.slug
+                        # print p.slug
                     count += 1
 
                 author.last_dropbox_sync = datetime.datetime.now()
@@ -291,7 +290,7 @@ def sync_posts(author_id):
 
             # Pull all social stats:
             twitter_api = authorized_tweepy_api(author)
-            facebook_api =  authorized_facebook_api(author)
+            facebook_api = authorized_facebook_api(author)
             for p in author.published_posts:
                 # Twitter
                 do_save = False
@@ -327,7 +326,7 @@ def sync_posts(author_id):
                 if p.facebook_published:
                     try:
                         try:
-                            print p.facebook_status_id
+                            # print p.facebook_status_id
                             resp = facebook_api.get(
                                 path="/%s" % p.facebook_status_id
                             )
