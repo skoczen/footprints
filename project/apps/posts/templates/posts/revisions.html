@@ -25,7 +25,7 @@
         {# </li> #}
         {% for revision in revisions %}
         <li>
-            <a href="{% url "posts:revision" revision.author.slug revision.pk %}">{{revision.revised_at }} - {{revision.title|safe}} </a>
+            <a href="{% url "posts:revision" revision.author.slug revision.pk %}">{{revision.revised_at }} - {{revision.title|safe}} </a> &nbsp; &nbsp; &nbsp; <a href="{% url "posts:revert_revision" revision.pk %}">Revert</a>
         </li>
         {% endfor %}
     </ul>

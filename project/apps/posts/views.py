@@ -349,7 +349,7 @@ def save_revision(request, author=None, title=None):
             new_url = reverse("posts:post", args=(new_post.slug,))
     else:
         print form
-    
+
     ret = {"success": success, "new_url": new_url}
     return ret
 
@@ -377,6 +377,15 @@ def revision(request, author=None, pk=None):
 
     return locals()
 
+
+def revert_revision(request, pk=None):
+    revision = PostRevision.objects.get(pk=pk, author__slug__iexact=request.user.get_profile().slug)
+    post = revision.post
+    post.body = revision.body
+    post.title = revision.title
+    post.save()
+
+    return HttpResponseRedirect(reverse("posts:revisions", args=(post.author.slug, post.slug,) ))
 
 def new(request):
     author = Author.objects.get(user=request.user)

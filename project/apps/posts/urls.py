@@ -47,6 +47,7 @@ urlpatterns = patterns(
 
     url(r'^{author:slug}/{title:slug}/revisions/?$', views.revisions, name='revisions'),
     url(r'^{author:slug}/revision/{pk:digits}/?$', views.revision, name='revision'),
+    url(r'^revert_revision/{pk:digits}/?$', views.revert_revision, name='revert_revision'),
     # url(r'^{author:slug}/?$', views.author, name='author'),
     # url(r'^$', views.blog, name='blog'),
 
