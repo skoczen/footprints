@@ -128,13 +128,22 @@ def generate_backup_zip(author_id):
     shutil.rmtree(temp_folder_path)
 
 
-@periodic_task(run_every=datetime.timedelta(seconds=180))
+@periodic_task(run_every=datetime.timedelta(seconds=90))
 def periodic_sync():
     from posts.models import Author
     for a in Author.objects.all():
         # print "%s: %s" % (a, a.dayone_valid)
         # print cache.get(a.sync_start_time_cache_key)
         sync_posts(a.pk)
+
+
+@periodic_task(run_every=datetime.timedelta(seconds=600))
+def periodic_stats_sync():
+    from posts.models import Author
+    for a in Author.objects.all():
+        # print "%s: %s" % (a, a.dayone_valid)
+        # print cache.get(a.sync_start_time_cache_key)
+        sync_stats(a.pk)
 
 
 def get_from_plist_if_exists(key, plist):
@@ -146,11 +155,13 @@ def get_from_plist_if_exists(key, plist):
     except:
         return None
 
+
 def get_matching_image_meta_if_exists(dayone_id, image_list):
     for i in image_list["contents"]:
         if i["path"].split("/")[-1].split(".")[0] == dayone_id.split(".")[0]:
             return i
     return None
+
 
 def datetime_from_utc_to_local(utc_datetime):
     # now_timestamp = time.time()
@@ -160,12 +171,17 @@ def datetime_from_utc_to_local(utc_datetime):
     # print pytz.timezone("Asia/Bangkok").localize(utc_datetime)
     # return pytz.timezone("Asia/Bangkok").localize(utc_datetime)
 
+
 @task
 def sync_posts(author_id):
     from posts.models import Author, Post
-    from posts.social import twitter_auth, authorized_tweepy_api, facebook_auth, authorized_facebook_api
     author = Author.objects.get(pk=author_id)
-    if cache.get(author.sync_cache_key) is None or cache.get(author.sync_start_time_cache_key) is None or cache.get(author.sync_start_time_cache_key)+MAX_SYNC_TIMEOUT < datetime.datetime.now():
+    if (
+        cache.get(author.sync_cache_key) is None or
+        cache.get(author.sync_start_time_cache_key) is None or
+        cache.get(author.sync_start_time_cache_key) + MAX_SYNC_TIMEOUT < datetime.datetime.now()
+        ):
+
         try:
             cache.set(author.sync_cache_key, True)
             cache.set(author.sync_start_time_cache_key, datetime.datetime.now())
@@ -217,7 +233,7 @@ def sync_posts(author_id):
 
                         body = "\n".join(split[1:])
                         draft = "Publish URL" not in plist
-                        
+
                         image = get_matching_image_meta_if_exists(dayone_id, image_list)
                         if image:
                             print "getting image"
@@ -231,20 +247,20 @@ def sync_posts(author_id):
                             "body": body,
                             "dayone_post": True,
                             "dayone_id": dayone_id,
-                            
+
                             "dayone_last_modified": datetime_from_utc_to_local(datetime.datetime(*time.strptime(f["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6])),
                             "dayone_last_rev": f["revision"],
                             "is_draft": draft,
                             "dayone_posted": datetime_from_utc_to_local(get_from_plist_if_exists("Creation Date", plist)),
                             "written_on": get_from_plist_if_exists("Creation Date", plist),
-                            
+
                             "location_area": get_from_plist_if_exists("Location.Administrative Area", plist),
                             "location_country": get_from_plist_if_exists("Location.Country", plist),
                             "latitude": get_from_plist_if_exists("Location.Latitude", plist),
                             "longitude": get_from_plist_if_exists("Location.Longitude", plist),
                             "location_name": get_from_plist_if_exists("Location.Place Name", plist),
                             "time_zone_string": get_from_plist_if_exists("Location.Time Zone", plist),
-                            
+
                             "weather_temp_f": get_from_plist_if_exists("Weather.Fahrenheit", plist),
                             "weather_temp_c": get_from_plist_if_exists("Weather.Celsius", plist),
                             "weather_description": get_from_plist_if_exists("Weather.Description", plist),
@@ -287,6 +303,28 @@ def sync_posts(author_id):
 
                 author.last_dropbox_sync = datetime.datetime.now()
                 author.save()
+        except:
+            import traceback; traceback.print_exc();
+            pass
+        cache.delete(author.sync_cache_key)
+        cache.delete(author.sync_start_time_cache_key)
+    else:
+        print "Sync for %s already running." % author
+    print "Done"
+
+
+@task
+def sync_stats(author_id):
+    from posts.models import Author, Post
+    from posts.social import twitter_auth, authorized_tweepy_api, facebook_auth, authorized_facebook_api
+    author = Author.objects.get(pk=author_id)
+    if cache.get(author.sync_cache_key) is None or cache.get(author.sync_start_time_cache_key) is None or cache.get(author.sync_start_time_cache_key)+MAX_SYNC_TIMEOUT < datetime.datetime.now():
+        try:
+            cache.set(author.sync_cache_key, True)
+            cache.set(author.sync_start_time_cache_key, datetime.datetime.now())
+            cache.set(author.sync_total_key, "~%s" % cache.get(author.sync_total_key, "0"))
+            cache.set(author.sync_current_key, 0)
+            print "Stats sync for %s" % author.name
 
             # Pull all social stats:
             twitter_api = authorized_tweepy_api(author)
@@ -391,8 +429,6 @@ def sync_posts(author_id):
                         # do_save = True
                         pass
 
-                        
-                        pass
                 if do_save:
                     p.save()
 
