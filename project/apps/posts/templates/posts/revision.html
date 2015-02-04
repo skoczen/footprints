@@ -11,7 +11,9 @@
 
 {% block main_content %}
 
+<div class="edit_bar">
+    <a class="button revisions_button"  href="{% url "posts:revert_revision" post.pk %}" >Revert to this Version</a>
+</div>
 {% include "posts/_blog_post.html" %}
 
-<textarea>{{post.body|safe}}</textarea>
 {% endblock %}
