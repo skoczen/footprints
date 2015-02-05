@@ -25,6 +25,7 @@ def refreeze():
     local_venv("pip install -r requirements.unstable.txt")
     local_venv("pip freeze requirements.unstable.txt > requirements.txt")
 
+
 def unit():
     local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate; manage.py test --attr=\!e2e" % env)
 

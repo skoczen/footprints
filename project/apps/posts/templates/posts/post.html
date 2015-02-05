@@ -40,6 +40,7 @@
 {% if is_mine %}
 <div class="edit_bar">
     <a href="{% url "posts:revisions" post.author.slug post.slug %}" class="button revisions_button" target="_blank"><i class="icon-revisions" ></i> Revisions</a>
+    {% if not post.is_draft %}<a href="{{post.full_permalink}}" class="button revisions_button"><i class="icon-revisions" ></i> Blog Link</a>{% endif %}
     <a href="{% url 'posts:social_share' post.pk %}" class="button social_share_button"><i class="icon-twitter" ></i> Social Share</a>
     <a href="{% url 'posts:edit' post.slug %}?editing=true" class="button start_editing_button edit_button"><i class="icon-edit" ></i> Edit</a>
 </div>
