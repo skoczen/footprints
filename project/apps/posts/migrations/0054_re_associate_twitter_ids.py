@@ -19,18 +19,20 @@ class Migration(DataMigration):
             if author.twitter_account_name:
                 statuses = twitter_api.user_timeline(screen_name=author.twitter_account_name)
 
+                print "expanded"
                 for s in statuses:
                     for u in s.entities["urls"]:
                         if "expanded_url" in u:
                             print u["expanded_url"]
 
+                print "posts"
                 for post in orm['posts.Post'].objects.filter(is_draft=False, twitter_status_id=None):
                     if post.permalink_path:
                         link = post.permalink_path
                     else:
                         link = reverse('posts:post', args=(post.slug,))
                     permalink = "http://%s%s" % (post.author.blog_domain, link)
-                    print permalink
+                    print "permalink: %s" % permalink
 
                     for s in statuses:
                         for u in s.entities["urls"]:
