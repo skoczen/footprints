@@ -80,7 +80,7 @@ $(function(){
         $(".read_form").submit();
     };
     Footprints.post.read_tracker.check_scroll = function() {
-        if($(window).scrollTop() + $(window).height() > $(document).height() - 280) {
+        if($(window).scrollTop() + $(window).height() > $(document).height() - 820) {
             Footprints.post.read_tracker.saw_bottom = true;
             $(window).unbind("scroll");
             Footprints.post.read_tracker.mark_read_if_read();
