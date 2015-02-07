@@ -17,7 +17,7 @@ class Migration(DataMigration):
             twitter_api = authorized_tweepy_api(author)
             print author.twitter_account_name
             if author.twitter_account_name:
-                statuses = twitter_api.user_timeline(screen_name=author.twitter_account_name)
+                statuses = twitter_api.user_timeline(screen_name=author.twitter_account_name, count=200, include_rts=False)
 
                 print "expanded"
                 for s in statuses:
