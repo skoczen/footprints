@@ -14,6 +14,7 @@ $(function(){
     Footprints.post.read_tracker.stayed_long_enough = false;
     Footprints.post.state.title = "";
     Footprints.post.state.body = "";
+    Footprints.post.state.fantastic_timeout = null;
     var ed;
 
     Footprints.post.editor.toggle_options = function() {
@@ -149,10 +150,11 @@ $(function(){
                     }
                 },
                 success: function(json) {
+                    clearTimeout(Footprints.post.state.fantastic_timeout);
                     if (json.num_people > 1) {
                         $(".fantastic_button .num_agree .number").html(json.num_people).addClass("visible");
                         $(".fantastic_button .num_agree").addClass("visible");
-                        setTimeout(function(){
+                        Footprints.post.state.fantastic_timeout = setTimeout(function(){
                             $(".fantastic_button .num_agree").removeClass("visible");
                         }, 12000);
                     }

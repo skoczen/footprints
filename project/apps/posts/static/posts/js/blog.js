@@ -15,6 +15,7 @@ $(function(){
     Footprints.post.read_tracker.stayed_long_enough = false;
     Footprints.post.state.title = "";
     Footprints.post.state.body = "";
+    Footprints.post.state.fantastic_timeout = null;
     var ed;
 
     Footprints.post.editor.toggle_options = function() {
@@ -127,10 +128,11 @@ $(function(){
         }
     }
     Footprints.post.handlers.fantastic_form_callback = function(json) {
+        clearTimeout(Footprints.post.state.fantastic_timeout);
         if (json.num_people > 1) {
             $(".post_" + json.post_id + " .fantastic_button .num_agree .number").html(json.num_people);
             $(".post_" + json.post_id + " .fantastic_button .num_agree").addClass("visible");
-            setTimeout(function(){
+            Footprints.post.state.fantastic_timeout = setTimeout(function(){
                 $(".post_" + json.post_id + " .fantastic_button .num_agree").removeClass("visible");
             }, 8000);
         }
