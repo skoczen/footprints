@@ -178,12 +178,15 @@ body {
     text-align: center;
 }
 .kudos .fantastic_button {
+    display: block;
+    position: relative;
     font-size: 2em;
     /*background-color: #FCFCFC;*/
     background-color: transparent;
     border-color: #FDFDFD; 
     border: 0;
     color: #CCC;
+    cursor: pointer !important;
 }
 .kudos .fantastic_button:hover {
     /*background-color: #EEE;*/
@@ -191,7 +194,7 @@ body {
     border-color: #DEDEDE; 
     border: 0;
     color: #a30000;
-
+    cursor: pointer;
 }
 
 .kudos .fantastic_button.clicked {

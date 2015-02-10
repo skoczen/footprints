@@ -74,7 +74,8 @@ $(function(){
         // $("")
     };
     Footprints.post.toggle_fantastic = function() {
-        $(".fantastic_form").submit();
+        var ele = $(this);
+        ele.parents(".fantastic_form").submit();
     };
     Footprints.post.read_tracker.mark_read = function() {
         $(".read_form").submit();
@@ -148,7 +149,13 @@ $(function(){
                     }
                 },
                 success: function(json) {
-                    $(".fantastic_button .num_agree").html(json.num_people).addClass("visible");
+                    if (json.num_people > 1) {
+                        $(".fantastic_button .num_agree .number").html(json.num_people).addClass("visible");
+                        $(".fantastic_button .num_agree").addClass("visible");
+                        setTimeout(function(){
+                            $(".fantastic_button .num_agree").removeClass("visible");
+                        }, 12000);
+                    }
                 }
             });
         }
@@ -165,6 +172,7 @@ $(function(){
         $(".start_editing_button").click(Footprints.post.editor.start_editing);
         $(".cancel_editing_button").click(Footprints.post.editor.cancel_editing);
         $(".options_button").click(Footprints.post.editor.toggle_options);
+        $(".fantastic_button").click(Footprints.post.toggle_fantastic);
 
         if (window.location.href.indexOf("?editing=true") != -1) {
             Footprints.post.editor.start_editing();

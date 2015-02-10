@@ -12,12 +12,6 @@
 {% block og_publish_time %}{{post.published_at|date:"c"}}{% endblock %}
 {% block og_update_time %}{{post.sort_datetime|date:"c"}}{% endblock %}
 
-{% block css %}{{block.super}}
-{% compress css %}
-<link rel="stylesheet" href="{{STATIC_URL}}posts/css/posts.css">
-{% endcompress %}
-{% endblock %}
-
 {% block js %}{{block.super}}
 <script type="text/javascript">
     window.Footprints = window.Footprints || {};
