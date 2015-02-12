@@ -141,6 +141,11 @@
     <a href="{% url "main_site:terms" %}">Terms</a>
     <a href="{% url "main_site:faq" %}">FAQ</a>
 </div>
+{% else %}
+<div id="footer" class="footer reader">
+    Copyright <a href="http://www.inkandfeet.com">Ink and Feet, LLC</a>, 2015
+</div>
+
 {% endif %}
   {% endblock %}
 

@@ -27,11 +27,12 @@
 {% endblock %}
 
 {% block main_content %}
-<div class="posts">
-    {% include "posts/_posts.html" %}
+<div class="post_content_area">
+    <div class="posts">
+        {% include "posts/_posts.html" %}
+    </div>
+    <div class="the_start">
+        &mdash; the start &mdash;
+    </div>
 </div>
-<div class="the_start">
-    &mdash; the start &mdash;
-</div>
-
 {% endblock %}

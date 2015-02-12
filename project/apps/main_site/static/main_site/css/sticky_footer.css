@@ -18,7 +18,7 @@ html, body {height: 100%;}
 #container {
     overflow:auto;
     overflow-x: hidden;
-    padding-bottom: 30px;}  /* must be same height as the footer */
+    padding-bottom: 60px;}  /* must be same height as the footer */
 
 #footer {position: relative;
     margin-top: -30px; /* negative value of footer height */

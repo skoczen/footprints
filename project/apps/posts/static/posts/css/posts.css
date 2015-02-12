@@ -1,7 +1,15 @@
+
 body {
     background: #AAA;
     /*background: #545454;*/
+    
+    background: #EEE;
     overflow-x: hidden;
+}
+.post_content_area {
+    display: block;
+    padding: 20px 0 160px 0;
+    background: #AAA;
 }
 #nav a {
     color: #888;
@@ -74,7 +82,7 @@ body {
 }
 .month_break {
     opacity: 1;
-    margin: 120px 0;
+    margin: 60px 0 40px 0;
 }
 
 .post .text_and_title {
@@ -381,69 +389,67 @@ a.all_posts:hover {
     border-bottom-color: transparent;
     border-right-color: transparent;
     box-shadow: none;
-    overflow: auto;
+    overflow: visible;   
+}
+.related_posts .post {
+    margin: 20px auto 20px auto;
+    box-shadow: 1px 2px 2px rgba(0,0,0,0.05);
+    transition: box-shadow 0.8s;
+}
+.related_posts .post:hover {
+    box-shadow: 1px 2px 2px rgba(0,0,0,0.3);
 }
 a.related_post {
     display: block;
-    position: relative;
-    /*width: 28%;*/
-    margin: 0 5em 40px 0;
-    /*float: left;*/
-    width: 18em;
-    min-height: 18em;
-    height: 18em;
-
-
-    background-color: #FFF;
-    border-bottom-color: rgba(255,255,255,0.97);
-    border-right-color: rgba(255,255,255,0.97);
-    box-shadow: 1px 2px 2px rgba(0,0,0,0.3);
+    overflow: auto;
+    height: 192px;
     text-decoration: none;
+    color: #888;
+}
+a.related_post:hover {
+    text-decoration: none;
+    color: #222;
+}
+a.related_post .post_title {
+    color: #555;
+    transition: color 0.8s;
+    font-family: 'Cardo', serif;
+    letter-spacing: -1px;
+    font-weight: 400;
+    font-size: 24px;
+    overflow: ellipsis;
+}
+a.related_post .post_description {
+    color: #888;
+    transition: color 0.8s;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.1em;
 }
 a.related_post:hover .post_title {
     color: #333;
-}
-a.related_post.last {
-    margin-right: 0;
-}
-a.related_post .post_title {
-    position: absolute;
     font-family: 'Cardo', serif;
     letter-spacing: -1px;
-    color: #454545;
-    z-index: 100;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    margin: 16px;
-    height: 225px;
+    font-weight: 400;
+    font-size: 24px;
+    overflow: ellipsis;
 }
-a.related_post .post_title {
-    font-size: 2.0em;
-    line-height: 1.1em;
-    text-overflow: ellipsis;
-    /*text-align: justify;*/
-    -webkit-hyphens: auto;  
-    -moz-hyphens: auto;  
-    hyphens: auto;
+a.related_post:hover .post_description {
+    color: #646464;
+}
+a.related_post .thumb {
+    float: left;
+    display: inline-block;
+    max-height: 192px;
+    margin-right: 20px;
+}
+a.related_post .post_text {
+    padding: 20px;
+    display: table-cell;
+    vertical-align: middle;
+    height: 152px;
 }
 
-a.related_post.has_image .post_title {
-    position: relative;
-    font-size: 1.2em;
-    line-height: 1.2em;
-    height: 2.4em;
-    text-overflow: ellipsis;
-    text-align: left;
-    margin: 8px 16px;
-}
-a.related_post img {
-    /*position: absolute;*/
-    width: 100%;
-    height: auto;
-    z-index: 1;
-    border: 1px solid #AAA;
-    border-width: 0 0 1px 0;
-}
 @page  
 { 
     size: auto;   /* auto is the initial value */ 
@@ -552,6 +558,26 @@ a.related_post img {
     .num_agree {
         display: block;
     }
+}
+.signup_blurb {
+    overflow: auto;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 300;
+    /*padding: 20px;*/
+}
+.signup_blurb .face {
+    float: right;
+    overflow: auto;
+    margin-left: 40px;
+}
+.signup_blurb .face img {
+    width: 200px;
+    /*border: 1px solid #EEE;*/
+}
+.signup_blurb .spiel {
+    padding: 40px;
+    font-size: 19px;
+    line-height: 1.2em;
 }
 .post .text_and_title input .post .text_and_title textarea {
     -webkit-hyphens: manual;  

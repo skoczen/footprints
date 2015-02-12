@@ -243,6 +243,15 @@ h1 {
     display: inline-block;
     margin: 0 10px;
 }
+.footer.reader {
+    display: block;
+    color: #AAA;
+    margin-top: 140px;
+}
+.footer.reader a {
+    color: #AAA;
+    margin: auto;
+}
 .bubble {
     background-color: #DDD;
     display: inline-block;
@@ -256,7 +265,11 @@ h1 {
 .manifesto.page_content {
     max-width: 880px;
 }
-
+.post_content_area {
+    display: block;
+    padding: 20px 0 160px 0;
+    background: #AAA;
+}
 
 .ph_form {
     display: block;

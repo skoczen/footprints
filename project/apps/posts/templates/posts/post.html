@@ -53,26 +53,43 @@
     {# </span> #}
     {# <span class="caption">All Posts</span> #}
 </a>
-
-
-{% include "posts/_blog_post.html" %}
-
-<div class="month_break">
-    &mdash; You Also Might Enjoy &mdash;
+<div class="post_content_area">
+    {% include "posts/_blog_post.html" %}
 </div>
-<div class="related_posts row">
-    {% for p in related_posts %}
-    <div class="col-md-4">
-    <a href="{{p.permalink}}" class="related_post {% if forloop.last %}last{% endif %} {% if p.dayone_image_related_size_url %}has_image{% endif %}">
-        {% if p.dayone_image_related_size_url %}
-            <img src="{{ p.dayone_image_related_size_url }}" />
-        {% endif %}
-        <div class="post_title">{{p.title_html|safe|removetags:"p a"}}</div>
-    </a>
+<div class="after_post_content">
+    <div class="post">
+        <div class="signup_blurb">
+            <div class="face"><img src="{{STATIC_URL}}/posts/img/face.jpg" /></div>
+            <div class="spiel">Hey, I’m Steven. I’m a writer, entrepreneur, and most recently, a nomad. I write about travel, projects, and what it means to be human.<br/><br/>I’ve got a pretty nifty <a href="http://eepurl.com/8fYd9">weekly email thing</a> going, too.
+                {# <br/><br/>There are a few other articles you might enjoy below. #}
+            </div>
+        </div>
     </div>
-    {% endfor %}
-</div>
 
+    {# <div class="month_break"> #}
+        {# &mdash; You Also Might Enjoy &mdash; #}
+    {# </div> #}
+    {# <div class="popular_articles"> #}
+        {# Popular Articles: #}
+    {# </div> #}
+
+
+    <div class="related_posts">
+        {% for p in related_posts %}
+        <div class="post">
+            <a href="{{p.permalink}}" class="related_post {% if forloop.last %}last{% endif %} {% if p.dayone_image_related_size_url %}has_image{% endif %}">
+                {% if p.dayone_image_related_size_url %}
+                    <img src="{{ p.dayone_image_related_size_url }}" class="thumb" />
+                {% endif %}
+                <div class="post_text">
+                    <div class="post_title">{{p.title_html|default:"Untitled"|safe|removetags:"p a"}}</div>
+                    <div class="post_description">{{p.description|default:""|safe|linebreaksbr|removetags:"p a"}}</div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
 
 {% block blog_header %}{% if not is_mine %}{{block.super}}{% endif %}{% endblock %}
