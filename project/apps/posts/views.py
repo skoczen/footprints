@@ -204,7 +204,13 @@ def blog(request):
         fantastic_form = FantasticForm()
         on_blog = True
         author = get_author_from_domain(request)
-        posts = Post.objects.filter(author=author, is_draft=False).order_by("-written_on", "title")
+        # posts = Post.objects.filter(author=author, is_draft=False).order_by("-written_on", "title")[:POSTS_PER_PAGINATION]
+        # posts = next_10_annotated_posts_and_forms(author, request)
+        posts = author.published_posts[:POSTS_PER_PAGINATION]
+        if len(posts) > 0:
+            last_timestamp = posts[len(posts)-1].written_on.strftime("%s")
+        else:
+            last_timestamp = False
         if author.user == request.user:
             is_me = True
 
@@ -227,7 +233,7 @@ def post(request, title=None):
                 author = request.user.get_profile()
             except:
                 pass
-    
+
     if not author:
         return HttpResponseRedirect(reverse("posts:home"))
 
@@ -239,7 +245,7 @@ def post(request, title=None):
                 return HttpResponseRedirect(r.new_url)
 
         return HttpResponseRedirect(reverse("posts:home"))
-    
+
     post = Post.objects.get(slug__iexact=title, author=author)
     related_posts = get_related_posts(post)
     # print related_posts
@@ -477,7 +483,7 @@ def next_10_annotated_posts_and_forms(author, request, last_timestamp=None):
     if not request.user.is_authenticated():
         if "uuid" not in request.session:
             request.session["uuid"] = uuid.uuid1()
-    
+
     is_mine = author == request.user.get_profile()
 
     for p in posts:
