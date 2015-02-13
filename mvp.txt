@@ -76,6 +76,7 @@ Next:
         - add to fb count shares: https://developers.facebook.com/tools/explorer/145634995501895/?method=GET&path=http%3A%2F%2Fblog.inkandfeet.com%2FHow-To-Get-To-The-Life-You-Want-Without-Being-A-Superhero&version=v2.2
         - pre-cache bottom thumbnails
         - prospects
+    - decide on slug or permalink, don't support both.
     - related posts - don't show ones someone's already read.
     - twitter file size (3072k) limit (have the site just resize and handle it.)
     - cache pages and thumbnail content entirely

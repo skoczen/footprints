@@ -237,7 +237,7 @@ def post(request, title=None):
     if not author:
         return HttpResponseRedirect(reverse("posts:home"))
 
-    if Post.objects.filter(slug__iexact=title, author=author).count() == 0:
+    if Post.objects.filter(slug__iexact=title, author=author).count() == 0 and Post.objects.filter(permalink_path__iexact="/%s" % title, author=author).count() == 0:
         # print request.path
         for r in Redirect.objects.filter(author=author):
             if re.match("%s" % r.old_url, request.path) or re.match(r"%s" % r.old_url, request.path, flags=re.IGNORECASE):
@@ -246,7 +246,11 @@ def post(request, title=None):
 
         return HttpResponseRedirect(reverse("posts:home"))
 
-    post = Post.objects.get(slug__iexact=title, author=author)
+    if Post.objects.filter(slug__iexact=title, author=author).count() > 0:
+        post = Post.objects.get(slug__iexact=title, author=author)
+    else:
+        post = Post.objects.get(permalink_path__iexact="/%s" % title, author=author)
+
     related_posts = get_related_posts(post)
     # print related_posts
     is_mine = post.author.user == request.user
@@ -254,7 +258,6 @@ def post(request, title=None):
     if not request.user.is_authenticated():
         if "uuid" not in request.session:
             request.session["uuid"] = uuid.uuid1()
-
 
     if not is_mine and post.is_draft and not post.allow_private_viewing:
         raise Http404("Post not found. Maybe it never existed, or maybe it's a draft and you're not logged in!")
