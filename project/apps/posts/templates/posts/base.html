@@ -15,9 +15,9 @@
 {% block css %}{{block.super}}
 {% compress css %}
 <link rel="stylesheet" href="{{STATIC_URL}}posts/css/posts.css">
+{% endcompress %}
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
 {# <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/monokai_sublime.min.css"> #}
-{% endcompress %}
 {% endblock %}
 
 {% block blog_header %}{% if author.blog_header %}{{author.blog_header|safe}}{% endif %}{% endblock %}
