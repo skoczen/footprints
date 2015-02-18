@@ -239,7 +239,7 @@ class AbstractPost(BaseModel):
     def save(self, *args, **kwargs):
         self.title_html = markdown.markdown(self.title, extensions=[
             FencedCodeExtension(),
-            'markdown.extensions.extra',
+            # 'markdown.extensions.extra',
             PyEmbedMarkdown(),
             # 'markdown.extensions.codehilite',
             # 'fenced-code-blocks',
