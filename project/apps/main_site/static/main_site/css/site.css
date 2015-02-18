@@ -59,6 +59,7 @@ p {
 }
 ul, ol {
     margin-left: 2em;
+    line-height: 1em;
 }
 code {
     background: #F9F9F9;
@@ -403,7 +404,9 @@ h1 {
 }
 .good_to_go h2 {
     margin-bottom: 60px;
-
+}
+code.hljs {
+    background: transparent;
 }
 @media (max-width: 1024px) {
     #nav a {

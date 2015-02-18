@@ -50,6 +50,7 @@ psycopg2==2.5.4
 pycrypto==2.6.1
 pyembed==1.1.1
 pyembed-markdown==1.1.0
+Pygments==2.0.2
 pylibmc==1.3.0
 python-oembed==0.2.1
 python-openid==2.2.5

@@ -179,6 +179,7 @@ $(function(){
         if (window.location.href.indexOf("?editing=true") != -1) {
             Footprints.post.editor.start_editing();
         }
+        hljs.initHighlightingOnLoad();
         // bkLib.onDomLoaded(nicEditors.allTextAreas);
     };
     Footprints.post.actions.init();
