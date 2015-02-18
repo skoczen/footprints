@@ -28,6 +28,7 @@ pyembed-markdown
 pillow
 psycopg2
 polytester
+Pygments
 pytz
 requests
 requests-oauth2

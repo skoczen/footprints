@@ -13,6 +13,7 @@ from django.db.models.signals import post_save
 from sorl.thumbnail import get_thumbnail
 from utils.slughifi import unique_slug, slughifi
 from main_site.models import BaseModel
+from .util import FencedCodeExtension
 
 ENTITY_REGEX = re.compile("&[^\s]*;")
 BODY_HTML_CACHE_KEY = "post_body_%(pk)s"
@@ -236,10 +237,28 @@ class AbstractPost(BaseModel):
         return self.title
 
     def save(self, *args, **kwargs):
-        self.title_html = markdown.markdown(self.title, extensions=[PyEmbedMarkdown()]).replace("http://www.youtube.com", "https://www.youtube.com")
+        self.title_html = markdown.markdown(self.title, extensions=[
+            FencedCodeExtension(),
+            'markdown.extensions.extra',
+            PyEmbedMarkdown(),
+            # 'markdown.extensions.codehilite',
+            # 'fenced-code-blocks',
+            # 'cuddled-lists',
+            # 'footnotes',
+            # 'smarty-pants',
+        ]).replace("http://www.youtube.com", "https://www.youtube.com")
         if self.title_html[:3] == "<p>" and self.title_html[-4:] == "</p>":
             self.title_html = self.title_html[3:-4]
-        self.body_html = markdown.markdown(self.body, extensions=[PyEmbedMarkdown()]).replace("http://www.youtube.com", "https://www.youtube.com")
+        self.body_html = markdown.markdown(self.body, extensions=[
+            FencedCodeExtension(),
+            # 'markdown.extensions.extra',
+            PyEmbedMarkdown(),
+            # 'markdown.extensions.codehilite',
+            # 'fenced-code-blocks',
+            # 'cuddled-lists',
+            # 'footnotes',
+            # 'smarty-pants',
+        ]).replace("http://www.youtube.com", "https://www.youtube.com")
 
         self.num_images = self.body_html.count("<img")
         if not self.description or self.description == "Body" or self.description == "by %s" % self.author.name:

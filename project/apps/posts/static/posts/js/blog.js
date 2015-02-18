@@ -165,6 +165,7 @@ $(function(){
         $(window).scroll(Footprints.post.read_tracker.check_scroll);
         Footprints.post.read_tracker.check_scroll();
         // $(".fantastic_button").click(Footprints.post.toggle_fantastic);
+        hljs.initHighlightingOnLoad();
     };
     Footprints.post.actions.init();
 
