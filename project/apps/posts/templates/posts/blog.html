@@ -2,7 +2,7 @@
 
 {% block title %}{{author.blog_name}}{% endblock %}
 {% block description %}A blog by {{author.name}}. Published on Footprints.{% endblock %}
-{% block author %}{% url "posts:blog" author.slug %}{% endblock %}
+{% block author %}{{post.author.full_blog_domain}}{% endblock %}
 {% block schema_name %}{{author.blog_name}}{% endblock %}
 {% block schema_description %}A blog by {{author.name}}. Published on Footprints.{% endblock %}
 {% block schema_author %}{{author.name}}{% endblock %}

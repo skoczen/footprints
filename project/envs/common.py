@@ -1,4 +1,4 @@
-import os
+import sys
 from os.path import abspath, join, dirname
 from sys import path
 from envs.keys_and_passwords import *
@@ -31,6 +31,9 @@ DATABASES = {
         'PORT': '',
     }
 }
+if 'test' in sys.argv:
+    DATABASES['default'] = {'ENGINE': 'django.db.backends.sqlite3'}
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',

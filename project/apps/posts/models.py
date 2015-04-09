@@ -31,6 +31,7 @@ POST_TYPES = [
     (BODY_WITH_NO_TITLE, "Body with no real title"),
 ]
 
+
 class Author(BaseModel):
     user = models.ForeignKey("auth.User", blank=True, null=True)
     premium_user = models.BooleanField(default=False)

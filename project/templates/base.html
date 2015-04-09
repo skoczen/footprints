@@ -11,7 +11,7 @@
   <meta name="description" content="{% block description %}{% endblock %}">
 
   <!-- Google Authorship and Publisher Markup --> 
-  <link rel="author" href="{% block author %}{% endblock %}"/>
+  <link rel="author" href="{% block author %}{{post.author.full_blog_domain}}{% endblock %}"/>
   {# <link rel="publisher" href=” https://plus.google.com/[Google+_Page_Profile]"/> #}
   
   <!-- Schema.org markup for Google+ --> 
