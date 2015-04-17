@@ -233,6 +233,7 @@ class AbstractPost(BaseModel):
 
     email_publish_intent = models.BooleanField(default=False)
     allow_private_viewing = models.BooleanField(default=False)
+    custom_pitch = models.TextField(blank=True, null=True)
 
     def __unicode__(self, *args, **kwargs):
         return self.title
@@ -338,6 +339,13 @@ class AbstractPost(BaseModel):
     @property
     def full_permalink(self):
         return "%s%s" % (self.author.full_blog_domain, self.permalink)
+
+    @property
+    def pitch(self):
+        if self.custom_pitch:
+            return self.custom_pitch
+        else:
+            return "Did you find this piece valuable?  Please consider <a href='https://www.patreon.com/inkandfeet' target='_blank'>supporting my work</a> on Patreon."
 
 class Post(AbstractPost):
     started_at = models.DateTimeField(blank=True, null=True, editable=False, auto_now_add=True)

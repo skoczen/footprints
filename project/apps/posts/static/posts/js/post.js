@@ -82,10 +82,11 @@ $(function(){
         $(".read_form").submit();
     };
     Footprints.post.read_tracker.check_scroll = function() {
-        if($(window).scrollTop() + $(window).height() > $(document).height() - 820) {
+        if($(window).scrollTop() + $(window).height() > $(document).height() - 1110) {
             Footprints.post.read_tracker.saw_bottom = true;
             $(window).unbind("scroll");
             Footprints.post.read_tracker.mark_read_if_read();
+            // $(".support").show();
         }
     };
     Footprints.post.read_tracker.enough_time_callback = function() {

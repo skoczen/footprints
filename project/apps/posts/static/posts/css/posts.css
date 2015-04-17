@@ -3,7 +3,7 @@ body {
     background: #AAA;
     /*background: #545454;*/
     
-    background: #EEE;
+    background: #FFF;
     overflow-x: hidden;
 }
 #nav a {
@@ -39,16 +39,29 @@ body {
 .post, .related_posts {
     display: block;
     position: relative;
-    width: 64em;
+    width: 100%;
+    
+
+    /*border: 1px solid rgba(0,0,0,0);*/
+    /*border-bottom-color: rgba(255,255,255,0.97);*/
+    /*border-right-color: rgba(255,255,255,0.97);*/
+    /*box-shadow: 1px 2px 2px rgba(0,0,0,0.3);*/
+}
+.post .body, .related_posts .body {
+    display: block;
+    position: relative;
+    width: 800px;
     background: #FFF;
     
     margin: 80px auto 0 auto;
-    /*top: 80px;*/
+}
+.post .title, .related_posts .title {
+    width: 800px;
+    display: block;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
 
-    /*border: 1px solid rgba(0,0,0,0);*/
-    border-bottom-color: rgba(255,255,255,0.97);
-    border-right-color: rgba(255,255,255,0.97);
-    box-shadow: 1px 2px 2px rgba(0,0,0,0.3);
 }
 .post_image.full_bleed {
     overflow: hidden;
@@ -122,7 +135,7 @@ body {
     line-height: 1.2em;
     padding-bottom: 8px;
 }
-.post .title { 
+.post h1.title { 
     /*reallly like*/
     /*font-family: 'EB Garamond', serif;*/
     
@@ -131,23 +144,27 @@ body {
     letter-spacing: -1px;
     
 
-    margin: 20px 0;
+    margin: 20px auto 0 auto;
     font-weight: 400;
+    font-size: 50px;
 }
 .post .title a, .post .title a:hover, .post .title a:visited, .post .title a:active { 
     color: #333;
     text-decoration: none !important;
 }
-.post .body {
+.post .body, .post .body p {
     /*all-rounder*/
     /*font-family: 'Lato', sans-serif;*/
     /*lighter, but good:;*/
     font-family: 'Raleway', sans-serif;
     
     font-weight: 400;
-    font-size: 16px;
+    font-size: 20px;
     /*line-height: 21px;*/
-    line-height: 1.4em;
+    line-height: 1.7em;
+}
+.post .body p { 
+    margin-bottom: 1em;
 }
 .post .draft_badge, .post.draft.editing .draft_badge {
     display: none;
@@ -176,7 +193,8 @@ body {
     text-decoration: underline;
 }
 .kudos {
-    margin-top: 60px;
+    font-family: 'Raleway', sans-serif;
+    margin-top: 40px;
     padding-left: 100px;
     text-align: center;
 }
@@ -186,9 +204,10 @@ body {
     font-size: 2em;
     /*background-color: #FCFCFC;*/
     background-color: transparent;
-    border-color: #FDFDFD; 
-    border: 0;
-    color: #CCC;
+    border: 1px solid #DDD;
+    width: 200px;
+    margin: 0 auto;
+    color: #999;
     cursor: pointer !important;
 }
 .kudos .fantastic_button:hover {
@@ -196,7 +215,9 @@ body {
     background-color: transparent;
     border-color: #DEDEDE; 
     border: 0;
-    color: #a30000;
+    border: 1px solid #EEE;
+    background-color: #a30000;
+    color: #FFF;
     cursor: pointer;
 }
 
@@ -206,6 +227,8 @@ body {
     color: #a30000;
     border-color: #AAA; 
     border: 0;
+    background-color: #a30000;
+    color: #FFF;
 }
 .kudos .fantastic_button .fantastic_text {
     font-size: 18px;
@@ -382,7 +405,7 @@ a.all_posts:hover {
 .post_content_area {
     display: block;
     padding: 20px 0 80px 0;
-    background: #AAA;
+    background: #FFF;
 }
 .related_posts {
     background-color: transparent;
@@ -519,6 +542,17 @@ a.related_post .post_text {
     -webkit-hyphens: manual;  
     -moz-hyphens: manual;  
     hyphens: manual;
+}
+.support {
+    display: block;
+    width: auto;
+    /*margin: 12px auto 8px auto;*/
+    padding: 8px;
+    font-family: 'Raleway', sans-serif;
+    text-align: center;
+    background: #C7EFFF;
+    /*display: none;*/
+
 }
 
 @media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait) {

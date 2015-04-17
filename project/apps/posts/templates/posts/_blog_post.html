@@ -52,10 +52,11 @@
                 <span class="unclicked_star"><icon class="fa fa-heart-o"></icon></span>
                 <span class="clicked_star"><icon class="fa fa-heart"></icon></span>
                 <span class="fantastic_text">I love this.</span>
-                <span class="num_agree"><span class="number">{{post.num_fantastics}}</span> people agree!</span> 
             </div>
+            <span class="num_agree"><span class="number">{{post.num_fantastics}}</span> people agree!</span> 
             </form>
         </div>
+        <div class="support">{{post.pitch|safe}}</div>
         <form class="read_form" action="{% url "posts:mark_read" post.pk %}" method="POST">
             {% csrf_token %}
             {{read_form.as_p}}
