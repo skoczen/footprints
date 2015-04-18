@@ -21,7 +21,6 @@ class Migration(DataMigration):
             p.num_read_minutes = round(p.num_read_seconds / 60.0)
             p.save()
 
-
     def backwards(self, orm):
         "Write your backwards methods here."
 
