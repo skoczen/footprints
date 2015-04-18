@@ -650,6 +650,7 @@ def next_posts(request, author=None):
         author = Author.objects.get(slug__iexact=author)
         last_timestamp = datetime.datetime.fromtimestamp(int(request.GET["last_timestamp"]))
         posts = author.published_posts.filter(written_on__lt=last_timestamp)[:POSTS_PER_PAGINATION]
+        on_blog = True
         last_timestamp = False
         if len(posts) > 0:
             last_timestamp = posts[len(posts)-1].written_on.strftime("%s")
