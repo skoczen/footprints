@@ -17,9 +17,10 @@ class Migration(DataMigration):
             chars = len(striptags(p.body))
             lines = p.body.count("\n")
             # Average reading speed of 275 wpm, 6 letters per word plus a space.
-            p.num_read_seconds = math.round(1.0 * chars / 6 / 250 * 60)
-            p.num_read_minutes = math.round(p.num_read_seconds / 60.0)
+            p.num_read_seconds = round(1.0 * chars / 6 / 250 * 60)
+            p.num_read_minutes = round(p.num_read_seconds / 60.0)
             p.save()
+
 
     def backwards(self, orm):
         "Write your backwards methods here."
@@ -200,7 +201,7 @@ class Migration(DataMigration):
             'weather_wind_bearing': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'weather_wind_chill_c': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'weather_wind_speed_kph': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'written_on': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2015, 4, 17, 0, 0)', 'null': 'True', 'blank': 'True'})
+            'written_on': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2015, 4, 18, 0, 0)', 'null': 'True', 'blank': 'True'})
         },
         u'posts.postimage': {
             'Meta': {'object_name': 'PostImage'},

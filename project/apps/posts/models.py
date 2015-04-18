@@ -274,10 +274,10 @@ class AbstractPost(BaseModel):
         if self.dayone_image:
             self.num_images += 1
 
-        lines = self.body.count("<br/>") + self.body.count("<br>") + self.body.count("<p/>")
+        # lines = self.body.count("<br/>") + self.body.count("<br>") + self.body.count("<p/>")
         chars = len(self.body)
-        self.num_read_seconds = math.ceil((1.0 * chars / 6 / 50 * 60) + lines * 0.05)
-        self.num_read_minutes = math.ceil(self.num_read_seconds / 60.0)
+        self.num_read_seconds = round((1.0 * chars / 6 / 50 * 60))
+        self.num_read_minutes = round(self.num_read_seconds / 60.0)
 
         # Invalidate any cached template.
         # cache.delete(make_template_fragment_key('blog_post', [self.pk]))
