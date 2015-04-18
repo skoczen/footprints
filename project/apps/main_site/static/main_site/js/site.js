@@ -1,31 +1,22 @@
 $(function(){
-    $(".home_buttons .button.readers").click(function(){
-        // Maaaan this brings me back to 2006-style.
-        $(".home_buttons .button").removeClass("current");
-        $(this).addClass("current");
-        $(".detail_section").hide();
-        $(".detail_section.for_readers").show();
-        return false;
-    });
-    $(".home_buttons .button.writers").click(function(){
-        $(".home_buttons .button").removeClass("current");
-        $(this).addClass("current");
-        $(".detail_section").hide();
-        $(".detail_section.for_writers").show();
-        return false;
-    });
-    $(".home_buttons .button.manifesto").click(function(){
-        $(".home_buttons .button").removeClass("current");
-        $(this).addClass("current");
-        $(".detail_section").hide();
-        $(".detail_section.the_manifesto").show();
-        return false;
-    });
-    $(".home_buttons .button.faq").click(function(){
-        $(".home_buttons .button").removeClass("current");
-        $(this).addClass("current");
-        $(".detail_section").hide();
-        $(".detail_section.the_faq").show();
-        return false;
-    });
+    var windowHeight = $(window).height();
+    var imageHeight = windowHeight*0.8;
+    $(".text_and_title").css({"margin-top": imageHeight});
+    $(window).scrollTop(64);
+    cheapoParallax();
+
+    function cheapoParallax() {
+        console.log("cheapoParallax")
+        // Scroll about half of the way up.
+        var scrollDistanceRatio = ($(window).scrollTop()/windowHeight);
+        console.log(scrollDistanceRatio)
+        if (scrollDistanceRatio < 1) {
+            var new_top = scrollDistanceRatio * imageHeight * 0.4 * -1;
+            console.log(new_top);
+            $(".parallax_image").css({"top": new_top, "opacity": 1});
+        } else {
+            $(".parallax_image").css({"opacity": 0});
+        }
+    }
+    $(window).scroll(cheapoParallax);
 });

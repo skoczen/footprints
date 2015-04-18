@@ -1,62 +1,41 @@
 <div class="post post_{{post.pk}} {% if post.is_draft %}draft{% endif %} {% if post.narrow %}narrow{% endif %} type_{{ post.post_type }}">
-{% if post.is_photo_with_caption %}
-    {% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{ post.dayone_image_url }}{% endif %}" target="_blank"><div class="post_image full_bleed"><img src="{{post.dayone_image_blog_size_url}}"/></div></a>{% endif %}
-    {% if post.title or post.body %}
-        <div class="text_and_title">
-            <h1 class="title"><a href="{% url 'posts:post' post.slug %}"><div class="editable" id="post_title">{{post.title|safe}}</div></a></h1>
-            <div class="body"><div class="editable" id="post_body">{{post.body_html|safe}}</div></div>
-    {% else %}
-    <div>
-    {% endif %}
-{% else %}
-{% if post.is_big_quote %}
-{% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{ post.dayone_image_url }}{% endif %}" target="_blank"><div class="post_image full_bleed"><img src="{{post.dayone_image_blog_size_url}}"/></div></a>{% endif %}
-    <div class="text_and_title">
-        <h1 class="title"><a href="{% url 'posts:post' post.slug %}">{{post.title|safe}} {{post.body_html|safe}}</a></h1>
-{% else %}
-{% if post.is_article_single_image %}
-    {% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{ post.dayone_image_url }}{% endif %}" target="_blank"><div class="post_image full_bleed"><img src="{{post.dayone_image_blog_size_url}}"/></div></a>{% endif %}
+    {% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{ post.dayone_image_url }}{% endif %}" target="_blank">
+    <img class="parallax_image" src="{{post.dayone_image_blog_size_url}}"/></a>{% endif %}
     <div class="draft_badge"></div>
     <div class="text_and_title">
         
         <h1 class="title"><a href="{% url 'posts:post' post.slug %}"><div class="editable" id="post_title">{{post.title|safe}}</div></a></h1>
+        <div class="byline"><i>by Steven Skoczen</i> &mdash; about a {{post.num_read_minutes}} minute read.</div>
         <div class="body"><div class="editable" id="post_body">{{post.body_html|safe}}</div></div>
 
-{% else %}
-{% if post.is_article_multiple_images %}
-    {% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{ post.dayone_image_url }}{% endif %}" target="_blank"><div class="post_image full_bleed"><img src="{{post.dayone_image_blog_size_url}}"/></div></a>{% endif %}
-    <div class="draft_badge"></div>
-    <div class="text_and_title">
-        <h1 class="title"><a href="{% url 'posts:post' post.slug %}"><div class="editable" id="post_title">{{post.title|safe}}</div></a></h1>
-        <div class="body"><div class="editable" id="post_body">{{post.body_html|safe}}</div></div>
-
-{% else %}
-{% if post.is_body_with_no_title %}
-    {% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{ post.dayone_image_url }}{% endif %}" target="_blank"><div class="post_image full_bleed"><img src="{{post.dayone_image_blog_size_url}}"/></div></a>{% endif %}
-    <div class="draft_badge"></div>
-    <div class="text_and_title">
-        <div class="body"><div class="editable" id="post_body">{{post.title|safe}}{{post.body_html|safe}}</div></div>
-{% else %}
-{% endif %}
-{% endif %}
-{% endif %}
-{% endif %}
-{% endif %}
         {# <div class="display author">by <a href="{% url "posts:blog" post.author.slug %}">{{post.author.name}}</a></div> #}
         {# <div class="print author">by {{post.author.name}}</div> #}
-        <div class="kudos">
-            <form class="fantastic_form" action="{% url "posts:this_was_fantastic" post.pk %}" method="POST">
-            {% csrf_token %}
-            {{fantastic_form.as_p}}
-            <div class="fantastic_button button {% if fantastic %}clicked{% endif %}">
-                <span class="unclicked_star"><icon class="fa fa-heart-o"></icon></span>
-                <span class="clicked_star"><icon class="fa fa-heart"></icon></span>
-                <span class="fantastic_text">I love this.</span>
-            </div>
-            <span class="num_agree"><span class="number">{{post.num_fantastics}}</span> people agree!</span> 
-            </form>
+        {# <div class="kudos"> #}
+            {# <form class="fantastic_form" action="{% url "posts:this_was_fantastic" post.pk %}" method="POST"> #}
+            {# {% csrf_token %} #}
+            {# {{fantastic_form.as_p}} #}
+            {# <div class="fantastic_button button {% if fantastic %}clicked{% endif %}"> #}
+                {# <span class="unclicked_star"><icon class="fa fa-heart-o"></icon></span> #}
+                {# <span class="clicked_star"><icon class="fa fa-heart"></icon></span> #}
+                {# <span class="fantastic_text">I love this.</span> #}
+            {# </div> #}
+            {# <span class="num_agree"><span class="number">{{post.num_fantastics}}</span> people agree!</span>  #}
+            {# </form> #}
+        {# </div> #}
+        <div class="share">
+            {# <a class="share_link heart" href="#"> #}
+                {# <i class="fa fa-heart"></i> Love #}
+            {# </a> #}
+            <a class="share_link facebook" href="#">
+                <i class="fa fa-facebook"></i> Share
+            </a><a class="share_link twitter" href="#">
+                <i class="fa fa-twitter"></i> Tweet
+            </a><a class="share_link google" href="#">
+                <i class="fa fa-google"></i> Post
+            </a>
+
+            <div class="support">{{post.pitch|safe}}</div>
         </div>
-        <div class="support">{{post.pitch|safe}}</div>
         <form class="read_form" action="{% url "posts:mark_read" post.pk %}" method="POST">
             {% csrf_token %}
             {{read_form.as_p}}

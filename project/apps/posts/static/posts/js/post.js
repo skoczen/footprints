@@ -84,7 +84,7 @@ $(function(){
     Footprints.post.read_tracker.check_scroll = function() {
         if($(window).scrollTop() + $(window).height() > $(document).height() - 1110) {
             Footprints.post.read_tracker.saw_bottom = true;
-            $(window).unbind("scroll");
+            $(window).unbind("scroll.read");
             Footprints.post.read_tracker.mark_read_if_read();
             // $(".support").show();
         }
@@ -101,7 +101,9 @@ $(function(){
     Footprints.post.read_tracker.calculate_from_lines_and_chars = function(lines, chars) {
         // seconds = (chars * .11693548387096774193) - (3.63089330024813895755 * lines);
         // seconds = 1000 * ((lines * 0.15) + (chars * 0.032));
-        seconds = 1000 * ((lines * 0.05) + (chars * 0.012));
+        // seconds = 1000 * ((lines * 0.05) + (chars * 0.012));
+        seconds = 1000 * 1.0 * chars / 6 / 300 * 60;
+
         return seconds;
     };
     Footprints.post.read_tracker.time_estimate = function() {
@@ -135,7 +137,7 @@ $(function(){
                     $(".num_reads .num").html(json.num_reads);
                 }
             });
-            $(window).scroll(Footprints.post.read_tracker.check_scroll);
+            $(window).on("scroll.read", Footprints.post.read_tracker.check_scroll);
             Footprints.post.read_tracker.check_scroll();
             setTimeout(Footprints.post.read_tracker.enough_time_callback, Footprints.post.read_tracker.time_estimate());
         }

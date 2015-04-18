@@ -20,5 +20,25 @@
 {# <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/monokai_sublime.min.css"> #}
 {% endblock %}
 
-{% block blog_header %}{% if author.blog_header %}{{author.blog_header|safe}}{% endif %}{% endblock %}
-{% block blog_footer %}{% if author.blog_footer %}{{author.blog_footer|safe}}{% endif %}{% endblock %}
+
+{% block blog_header %}
+<div class="ink_and_feet_header">
+    <div class="ink_and_feet_nav">
+    <a href="http://inkandfeet.com/" class="logo"><span class="logo_text">Ink and Feet</span></a>
+    {# <div class="link_container"> #}
+        {# <a href="#" class="show_side_nav"><i class="fa fa-bars"></i></a> #}
+        <div class="links">
+            <a class="" href="http://inkandfeet.com/letter.html">Letter</a>
+            <a class="" href="http://inkandfeet.com/travel.html">Travel</a>
+            <a class="" href="http://inkandfeet.com/essays.html">Essays</a>
+            <a class="" href="http://inkandfeet.com/products.html">Products</a>
+            <a class="current" href="http://blog.inkandfeet.com">Blog</a>
+        </div>
+    {# </div> #}
+    </div>
+</div>
+{# {% if author.blog_header %}{{author.blog_header|safe}}{% endif %} #}
+{% endblock %}
+{% block blog_footer %}
+{# {% if author.blog_footer %}{{author.blog_footer|safe}}{% endif %} #}
+{% endblock %}

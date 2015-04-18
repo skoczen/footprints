@@ -127,7 +127,7 @@ class Author(BaseModel):
     @property
     def dropbox_valid(self):
         return self.dropbox_access_token and self.dropbox_user_id
-    
+
     @property
     def dayone_valid(self):
         return self.dropbox_valid and self.dropbox_dayone_folder_path
@@ -179,6 +179,8 @@ class AbstractPost(BaseModel):
     post_type = models.IntegerField(choices=POST_TYPES)
     num_images = models.IntegerField(default=0)
     permalink_path = models.CharField(max_length=500, blank=True, null=True, editable=False)
+    num_read_seconds = models.IntegerField(default=60)
+    num_read_minutes = models.IntegerField(default=60)
 
     is_draft = models.BooleanField(default=True)
     prospect = models.BooleanField(default=False)
@@ -201,7 +203,7 @@ class AbstractPost(BaseModel):
     longitude = models.FloatField(blank=True, null=True)
     location_name = models.CharField(max_length=255, blank=True, null=True, editable=False)
     time_zone_string = models.CharField(max_length=255, blank=True, null=True, editable=False)
-    
+
     weather_temp_f = models.IntegerField(blank=True, null=True)
     weather_temp_c = models.IntegerField(blank=True, null=True)
     weather_description = models.CharField(max_length=255, blank=True, null=True, editable=False)
@@ -270,6 +272,11 @@ class AbstractPost(BaseModel):
                 self.description = "by %s" % self.author.name
         if self.dayone_image:
             self.num_images += 1
+
+        lines = self.body.count("<br/>") + self.body.count("<br>") + self.body.count("<p/>")
+        chars = len(self.body)
+        self.num_read_seconds = round(1.0 * chars / 6 / 50 * 60)
+        self.num_read_minutes = round(self.num_read_seconds / 60)
 
         # Invalidate any cached template.
         # cache.delete(make_template_fragment_key('blog_post', [self.pk]))
@@ -345,7 +352,8 @@ class AbstractPost(BaseModel):
         if self.custom_pitch:
             return self.custom_pitch
         else:
-            return "Did you find this piece valuable?  Please consider <a href='https://www.patreon.com/inkandfeet' target='_blank'>supporting my work</a> on Patreon."
+            return "Find my writing valuable?  Please consider <a href='https://www.patreon.com/inkandfeet' target='_blank'>supporting me</a> on Patreon."
+
 
 class Post(AbstractPost):
     started_at = models.DateTimeField(blank=True, null=True, editable=False, auto_now_add=True)
@@ -415,7 +423,7 @@ class Post(AbstractPost):
         # if make_revision:
         #     cleaned_body = self.body.replace("<br/>", "\n").replace("<br>", "\n").replace("</div>", "\n")
         #     cleaned_body = ENTITY_REGEX.sub(" ", cleaned_body)
-            
+
         self.sort_datetime = self.date
         super(Post, self).save(*args, **kwargs)
 
