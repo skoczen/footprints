@@ -276,7 +276,8 @@ class AbstractPost(BaseModel):
 
         # lines = self.body.count("<br/>") + self.body.count("<br>") + self.body.count("<p/>")
         chars = len(self.body)
-        self.num_read_seconds = round((1.0 * chars / 6 / 50 * 60))
+        # Average reading speed of 300 wpm, 5 letters per word plus a space.
+        self.num_read_seconds = round(1.0 * chars / 6 / 300 * 60)
         self.num_read_minutes = round(self.num_read_seconds / 60.0)
 
         # Invalidate any cached template.
