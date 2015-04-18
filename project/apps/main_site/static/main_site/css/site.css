@@ -435,3 +435,145 @@ code.hljs {
         margin-top: 64px;
     }
 }
+
+
+/* Header from Ink & Feet */
+h1, h2, h3 {
+    line-height: 1em;
+    margin-bottom: -10px;
+}
+a {
+  color: #FF7019;
+}
+h3 {
+    color: #5290B6;
+    /* color: #E25F0F; */
+}
+.ink_and_feet_header {
+   width: 100%;
+}
+.ink_and_feet_header, .ink_and_feet_signup {
+    color: #454545;
+    
+    font-family: "Sorts Mill Goudy", serif;
+}
+.ink_and_feet_nav {
+    top: 0;
+    color: #454545;
+    background: #FFF;
+    background: rgba(255,255,255,1);
+    position: relative;
+    height: 36px;
+    font-size: 30px;
+    line-height: 30px;
+    text-align: left;
+    /*position: absolute;*/
+    /*margin-bottom: 40px;*/
+    /*top: 0;*/
+    height: 64px;
+    font-weight: 300;
+    vertical-align: bottom;
+    width: 100%;
+    z-index: 1000;
+    transition: background 0.5s;
+}
+.ink_and_feet_nav:hover {
+
+}
+.ink_and_feet_nav.not_top {
+    background: rgba(255,255,255,0.0);
+}
+.ink_and_feet_nav a {
+   color: #454545; 
+   text-decoration: none;
+   opacity: 1;
+   transition: opacity 0.5s;
+}
+.ink_and_feet_nav.not_top a {
+    opacity: 0;
+}
+.ink_and_feet_nav .logo .logo_text {
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+.ink_and_feet_nav.not_top .logo .logo_text {
+    opacity: 0;
+}
+.ink_and_feet_nav .link_container {
+    text-align: right;
+    padding: 10px;
+}
+.ink_and_feet_nav .show_side_nav {
+    padding: 10px;
+}
+
+.ink_and_feet_nav .logo, .ink_and_feet_nav.not_top .logo {
+    float: left;
+    margin-left: 20px;
+    padding-left: 36px;
+    /*height: 36px;*/
+    padding-top: 16px;
+    margin-top: 5px;
+    height: 50px;
+    text-decoration: none;
+    background: transparent url("https://inkandfeet-footprints.s3.amazonaws.com/post_images/logo-36.png") no-repeat left 8px;
+    opacity: 1;
+}
+.ink_and_feet_nav .links {
+    padding-top: 21px;
+    text-align: right;
+    text-transform: lowercase;
+    padding-right: 1%;
+    width: auto;
+}
+.ink_and_feet_nav .links a, .ink_and_feet_nav .links a:hover, .ink_and_feet_nav .links a:active {
+    margin: 0 2%;
+    text-decoration: none;
+}
+.ink_and_feet_nav .links a.current {
+    text-decoration: underline;
+}
+hr {
+    display: block;
+    color: transparent;
+    background-color: transparent;
+    border: 1px solid #DDD;
+    border-width: 0 0 1px 0;
+    width: 100%;
+    margin: 40px 0 0 0;
+}
+@media (max-width: 760px) {
+    .ink_and_feet_nav .logo .logo_text {
+        display: none;
+    }
+    .ink_and_feet_nav {
+        height: 60px;
+    }
+    .ink_and_feet_nav .logo {
+        margin-left: 0;
+        padding-left: 36px;
+    }
+    
+    .ink_and_feet_nav .links a {
+        font-size: 18px;
+    }
+}
+@media (max-width: 600px) {
+    .ink_and_feet_nav .logo .logo_text {
+        display: none;
+    }
+    .ink_and_feet_nav {
+        height: 60px;
+    }
+    .ink_and_feet_nav .logo {
+        margin-left: 0;
+        padding-left: 36px;
+    }
+    .ink_and_feet_nav .links {
+        padding-top: 12px;
+    }
+    .ink_and_feet_nav .links a {
+        font-size: 16px;
+        margin: 0 4px;
+    }
+}

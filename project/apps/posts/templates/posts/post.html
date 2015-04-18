@@ -58,9 +58,19 @@
 </div>
 <div class="after_post_content">
     <div class="post signup_blurb">
-        <div class="face"><img src="{{STATIC_URL}}posts/img/face.jpg" /></div>
-        <div class="spiel">Hey, I’m Steven. I’m a writer, entrepreneur, and most recently, a nomad. I write about travel, world-changing projects, and what it means to be human.<br/><br/>I send out a <a href="http://www.inkandfeet.com/letter.html">hand-crafted letter</a> every Sunday that a lot of people love.  Maybe you're be one of them.
+        <div class="face"><img src="{{STATIC_URL}}posts/img/new_face_cropped.jpg" /></div>
+        <div class="spiel">Hey, I’m Steven. <br/><br/>I’m a writer, entrepreneur, and most recently, a nomad. I write about travel, world-changing projects, and what it means to be human.<br/><br/>
+            I also write a <a style='white-space:nowrap' href="http://www.inkandfeet.com/letter.html">hand-crafted letter</a> every week that people love. 
+            {# It's free, and you can sign up <a href="http://www.inkandfeet.com/letter.html">over here</a>. #}
+            {# I send out a <a href="http://www.inkandfeet.com/letter.html">hand-crafted letter</a> every Sunday that a lot of people love.  Maybe you're be one of them. #}
             {# <br/><br/>There are a few other articles you might enjoy below. #}
+            <div class="subscribe_btn_container">
+                <a href="http://inkandfeet.com/letter.html" class="button btn subscribe_btn">
+                    {# <i class="fa fa-envelope envelope"></i> #}
+                    <i class="fa fa-heart heart"></i>
+                     Subscribe
+                </a>
+            </div>
         </div>
     </div>
 
@@ -73,6 +83,7 @@
 
 
     <div class="related_posts">
+        <div class="related_post_title">3 Related Posts You Might Like:</div>
         {% for p in related_posts %}
         <div class="post">
             <a href="{{p.permalink}}" class="related_post {% if forloop.last %}last{% endif %} {% if p.dayone_image_related_size_url %}has_image{% endif %}">

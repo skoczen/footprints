@@ -70,7 +70,7 @@ MEDIA_ROOT = join(PROJECT_ROOT, "media_root")
 STATIC_ROOT = join(PROJECT_ROOT, "collected_static")
 STATIC_URL = '/static/'
 
-BASE_URL = "http://localhost:8001"
+BASE_URL = "http://localhost:8202"
 MEDIA_URL = '%s/media/' % BASE_URL
 
 STATICFILES_DIRS = ()
