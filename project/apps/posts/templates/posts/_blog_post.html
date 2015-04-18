@@ -1,6 +1,6 @@
-<div class="post post_{{post.pk}} {% if post.is_draft %}draft{% endif %} {% if post.narrow %}narrow{% endif %} type_{{ post.post_type }}">
-    {% if post.dayone_image %}<a href="{% if on_blog %}{% url 'posts:post' post.slug %}{% else %}{{ post.dayone_image_url }}{% endif %}" target="_blank">
-    <img class="parallax_image" src="{{post.dayone_image_blog_size_url}}"/></a>{% endif %}
+<div class="post post_{{post.pk}} {% if post.is_draft %}draft{% endif %} {% if post.narrow %}narrow{% endif %} type_{{ post.post_type }} {% if not on_blog %}single_post{% endif %}">
+    {% if post.dayone_image %}{% if on_blog %}<a href="{% url 'posts:post' post.slug %}">{% endif %}
+    <div class="{% if on_blog %}post_image full_bleed{% else %}parallax_image{% endif %}"><img src="{{post.dayone_image_blog_size_url}}"/></div>{% if on_blog %}</a>{% endif %}{% endif %}
     <div class="draft_badge"></div>
     <div class="text_and_title">
         
@@ -26,15 +26,15 @@
             {# <a class="share_link heart" href="#"> #}
                 {# <i class="fa fa-heart"></i> Love #}
             {# </a> #}
-            <a class="share_link facebook" href="#">
+            <a class="share_link facebook" href="http://www.facebook.com/sharer/sharer.php?u={{post.full_permalink|iriencode}}">
                 <i class="fa fa-facebook"></i> Share
-            </a><a class="share_link twitter" href="#">
+            </a><a class="share_link twitter" href="https://twitter.com/share?original_referer={{post.full_permalink|iriencode}}&url={{post.full_permalink|iriencode}}&via=skoczen">
                 <i class="fa fa-twitter"></i> Tweet
-            </a><a class="share_link google" href="#">
+            </a><a class="share_link google" href="https://plus.google.com/share?url={{post.full_permalink|iriencode}}">
                 <i class="fa fa-google"></i> Post
             </a>
 
-            <div class="support">{{post.pitch|safe}}</div>
+            <!-- <div class="support">{{post.pitch|safe}}</div> -->
         </div>
         <form class="read_form" action="{% url "posts:mark_read" post.pk %}" method="POST">
             {% csrf_token %}

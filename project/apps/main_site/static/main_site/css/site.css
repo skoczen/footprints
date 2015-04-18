@@ -558,3 +558,22 @@ hr {
         font-size: 18px;
     }
 }
+@media (max-width: 600px) {
+    .ink_and_feet_nav .logo .logo_text {
+        display: none;
+    }
+    .ink_and_feet_nav {
+        height: 60px;
+    }
+    .ink_and_feet_nav .logo {
+        margin-left: 0;
+        padding-left: 36px;
+    }
+    .ink_and_feet_nav .links {
+        padding-top: 12px;
+    }
+    .ink_and_feet_nav .links a {
+        font-size: 16px;
+        margin: 0 4px;
+    }
+}

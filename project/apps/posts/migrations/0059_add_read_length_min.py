@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import math
 from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import DataMigration
@@ -14,9 +15,10 @@ class Migration(DataMigration):
         # and orm['appname.ModelName'] for models in other applications.
         for p in orm.Post.objects.all():
             chars = len(striptags(p.body))
+            lines = p.body.count("\n")
             # Average reading speed of 275 wpm, 6 letters per word plus a space.
-            p.num_read_seconds = round(1.0 * chars / 6 / 250 * 60)
-            p.num_read_minutes = round(p.num_read_seconds / 60)
+            p.num_read_seconds = math.ceil(1.0 * chars / 6 / 250 * 60 + lines * 0.05)
+            p.num_read_minutes = math.ceil(p.num_read_seconds / 60.0)
             p.save()
 
     def backwards(self, orm):

@@ -50,7 +50,7 @@ body {
 .post .body, .related_posts .body, .after_post_content .post, .after_post_content .related_posts {
     display: block;
     position: relative;
-    width: 800px;
+    width: 740px;
     background: transparent;
     
     margin: 80px auto 0 auto;
@@ -59,7 +59,7 @@ body {
     margin-top: 0;
 }
 .post .title, .related_posts .title {
-    width: 800px;
+    width: 740px;
     display: block;
     position: relative;
     margin-left: auto;
@@ -76,7 +76,7 @@ body {
     width: 100%;
     /*position: absolute;*/
     /*top: 0;*/
-    /*max-height: 800px;*/
+    /*max-height: 740px;*/
     vertical-align: middle;
 }
 .the_start, .month_break {
@@ -99,10 +99,13 @@ body {
 }
 
 .post .text_and_title {
-    margin-top: 800px;
+    margin-top: 0;
     padding: 80px 80px 20px 80px;
     background: #FFF;
     z-index: 100;
+}
+.post.single_post .text_and_title {
+    margin-top: 740px;
 }
 .post .text_and_title img {
     max-width: 100%;
@@ -170,7 +173,7 @@ body {
     font-weight: 400;
     font-size: 20px;
     /*line-height: 21px;*/
-    line-height: 1.7em;
+    line-height: 1.5em;
 }
 .post .body p { 
     margin-bottom: 1em;
@@ -264,11 +267,12 @@ body {
 }
 .share {
     display: block;
-    max-width: 800px;
-    margin: 60px auto 20px auto;
+    max-width: 740px;
+    margin: 100px auto 20px auto;
 }
 .share .share_link {
-    width: 33%;
+    width: 32%;
+    margin: 0 0 0 1%;
     border: 0;
     display: inline-block;
     padding: 10px 0;
@@ -283,9 +287,11 @@ body {
 }
 .share .share_link.facebook {
     width: 34%;
+    margin-left: 0;
     background-color: #365882;
     color: #FFF;
 }
+
 .share .share_link.heart {
     background-color: #a30000;
     color: #FFF;
@@ -339,7 +345,7 @@ a.subscribe_btn, a.subscribe_btn:hover {
     display: inline-block;
     border-radius: 4px;
     background-color: #454545;
-    color: #EEE;
+    color: #FFF;
     border: 0;
     font-weight: 300;
     /*text-transform: uppercase;*/
@@ -347,6 +353,9 @@ a.subscribe_btn, a.subscribe_btn:hover {
 a.subscribe_btn:hover {
     background-color: #830000;
     background-color: #222;
+}
+a.subscribe_btn:hover i {
+    /*color: #FF0000;*/
 }
 a.subscribe_btn i {
     margin-right: 4px;
@@ -596,12 +605,19 @@ a.related_post .post_text {
     height: 152px;
 }
 .parallax_image {
+    pointer-events: none;
+}
+.parallax_image img {
     position: fixed;
     /*top: 64px;*/
     top: 0;
     left: 0;
     width: 100%;
     z-index: -1;
+    pointer-events: none;
+}
+.regular_image {
+    width: 100;
 }
 
 @page  
@@ -666,14 +682,14 @@ a.related_post .post_text {
 .signup_blurb .face {
     float: left;
     overflow: auto;
-    margin-right: 40px;
+    margin-right: 30px;
 }
 .signup_blurb .face img {
-    height: 300px;
+    height: 320px;
     /*border: 1px solid #EEE;*/
 }
 .signup_blurb .spiel {
-    padding: 20px 40px;
+    padding: 20px 20px 20px 0;
     font-size: 20px;
     line-height: 1.2em;
 }
@@ -694,6 +710,9 @@ a.related_post .post_text {
     .post .text_and_title {
         padding: 40px 16px 20px 26px;
     }
+    .post.single_post .text_and_title {
+       margin-top: 20px;
+    }
     .post.narrow .text_and_title {
         padding: 40px 40px 20px 60px;
     }
@@ -706,6 +725,14 @@ a.related_post .post_text {
     .post_image.full_bleed {
         overflow: hidden;
         height: 400px;
+    }
+}
+@media all and (device-width: 1024px) and (device-height: 672px) and (orientation:landscape) {
+    .post .text_and_title {
+        padding-top: 20px;
+    }
+    .post_content_area {
+        /*padding-top: 20px;*/
     }
 }
 @media all and (max-width: 920px) {
@@ -796,6 +823,9 @@ a.related_post .post_text {
         /*margin-bottom: 8px;*/
         margin-top: 10px;
     }
+    .byline {
+        font-size: 14px;   
+    }
     .post.type_4 {
         padding-top: 8px;
     }
@@ -819,6 +849,7 @@ a.related_post .post_text {
     }
     .post .text_and_title h1.title, .post.narrow .text_and_title h1.title, .post .text_and_title h1.title .editable {
         /*text-align: left;*/
+        font-size: 40px;
         line-height: 1.1em;
         -webkit-hyphens: manual;  
         -moz-hyphens: manual;  
@@ -844,9 +875,20 @@ a.related_post .post_text {
         width: 100%;
     }
     .share {
-        max-width: 100%;
+        width: 100%;
         margin: 0;
         padding: 30px 0 0 0;
+    }
+    .share .share_link {
+        /*margin: 0;*/
+        white-space: nowrap;
+        font-size: 0.9em;
+    }
+    .share .share_link.twitter {
+        /*width: 34%;*/
+    }
+    .share .share_link.google {
+        /*width: 32%;*/
     }
     .after_post_content {
         background: #FFF;
@@ -903,4 +945,8 @@ a.related_post .post_text {
     a.related_post .post_description {
         font-size: 14px;
     }
+}
+
+@media all and (device-width: 320px) and (device-height: 460px) and (orientation:portrait) {
+
 }
