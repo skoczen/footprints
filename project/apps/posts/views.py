@@ -165,16 +165,19 @@ def get_author_from_domain(request):
 
 def get_related_posts(post):
     try:
-        top = Post.objects.filter(author=post.author, is_draft=False).exclude(pk=post.pk).annotate(fantastics=Count('fantastic')).order_by('fantastics')[:6]
-        random_selection = Post.objects.filter(author=post.author, is_draft=False).exclude(dayone_image=None, pk__in=[post.pk]+[t.pk for t in top]).order_by("?")[:2]
-        recent = Post.objects.filter(author=post.author, is_draft=False).exclude(dayone_image=None, pk__in=[post.pk]+[t.pk for t in top]+[t.pk for t in random_selection]).order_by("-written_on")[:4]
+        top = Post.objects.exclude(dayone_image=None).exclude(dayone_image="").filter(author=post.author, is_draft=False).annotate(fantastics=Count('fantastic')).order_by('-fantastics')[:6]
+        random_selection = Post.objects.exclude(dayone_image=None).exclude(dayone_image="").filter(author=post.author, is_draft=False).order_by("?")[:2]
+        recent = Post.objects.exclude(dayone_image=None).exclude(dayone_image="").filter(author=post.author, is_draft=False).order_by("-written_on")[:4]
         options = []
         for t in top:
-            options.append(t)
+            if t not in options and t.pk != post.pk:
+                options.append(t)
         for r in random_selection:
-            options.append(r)
+            if r not in options and r.pk != post.pk:
+                options.append(r)
         for r in recent:
-            options.append(r)
+            if r not in options and r.pk != post.pk:
+                options.append(r)
 
         return random.sample(options, 3)
     except:
@@ -182,21 +185,21 @@ def get_related_posts(post):
 
     return []
 
-def get_related_posts(post):
-    try:
-        top = Post.objects.filter(author=post.author, is_draft=False).exclude(pk=post.pk).annotate(fantastics=Count('fantastic')).order_by('-fantastics')[:6]
-        random_selection = Post.objects.filter(author=post.author, is_draft=False).exclude(pk__in=[post.pk]+[t.pk for t in top]).order_by("?")[:2]
-        options = []
-        for t in top:
-            options.append(t)
-        for r in random_selection:
-            options.append(r)
+# def get_related_posts(post):
+#     try:
+#         top = Post.objects.filter(author=post.author, is_draft=False).exclude(pk=post.pk).annotate(fantastics=Count('fantastic')).order_by('-fantastics')[:6]
+#         random_selection = Post.objects.filter(author=post.author, is_draft=False).exclude(pk__in=[post.pk]+[t.pk for t in top]).order_by("?")[:2]
+#         options = []
+#         for t in top:
+#             options.append(t)
+#         for r in random_selection:
+#             options.append(r)
 
-        return random.sample(options, 3)
-    except:
-        import traceback; traceback.print_exc();
+#         return random.sample(options, 3)
+#     except:
+#         import traceback; traceback.print_exc();
 
-    return []
+#     return []
 
 @render_to("posts/blog.html")
 def blog(request):
