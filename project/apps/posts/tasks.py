@@ -248,11 +248,10 @@ def sync_posts(author_id):
                             "dayone_post": True,
                             "dayone_id": dayone_id,
 
+                            "dayone_posted": datetime_from_utc_to_local(get_from_plist_if_exists("Creation Date", plist)),
                             "dayone_last_modified": datetime_from_utc_to_local(datetime.datetime(*time.strptime(f["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6])),
                             "dayone_last_rev": f["revision"],
                             "is_draft": draft,
-                            "dayone_posted": datetime_from_utc_to_local(get_from_plist_if_exists("Creation Date", plist)),
-                            "written_on": get_from_plist_if_exists("Creation Date", plist),
 
                             "location_area": get_from_plist_if_exists("Location.Administrative Area", plist),
                             "location_country": get_from_plist_if_exists("Location.Country", plist),
@@ -277,6 +276,8 @@ def sync_posts(author_id):
 
                             for (key, value) in kwargs.items():
                                 setattr(p, key, value)
+                            if not p.written_on:
+                                kwargs["written_on"] = get_from_plist_if_exists("Creation Date", plist),
                             if image:
                                 image_file = client.get_file(image["path"])
                                 p.dayone_image.save(

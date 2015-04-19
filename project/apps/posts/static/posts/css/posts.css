@@ -578,6 +578,8 @@ a.related_post .post_title {
     font-weight: 400;
     font-size: 24px;
     overflow: ellipsis;
+    margin-bottom: 0.5em;
+    line-height: 1em;
 }
 a.related_post .post_description {
     color: #888;
