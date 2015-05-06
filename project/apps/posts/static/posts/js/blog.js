@@ -121,6 +121,8 @@ $(function(){
                 $(".fantastic_form").ajaxForm({
                     success: Footprints.post.handlers.fantastic_form_callback
                 });
+                $(".share_link.facebook").click(Footprints.post.facebook_shared);
+                $(".share_link.twitter").click(Footprints.post.twitter_shared);
             } else {
                 $(".the_start").addClass("visible");
             }
@@ -128,6 +130,15 @@ $(function(){
     };
     Footprints.post.handlers.fantastic_form_callback = function(json) {
         clearTimeout(Footprints.post.state.fantastic_timeout);
+        console.log($(".post_" + json.post_id + " .fantastic_button").hasClass("clicked"))
+        if ($(".post_" + json.post_id + " .fantastic_button").hasClass("clicked")) {
+            $(".post_" + json.post_id + " .share_link.heart .caption").text("Thanks! It really keeps me going. :)");
+            $(".post_" + json.post_id + " .share_link.heart .share_label").text("Loved");
+        } else {
+            $(".post_" + json.post_id + " .share_link.heart .caption").text("Tells me you loved it.");
+            $(".post_" + json.post_id + " .share_link.heart .share_label").text("Love");
+            
+        }
         if (json.num_people > 1) {
             $(".post_" + json.post_id + " .fantastic_button .num_agree .number").html(json.num_people);
             $(".post_" + json.post_id + " .fantastic_button .num_agree").addClass("visible");
@@ -136,6 +147,34 @@ $(function(){
             }, 8000);
         }
     };
+    function popitup(url) {
+        newwindow=window.open(url,'footprints_share_window','height=300,width=450');
+        if (window.focus) {newwindow.focus()}
+        return false;
+    }
+    Footprints.post.popup_or_redirect = function(ele) {
+        console.log(ele)
+        console.log(ele.attr("href"))
+        if ($(window).width() > 480) {
+            popitup(ele.attr("href"));
+            return false;
+        } else {
+            return true;
+        }
+    };
+    Footprints.post.facebook_shared = function () {
+        var ele = $(this);
+        $(".facebook .share_label").text("Shared");
+        $(".facebook .caption").text("You rock. And your friends know it.");
+        return Footprints.post.popup_or_redirect(ele);
+    };
+    Footprints.post.twitter_shared = function () {
+        var ele = $(this);
+        $(".twitter .share_label").text("Tweeted");
+        $(".twitter .caption").text("Lookin' smart!");
+        return Footprints.post.popup_or_redirect(ele);
+    };
+
     Footprints.post.actions.init = function() {
         $(".fantastic_form").on('click', '.fantastic_button', function(){
             var ele = $(this);
@@ -149,6 +188,8 @@ $(function(){
             form.submit();
             return false;
         });
+        $(".share_link.facebook").click(Footprints.post.facebook_shared);
+        $(".share_link.twitter").click(Footprints.post.twitter_shared);
         if ($(".read_form").length > 0) {
             $(".read_form").ajaxForm({
                 success: function(json) {

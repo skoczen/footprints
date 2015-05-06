@@ -130,16 +130,16 @@ $(function(){
             popitup(ele.attr("href"));
             return false;
         } else {
-            return true
+            return true;
         }
-    }
-    Footprints.post.facebook_shared = function () {
+    };
+    Footprints.post.facebook_shared = function (e) {
         var ele = $(".share_link.facebook");
         $(".facebook .share_label").text("Shared");
         $(".facebook .caption").text("You rock. And your friends know it.");
         return Footprints.post.popup_or_redirect(ele);
     };
-    Footprints.post.twitter_shared = function () {
+    Footprints.post.twitter_shared = function (e) {
         var ele = $(".share_link.twitter");
         $(".twitter .share_label").text("Tweeted");
         $(".twitter .caption").text("Lookin' smart!");
