@@ -11,9 +11,7 @@
         {# <div class="display author">by <a href="{% url "posts:blog" post.author.slug %}">{{post.author.name}}</a></div> #}
         {# <div class="print author">by {{post.author.name}}</div> #}
         {# <div class="kudos"> #}
-            {# <form class="fantastic_form" action="{% url "posts:this_was_fantastic" post.pk %}" method="POST"> #}
-            {# {% csrf_token %} #}
-            {# {{fantastic_form.as_p}} #}
+            
             {# <div class="fantastic_button button {% if fantastic %}clicked{% endif %}"> #}
                 {# <span class="unclicked_star"><icon class="fa fa-heart-o"></icon></span> #}
                 {# <span class="clicked_star"><icon class="fa fa-heart"></icon></span> #}
@@ -23,16 +21,24 @@
             {# </form> #}
         {# </div> #}
         <div class="share">
-            {# <a class="share_link heart" href="#"> #}
-                {# <i class="fa fa-heart"></i> Love #}
-            {# </a> #}
-            <a class="share_link facebook" href="http://www.facebook.com/sharer/sharer.php?u={{post.full_permalink|iriencode}}">
-                <i class="fa fa-facebook"></i> Share
-            </a><a class="share_link twitter" href="https://twitter.com/share?original_referer={{post.full_permalink|iriencode}}&url={{post.full_permalink|iriencode}}&via=skoczen">
-                <i class="fa fa-twitter"></i> Tweet
-            </a><a class="share_link google" href="https://plus.google.com/share?url={{post.full_permalink|iriencode}}">
-                <i class="fa fa-google"></i> Post
+            <form class="fantastic_form" action="{% url "posts:this_was_fantastic" post.pk %}" method="POST">
+            {% csrf_token %}
+            {{fantastic_form.as_p}}
+            <a class="share_link heart fantastic_button {% if fantastic %}clicked{% endif %}" href="#">
+                <div class="caption">{% if fantastic %}Thanks! It really keeps me going. :){% else %}Tells me you loved it!{% endif %}</div>
+                {# {{post.num_fantastics|default:""}} #}
+                 <i class="fa fa-heart"></i> <span class="share_label">Love{% if fantastic %}d{% endif %}</span>
+            </a><a class="share_link facebook" href="http://www.facebook.com/sharer/sharer.php?u={{post.full_permalink|iriencode}}" target="_blank">
+                <div class="caption">Shows your friends how awesome you are.</div>
+                <i class="fa fa-facebook"></i> <span class="share_label">Share</span>
+            </a><a class="share_link twitter" href="https://twitter.com/share?original_referer={{post.full_permalink|iriencode}}&amp;url={{post.full_permalink|iriencode}}&amp;via=skoczen" target="_blank">
+                <div class="caption">Makes you look smart to your followers.</div>
+                <i class="fa fa-twitter"></i> <span class="share_label">Tweet</span>
             </a>
+            </form>
+            {# <a class="share_link google" href="https://plus.google.com/share?url={{post.full_permalink|iriencode}}"> #}
+                {# <i class="fa fa-google"></i> Post #}
+            {# </a> #}
 
             <!-- <div class="support">{{post.pitch|safe}}</div> -->
         </div>

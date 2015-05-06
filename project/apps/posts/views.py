@@ -163,6 +163,7 @@ def get_author_from_domain(request):
     domain = Author.objects.get(blog_domain__iexact=domain)
     return domain
 
+
 def get_related_posts(post):
     try:
         top = Post.objects.exclude(dayone_image=None).exclude(dayone_image="").filter(author=post.author, is_draft=False).annotate(fantastics=Count('fantastic')).order_by('-fantastics')[:6]

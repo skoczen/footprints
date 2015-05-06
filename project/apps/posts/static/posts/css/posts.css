@@ -104,7 +104,7 @@ body {
     background: #FFF;
     z-index: 100;
 }
-.post.single_post .text_and_title {
+.post.single_post .type_3 .text_and_title {
     margin-top: 740px;
 }
 .post .text_and_title img {
@@ -281,20 +281,43 @@ body {
     text-transform: uppercase;
     font-size: 20px;
     text-decoration: none;
+    position: relative;
 }
 .share .share_link i {
     margin-right: 6px;
 }
 .share .share_link.facebook {
-    width: 34%;
-    margin-left: 0;
     background-color: #365882;
     color: #FFF;
 }
 
 .share .share_link.heart {
+    width: 34%;
+    margin-left: 0;
     background-color: #a30000;
+    
     color: #FFF;
+}
+.share .share_link .caption {
+    position: absolute;
+    left: 0;
+    width: 300%;
+    top: -30px;
+    color: #646464;   
+    display: none;
+    font-size: 14px;
+    text-align: left;
+}
+.share .share_link.facebook .caption {
+    left: -100%;
+    text-align: center;
+}
+.share .share_link.twitter .caption {
+    left: -200%;
+    text-align: right;
+}
+.share .share_link:hover .caption {
+    display: block;
 }
 .share .share_link.twitter {
     background-color: #0087C6;
@@ -303,6 +326,13 @@ body {
 .share .share_link.google {
     background-color: #D95433;
     color: #FFF;
+}
+.share .share_link.heart:hover {
+    background-color: #C92933;
+    color: #FFF;
+}
+.share .share_link.heart.clicked, .share .share_link.heart.clicked:hover {
+    background-color: #BB0011
 }
 .share .share_link.facebook:hover {
     background-color: #4a78b1;
@@ -870,8 +900,15 @@ a.related_post .post_text {
         background: #FFF;
         padding-bottom: 20px;
     }
-    .post, .related_posts {
+    .post .body, .related_posts .body, .after_post_content .post, .after_post_content .related_posts {
         width: 100%;
+    }
+    .post .title, .related_posts .related_post {
+        height: auto;
+        background-color: #FDFDFD;
+    }
+    .related_post_title {
+        margin: 0 0 0 5px;
     }
     .post .title, .related_posts .title {
         width: 100%;
@@ -883,14 +920,32 @@ a.related_post .post_text {
     }
     .share .share_link {
         /*margin: 0;*/
+        width: 100%;
         white-space: nowrap;
         font-size: 0.9em;
     }
+    .share .share_link .caption, .share .share_link:hover .caption  {
+        display: none;
+        margin: 5px 0;
+    }
+    .share .share_link {
+        font-size: 20px;
+    }
+    .share .share_link.heart {
+        width: 100%;
+        margin: 10px 0;
+    }
+    .share .share_link.facebook {
+        /*width: 34%;*/
+        margin: 10px 0;
+    }
     .share .share_link.twitter {
         /*width: 34%;*/
+        margin: 10px 0;
     }
     .share .share_link.google {
         /*width: 32%;*/
+        margin: 10px 0;
     }
     .after_post_content {
         background: #FFF;
@@ -927,10 +982,10 @@ a.related_post .post_text {
         height: 144px;
     }
     a.related_post .thumb {
-        float: left;
-        display: inline-block;
-        max-height: 144px;
-        margin-right: 20px;
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: inherit;
     }
     .related_posts .post {
         padding: 0;
