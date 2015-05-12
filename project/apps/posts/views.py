@@ -35,7 +35,7 @@ def home(request):
     return locals()
 
 
-@render_to("posts/blitz.html")
+@render_to("main_site/blitz.html")
 def blitz(request):
     return locals()
 
