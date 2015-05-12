@@ -29,6 +29,7 @@ urlpatterns = patterns(
     url(r'^my-reading/?$', views.my_reading, name='my_reading'),
     url(r'^my-drafts/?$', views.my_drafts, name='my_drafts'),
     url(r'^my-blog/?$', views.my_blog, name='my_blog'),
+    url(r'^mu-92cf0d71-5423686f-cd421482-2d32b3af/?$', views.blitz, name='blitz'),
 
     url(r'^my-account/?$', views.my_account, name='my_account'),
     url(r'^blog-settings/?$', views.blog_settings, name='blog_settings'),

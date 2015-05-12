@@ -34,6 +34,12 @@ POSTS_PER_PAGINATION = 10
 def home(request):
     return locals()
 
+
+@render_to("posts/blitz.html")
+def blitz(request):
+    return locals()
+
+
 @render_to("posts/explore.html")
 def explore(request):
     # Yeah, I know.  I'll move this to a cached, non-db killing thing once we've got a few people.

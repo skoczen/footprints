@@ -10,7 +10,7 @@ if "PORT" in os.environ:
     settings = "--settings=envs.live"
 else:
     settings = ""
-    port = "8001"
+    port = "8202"
 
 command_config = {
     "settings": settings,
