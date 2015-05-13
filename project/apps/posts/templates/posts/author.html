@@ -51,7 +51,7 @@
         <div class="post row {% if not post.is_draft %}published{% endif %}">
             <a href="{% url "posts:post" post.slug %}" class="{% if post.is_draft %}col-xs-11{% else %}col-xs-7{% endif %} thumb_col post_body">
                 {% if post.dayone_image %}
-                <img src="{{post.dayone_image_thumb_size_url}}" class="list_thumb" />
+                <img src="{{post.dayone_image_related_size_url}}" class="list_thumb" />
                 {% else %}
                 <span class="image_placeholder"></span>
                 {% endif %}
