@@ -5,7 +5,10 @@
     <div class="text_and_title">
         
         <h1 class="title"><a href="{% url 'posts:post' post.slug %}"><div class="editable" id="post_title">{{post.title|safe}}</div></a></h1>
-        <div class="byline"><i>by Steven Skoczen</i> &mdash; about a {{post.num_read_minutes}} minute read.</div>
+        <div class="byline"><i>by Steven Skoczen</i> 
+            {# &mdash; {{post.written_on|date:"N d, Y"}} #}
+            &mdash; about a {{post.num_read_minutes}} minute read.
+        </div>
         <div class="body"><div class="editable" id="post_body">{{post.body_html|safe}}</div></div>
 
         {# <div class="display author">by <a href="{% url "posts:blog" post.author.slug %}">{{post.author.name}}</a></div> #}

@@ -224,80 +224,86 @@ def sync_posts(author_id):
                             print "Interrupted."
                             break;
 
+                        plist = None
                         with client.get_file(f["path"]) as fh:
-                            plist = plistlib.readPlist(fh)
-                        content = u"%s" % plist["Entry Text"]
+                            try:
+                                plist = plistlib.readPlist(fh)
+                            except:
+                                print "failed to parse: %s" % f["path"]
+                                print fh.read()
+                        if plist:
+                            content = u"%s" % plist["Entry Text"]
 
-                        split = content.split("\n")
-                        title = split[0]
+                            split = content.split("\n")
+                            title = split[0]
 
-                        body = "\n".join(split[1:])
-                        draft = "Publish URL" not in plist
+                            body = "\n".join(split[1:])
+                            draft = "Publish URL" not in plist
 
-                        image = get_matching_image_meta_if_exists(dayone_id, image_list)
-                        if image:
-                            print "getting image"
-                            m = hashlib.sha1()
-                            m.update("%s %s" % (dayone_id, datetime.datetime.now()))
-                            image_name = "%s%s" % (dayone_id.split(".")[0], m.hexdigest())
-
-                        kwargs = {
-                            "author": author,
-                            "title": title,
-                            "body": body,
-                            "dayone_post": True,
-                            "dayone_id": dayone_id,
-
-                            "dayone_posted": datetime_from_utc_to_local(get_from_plist_if_exists("Creation Date", plist)),
-                            "dayone_last_modified": datetime_from_utc_to_local(datetime.datetime(*time.strptime(f["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6])),
-                            "dayone_last_rev": f["revision"],
-                            "is_draft": draft,
-
-                            "location_area": get_from_plist_if_exists("Location.Administrative Area", plist),
-                            "location_country": get_from_plist_if_exists("Location.Country", plist),
-                            "latitude": get_from_plist_if_exists("Location.Latitude", plist),
-                            "longitude": get_from_plist_if_exists("Location.Longitude", plist),
-                            "location_name": get_from_plist_if_exists("Location.Place Name", plist),
-                            "time_zone_string": get_from_plist_if_exists("Location.Time Zone", plist),
-
-                            "weather_temp_f": get_from_plist_if_exists("Weather.Fahrenheit", plist),
-                            "weather_temp_c": get_from_plist_if_exists("Weather.Celsius", plist),
-                            "weather_description": get_from_plist_if_exists("Weather.Description", plist),
-                            "weather_icon": get_from_plist_if_exists("Weather.IconName", plist),
-                            "weather_pressure": get_from_plist_if_exists("Weather.Pressure MB", plist),
-                            "weather_relative_humidity": get_from_plist_if_exists("Weather.Relative Humidity", plist),
-                            "weather_wind_bearing": get_from_plist_if_exists("Weather.Wind Bearing", plist),
-                            "weather_wind_chill_c": get_from_plist_if_exists("Weather.Wind Chill Celsius", plist),
-                            "weather_wind_speed_kph": get_from_plist_if_exists("Weather.Wind Speed KPH", plist),
-                        }
-                        if exists:
-                            if not p.is_draft:
-                                kwargs["is_draft"] = False
-
-                            for (key, value) in kwargs.items():
-                                setattr(p, key, value)
-                            if not p.written_on:
-                                kwargs["written_on"] = get_from_plist_if_exists("Creation Date", plist),
+                            image = get_matching_image_meta_if_exists(dayone_id, image_list)
                             if image:
-                                image_file = client.get_file(image["path"])
-                                p.dayone_image.save(
-                                    "%s.jpg" % image_name,
-                                    ContentFile(StringIO(image_file.read()).getvalue())
-                                )
-                                image_file.close()
-                            p.save()
-                        else:
-                            p = Post.objects.create(**kwargs)
-                            if image:
-                                image_file = client.get_file(image["path"])
+                                print "getting image"
+                                m = hashlib.sha1()
+                                m.update("%s %s" % (dayone_id, datetime.datetime.now()))
+                                image_name = "%s%s" % (dayone_id.split(".")[0], m.hexdigest())
 
-                                p.dayone_image.save(
-                                    "%s.jpg" % image_name,
-                                    ContentFile(StringIO(image_file.read()).getvalue())
-                                )
+                            kwargs = {
+                                "author": author,
+                                "title": title,
+                                "body": body,
+                                "dayone_post": True,
+                                "dayone_id": dayone_id,
 
+                                "dayone_posted": datetime_from_utc_to_local(get_from_plist_if_exists("Creation Date", plist)),
+                                "dayone_last_modified": datetime_from_utc_to_local(datetime.datetime(*time.strptime(f["modified"], '%a, %d %b %Y %H:%M:%S +0000')[:6])),
+                                "dayone_last_rev": f["revision"],
+                                "is_draft": draft,
+
+                                "location_area": get_from_plist_if_exists("Location.Administrative Area", plist),
+                                "location_country": get_from_plist_if_exists("Location.Country", plist),
+                                "latitude": get_from_plist_if_exists("Location.Latitude", plist),
+                                "longitude": get_from_plist_if_exists("Location.Longitude", plist),
+                                "location_name": get_from_plist_if_exists("Location.Place Name", plist),
+                                "time_zone_string": get_from_plist_if_exists("Location.Time Zone", plist),
+
+                                "weather_temp_f": get_from_plist_if_exists("Weather.Fahrenheit", plist),
+                                "weather_temp_c": get_from_plist_if_exists("Weather.Celsius", plist),
+                                "weather_description": get_from_plist_if_exists("Weather.Description", plist),
+                                "weather_icon": get_from_plist_if_exists("Weather.IconName", plist),
+                                "weather_pressure": get_from_plist_if_exists("Weather.Pressure MB", plist),
+                                "weather_relative_humidity": get_from_plist_if_exists("Weather.Relative Humidity", plist),
+                                "weather_wind_bearing": get_from_plist_if_exists("Weather.Wind Bearing", plist),
+                                "weather_wind_chill_c": get_from_plist_if_exists("Weather.Wind Chill Celsius", plist),
+                                "weather_wind_speed_kph": get_from_plist_if_exists("Weather.Wind Speed KPH", plist),
+                            }
+                            if exists:
+                                if not p.is_draft:
+                                    kwargs["is_draft"] = False
+
+                                for (key, value) in kwargs.items():
+                                    setattr(p, key, value)
+                                if not p.written_on:
+                                    kwargs["written_on"] = get_from_plist_if_exists("Creation Date", plist),
+                                if image:
+                                    image_file = client.get_file(image["path"])
+                                    p.dayone_image.save(
+                                        "%s.jpg" % image_name,
+                                        ContentFile(StringIO(image_file.read()).getvalue())
+                                    )
+                                    image_file.close()
                                 p.save()
-                                image_file.close()
+                            else:
+                                p = Post.objects.create(**kwargs)
+                                if image:
+                                    image_file = client.get_file(image["path"])
+
+                                    p.dayone_image.save(
+                                        "%s.jpg" % image_name,
+                                        ContentFile(StringIO(image_file.read()).getvalue())
+                                    )
+
+                                    p.save()
+                                    image_file.close()
 
                         # print p.slug
                     count += 1
