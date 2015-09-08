@@ -187,7 +187,7 @@ class Command(BaseCommand):
             )
             event = {
                 "timestamp": int(time.mktime(r.read_at.timetuple()) * 1000),
-                "type": "loved",
+                "type": "read",
                 "uid": uuid,
                 "url": url
             }
