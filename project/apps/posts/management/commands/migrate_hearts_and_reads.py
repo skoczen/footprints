@@ -140,6 +140,7 @@ class Command(BaseCommand):
 
         firebase_delete("/events/")
         firebase_delete("/users/")
+        firebase_delete("/pieces/")
 
         for f in Fantastic.objects.all():
             if f.on:
