@@ -168,7 +168,7 @@ class Command(BaseCommand):
                 firebase_put("/users/%s/events/%s" % (uuid, resp["name"]), event)
                 user_data = {}
                 user_data[uuid] = True
-                firebase_put("/pieces/%s/loved/" % (url,), user_data)
+                firebase_patch("/pieces/%s/loved/" % (url,), user_data)
 
         for r in Read.objects.all():
             uuid = r.uuid
@@ -195,4 +195,4 @@ class Command(BaseCommand):
             firebase_put("/users/%s/events/%s" % (uuid, resp["name"]), event)
             user_data = {}
             user_data[uuid] = True
-            firebase_put("/pieces/%s/read/" % (url,), user_data)
+            firebase_patch("/pieces/%s/read/" % (url,), user_data)
