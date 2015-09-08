@@ -11,7 +11,8 @@ TWITTER_APP_KEY = None
 TWITTER_APP_SECRET = None
 FACEBOOK_APP_KEY = None
 FACEBOOK_APP_SECRET = None
-
+FIREBASE_ENDPOINT = None
+FIREBASE_KEY = None
 try:
     from keys_and_passwords_private import *
 except:
@@ -37,3 +38,5 @@ set_env_fallback("TWITTER_APP_KEY")
 set_env_fallback("TWITTER_APP_SECRET")
 set_env_fallback("FACEBOOK_APP_KEY")
 set_env_fallback("FACEBOOK_APP_SECRET")
+set_env_fallback("FIREBASE_ENDPOINT")
+set_env_fallback("FIREBASE_KEY")
