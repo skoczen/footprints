@@ -8,7 +8,7 @@ import time
 import os
 import requests
 import shutil
-from posts.models import Fantastic, Read
+from posts.models import Fantastic, Read, Post
 from django.conf import settings
 
 FOLDER_ROOT = os.path.abspath(os.path.join(os.getcwd(), "export"))
@@ -49,7 +49,7 @@ def firebase_url(endpoint, shallow=False):
 def firebase_put(endpoint, data, acks_late=True, shallow=False):
     # TODO: get endpoint make sure it hasn't been updated more recently.
     # print(firebase_url(endpoint))
-    print json.dumps(data)
+    # print json.dumps(data)
     r = requests.put(firebase_url(endpoint, shallow=shallow), json.dumps(data))
     if not r.status_code == 200:
         print(r.status_code)
@@ -60,7 +60,7 @@ def firebase_put(endpoint, data, acks_late=True, shallow=False):
 def firebase_patch(endpoint, data, acks_late=True, shallow=False):
     # TODO: get endpoint make sure it hasn't been updated more recently.
     # print(firebase_url(endpoint, shallow=shallow))
-    print json.dumps(data)
+    # print json.dumps(data)
     r = requests.patch(firebase_url(endpoint, shallow=shallow), json.dumps(data))
     if not r.status_code == 200:
         print(r.status_code)
@@ -138,62 +138,85 @@ class Command(BaseCommand):
         #  uid: "6a4ea007-aed0-4f4e-99a3-7fd1789f13b0"
         #  url: "yep-this-happened-today"
 
+
         firebase_delete("/events/")
         firebase_delete("/users/")
         firebase_delete("/pieces/")
 
         for f in Fantastic.objects.all():
             if f.on:
-                uuid = f.uuid
-                if f.reader:
-                    uuid = f.reader.pk
-                url = f.post.permalink.lower()
+                if not f.post.is_draft or f.post.allow_private_viewing:
+                    uuid = f.uuid
+                    if f.reader:
+                        uuid = f.reader.pk
+                    url = f.post.permalink.lower()
+                    if url[-1] == "/":
+                        url = url[:-1]
+                    if url[0] == "/":
+                        url = url[1:]
+
+                    print "/users/%s/pieces/%s/loved" % (uuid, url),
+                    firebase_patch(
+                        "/users/%s/pieces/%s/" % (uuid, url),
+                        {"loved": True}
+                    )
+                    event = {
+                        "timestamp": int(time.mktime(f.marked_at.timetuple()) * 1000),
+                        "type": "loved",
+                        "uid": uuid,
+                        "url": url,
+                    }
+                    print event
+                    resp = firebase_post("/events/", event)
+                    firebase_put("/users/%s/events/%s" % (uuid, resp["name"]), event)
+                    user_data = {}
+                    user_data[uuid] = True
+                    firebase_patch("/pieces/%s/loved/" % (url,), user_data)
+
+        for r in Read.objects.all():
+            if not r.post.is_draft or r.post.allow_private_viewing:
+                uuid = r.uuid
+                if r.reader:
+                    uuid = r.reader.pk
+
+                url = r.post.permalink.lower()
                 if url[-1] == "/":
                     url = url[:-1]
                 if url[0] == "/":
                     url = url[1:]
 
-                print "/users/%s/pieces/%s/loved" % (uuid, url),
                 firebase_patch(
                     "/users/%s/pieces/%s/" % (uuid, url),
-                    {"loved": True}
+                    {"read": True}
                 )
                 event = {
-                    "timestamp": int(time.mktime(f.marked_at.timetuple()) * 1000),
-                    "type": "loved",
+                    "timestamp": int(time.mktime(r.read_at.timetuple()) * 1000),
+                    "type": "read",
                     "uid": uuid,
-                    "url": url,
+                    "url": url
                 }
-                print event
                 resp = firebase_post("/events/", event)
                 firebase_put("/users/%s/events/%s" % (uuid, resp["name"]), event)
                 user_data = {}
                 user_data[uuid] = True
-                firebase_patch("/pieces/%s/loved/" % (url,), user_data)
+                firebase_patch("/pieces/%s/read/" % (url,), user_data)
 
-        for r in Read.objects.all():
-            uuid = r.uuid
-            if r.reader:
-                uuid = r.reader.pk
+        for p in Post.objects.all():
+            if not p.is_draft or p.allow_private_viewing:
+                url = p.permalink.lower()
+                if url[-1] == "/":
+                    url = url[:-1]
+                if url[0] == "/":
+                    url = url[1:]
 
-            url = r.post.permalink.lower()
-            if url[-1] == "/":
-                url = url[:-1]
-            if url[0] == "/":
-                url = url[1:]
+                print("Twitter for %s (%s)" % (p.title, p.num_twitter_activity))
+                for i in range(0, p.num_twitter_activity):
+                    d = {}
+                    d["migrated_%s" % i] = True
+                    firebase_patch("/pieces/%s/twitter_shared/" % url, d)
 
-            firebase_patch(
-                "/users/%s/pieces/%s/" % (uuid, url),
-                {"read": True}
-            )
-            event = {
-                "timestamp": int(time.mktime(r.read_at.timetuple()) * 1000),
-                "type": "read",
-                "uid": uuid,
-                "url": url
-            }
-            resp = firebase_post("/events/", event)
-            firebase_put("/users/%s/events/%s" % (uuid, resp["name"]), event)
-            user_data = {}
-            user_data[uuid] = True
-            firebase_patch("/pieces/%s/read/" % (url,), user_data)
+                print("Facebook for %s (%s)" % (p.title, p.num_facebook_activity))
+                for i in range(0, p.num_facebook_activity):
+                    d = {}
+                    d["migrated_%s" % i] = True
+                    firebase_patch("/pieces/%s/facebook_shared/" % url, d)
