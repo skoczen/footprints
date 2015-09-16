@@ -172,6 +172,7 @@ class Command(BaseCommand):
                     user_data = {}
                     user_data[uuid] = True
                     firebase_patch("/pieces/%s/loved/" % (url,), user_data)
+                    print ".",
 
         for r in Read.objects.all():
             if not r.post.is_draft or r.post.allow_private_viewing:
@@ -200,6 +201,7 @@ class Command(BaseCommand):
                 user_data = {}
                 user_data[uuid] = True
                 firebase_patch("/pieces/%s/read/" % (url,), user_data)
+                print ".",
 
         for p in Post.objects.all():
             if not p.is_draft or p.allow_private_viewing:
@@ -214,9 +216,11 @@ class Command(BaseCommand):
                     d = {}
                     d["migrated_%s" % i] = True
                     firebase_patch("/pieces/%s/twitter_shared/" % url, d)
+                    print ".",
 
                 print("Facebook for %s (%s)" % (p.title, p.num_facebook_activity))
                 for i in range(0, p.num_facebook_activity):
                     d = {}
                     d["migrated_%s" % i] = True
                     firebase_patch("/pieces/%s/facebook_shared/" % url, d)
+                    print ".",
