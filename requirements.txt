@@ -1,5 +1,5 @@
 BeautifulSoup==3.2.1
-Django==1.5.11
+Django==1.11.29
 Fabric==1.10.0
 Markdown==2.5.2
 Pillow==2.6.1
