@@ -66,6 +66,6 @@ splinter==0.7.0
 sqlparse==0.1.14
 titlecase==0.7.2
 tweepy==3.1.0
-urllib3==1.9.1
+urllib3==1.26.5
 versiontools==1.9.1
 wsgiref==0.1.2
