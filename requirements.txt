@@ -11,7 +11,7 @@ beautifulsoup4==4.3.2
 billiard==3.3.0.19
 bleach==1.4
 boto==2.34.0
-celery==3.1.17
+celery==5.2.2
 dj-database-url==0.1.2
 django-allauth==0.18.0
 django-analytical==0.19.0
