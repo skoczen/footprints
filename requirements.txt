@@ -38,7 +38,7 @@ ecdsa==0.11
 facepy==1.0.4
 gnureadline==6.3.3
 gunicorn==19.1.1
-html5lib==0.999
+html5lib==0.999999999
 ipython==2.3.1
 kombu==3.0.24
 newrelic==2.40.0.34
